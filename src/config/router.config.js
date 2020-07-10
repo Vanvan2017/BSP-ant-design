@@ -47,7 +47,7 @@ export const asyncRouterMap = [
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard'] }
+            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['admin'] }
           }
         ]
       },
@@ -58,7 +58,7 @@ export const asyncRouterMap = [
         name: 'BVO',
         redirect: '/bvo/bvo-info',
         component: RouteView,
-        meta: { title: 'BVO', keepAlive: true, icon: 'form' },
+        meta: { title: 'BVO', keepAlive: true, icon: 'form', permission: ['admin'] },
         children: [
           {
             path: '/bvo/bvo-info',
@@ -177,7 +177,7 @@ export const asyncRouterMap = [
         path: '/form',
         redirect: '/form/base-form',
         component: RouteView,
-        meta: { title: '表单页', icon: 'form', permission: ['form'] },
+        meta: { title: '表单页', icon: 'form', permission: ['admin'] },
         children: [
           {
             path: '/form/base-form',
@@ -206,7 +206,7 @@ export const asyncRouterMap = [
         name: 'list',
         component: RouteView,
         redirect: '/list/table-list',
-        meta: { title: '列表页', icon: 'table', permission: ['table'] },
+        meta: { title: '列表页', icon: 'table', permission: ['admin'] },
         children: [
           {
             path: '/list/table-list/:pageNo([1-9]\\d*)?',
@@ -263,7 +263,7 @@ export const asyncRouterMap = [
         name: 'profile',
         component: RouteView,
         redirect: '/profile/basic',
-        meta: { title: '详情页', icon: 'profile', permission: ['profile'] },
+        meta: { title: '详情页', icon: 'profile', permission: ['admin'] },
         children: [
           {
             path: '/profile/basic',
@@ -286,7 +286,7 @@ export const asyncRouterMap = [
         name: 'result',
         component: RouteView,
         redirect: '/result/success',
-        meta: { title: '结果页', icon: 'check-circle-o', permission: ['result'] },
+        meta: { title: '结果页', icon: 'check-circle-o', permission: ['admin'] },
         children: [
           {
             path: '/result/success',
