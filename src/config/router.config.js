@@ -58,7 +58,7 @@ export const asyncRouterMap = [
         name: 'BVO',
         redirect: '/bvo/bvo-info',
         component: RouteView,
-        meta: { title: 'BVO', keepAlive: true, icon: 'form', permission: ['admin'] },
+        meta: { title: 'BVO', keepAlive: true, icon: 'form', permission: ['dashboard'] },
         children: [
           {
             path: '/bvo/bvo-info',
@@ -166,7 +166,7 @@ export const asyncRouterMap = [
           {
             path: '/mvo/my-wallet',
             name: 'MVO-MyWallet',
-            component: () => import('@/views/MVO/MyWallet'),
+            component: () => import('@/views/MVO/stepForm/StepForm'),
             meta: { title: 'MVO-MyWallet', keepAlive: false }
           }
           ]
