@@ -40,7 +40,7 @@
       <a-list rowKey="id" :grid="{gutter: 24, lg: 3, md: 2, sm: 1, xs: 1}" :dataSource="dataSource">
         <a-list-item slot="renderItem" slot-scope="item">
           <template v-if="!item || item.id === undefined">
-            <a-button class="new-btn" type="dashed">
+            <a-button class="new-btn" type="dashed" @click="addBrand">
               <a-icon type="plus" />新增品牌
             </a-button>
           </template>
@@ -52,8 +52,8 @@
                 <div class="meta-content" slot="description">{{ item.content }}</div>
               </a-card-meta>
               <template class="ant-card-actions" slot="actions">
-                <a>编辑</a>
-                <a>删除</a>
+                <a @click="saveBrand">编辑</a>
+                <a @ @click="removeBrand">删除</a>
               </template>
             </a-card>
           </template>
@@ -66,11 +66,16 @@
 <script>
 import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
-
+import axios from 'axios'
 import { getRoleList, getServiceList } from '@/api/manage'
 // const DataSet = require('@antv/data-set')
 import { STable, Ellipsis } from '@/components'
 
+const request = axios.create({ // eslint-disable-line no-unused-vars
+  // API 请求的默认前缀
+  baseURL: 'http://localhost:9000/system/',
+  timeout: 6000 // 请求超时时间
+})
 const dataSource = []
 dataSource.push({})
 for (let i = 0; i < 11; i++) {
@@ -114,15 +119,15 @@ const columns = [
   }
 ]
 
-const data = []
-data.push({
-  name_cn: '马坤坤',
-  name_en: 'Kunkun Ma',
-  type: 'lalala',
-  certificate: 'www.lalala.com',
-  description:
-    '北冥有鱼，其名为鲲。鲲之大，不知其几千里也；化而为鸟，其名为鹏。鹏之背，不知其几千里也；怒而飞，其翼若垂天之云。是鸟也，海运则将徙于南冥。南冥者，天池也。《齐谐》者，志怪者也。'
-})
+// const data = []
+// data.push({
+//   name_cn: '马坤坤',
+//   name_en: 'Kunkun Ma',
+//   type: 'lalala',
+//   certificate: 'www.lalala.com',
+//   description:
+//     '北冥有鱼，其名为鲲。鲲之大，不知其几千里也；化而为鸟，其名为鹏。鹏之背，不知其几千里也；怒而飞，其翼若垂天之云。是鸟也，海运则将徙于南冥。南冥者，天池也。《齐谐》者，志怪者也。'
+// })
 
 export default {
   name: 'MVOWorkplace',
@@ -132,12 +137,13 @@ export default {
   },
   data () {
     return {
-      data,
-      columns,
-      timeFix: timeFix(),
-      avatar: '',
-      user: {},
-      dataSource
+		data: [],
+		columns,
+		timeFix: timeFix(),
+		avatar: '',
+		user: {},
+		MVOInfo: {},
+		dataSource
     }
   },
   computed: {
@@ -170,7 +176,93 @@ export default {
   methods: {
     toMVOInfo () {
       this.$router.push('/mvo/mvo-info')
-    }
+    },
+	getMVOInfo () {
+		var app = this
+		console.log('hhh')
+		request.post('CompanyInformationController/getCompanyInfo',
+		{
+			'manBuyerId':	0,
+			'userId':	4,
+			'username':	'string'
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+			var data = response.data.content
+			if (data) {
+				app.data.push({
+					manId: data.manId,
+					name_cn: data.nameCn,
+					name_en: data.nameEn,
+					type: data.gmcReportType,
+					certificate: data.gmcReportUrl,
+					description: data.description
+				})
+				app.MVOInfo = data
+				app.getBrandList()
+			}
+		})
+	},
+	addBrand () {
+		var brandDto = {
+			manId: this.MVOInfo.manId,
+			nameCn: '淘宝',
+			nameEn: 'TaoBao',
+			remark: 'ohhhh'
+		}
+		request.post('BrdBrandController/saveBrand', {
+			UserId: 4,
+			BrdBrandDto: brandDto
+		}).then(function (response) {
+			console.log(response)
+		})
+	},
+	saveBrand () {
+		var brandDto = {
+			brdId: 2,
+			manId: this.MVOInfo.manId,
+			nameCn: '淘宝21',
+			nameEn: 'TaoBao',
+			remark: 'ohhhh'
+		}
+		request.post('BrdBrandController/saveBrand', {
+			UserId: 4,
+			BrdBrandDto: brandDto
+		}).then(function (response) {
+			console.log(response)
+		})
+		console.log('saveBrand')
+	},
+	removeBrand () {
+		console.log('removeBrand')
+		var brandDto = {
+			brdId: 2,
+			manId: this.MVOInfo.manId,
+			nameCn: '淘宝21',
+			nameEn: 'TaoBao',
+			remark: 'ohhhh'
+		}
+		request.post('BrdBrandController/removeBrand', {
+			UserId: 4,
+			BrdBrandDto: brandDto
+		}).then(function (response) {
+			console.log(response)
+		})
+	},
+	getBrandList () {
+		console.log('1232')
+		console.log(this.MVOInfo)
+		// console.log(this.data instanceof Array)
+		request.post('BrdBrandController/getBrandsList',
+		this.MVOInfo)
+		.then(function (response) {
+			console.log(response)
+		})
+	}
+  },
+  mounted () {
+	this.getMVOInfo()
+	// this.getBrandList()
   }
 }
 </script>

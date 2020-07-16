@@ -87,11 +87,16 @@
 
 import ATextarea from 'ant-design-vue/es/input/TextArea'
 import AInput from 'ant-design-vue/es/input/Input'
+import axios from 'axios'
 // 动态切换组件
 import List from '@/views/list/table/List'
 import Edit from '@/views/list/table/Edit'
 // import router from '../../router'
-
+const request = axios.create({ // eslint-disable-line no-unused-vars
+  // API 请求的默认前缀
+  baseURL: 'http://localhost:9000/system/',
+  timeout: 6000 // 请求超时时间
+})
 export default {
   name: 'BaseForm',
   components: {
@@ -110,11 +115,36 @@ export default {
   methods: {
     // handler
     handleSubmit (e) {
-      e.preventDefault()
-      this.form.validateFields((err, values) => {
+		// var app = this
+		e.preventDefault()
+		console.log(this.form)
+		this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values)
-          this.$router.push('/dashboard/mvo-workplace')
+			console.log('Received values of form: ', values)
+			var manManufacturerDto = {
+				'nameEn':	values.nameEn,
+				'nameCn':	values.nameCn,
+				'gmcReportType':	values.type,
+				'description':	values.description,
+				'gmcReportUrl':	values.certificate
+			}
+			console.log(manManufacturerDto)
+			request.post('CompanyInformationController/saveCompanyInfo',
+			{
+				'SysUserDto':	{
+					'manBuyerId':	0,
+					'userId':	4,
+					'username':	'string'
+				},
+				'ManManufacturerDto':	manManufacturerDto
+
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+				// if (response.data.success) {
+				// 	app.$router.push('/dashboard/mvo-workplace')
+				// }
+			})
         }
       })
     },
@@ -129,7 +159,30 @@ export default {
     handleGoBack () {
       this.record = ''
       this.currentComponet = 'List'
-    }
+    },
+	getForm () {
+		var app = this
+		console.log('hhh')
+		request.post('CompanyInformationController/getCompanyInfo',
+		{
+			'manBuyerId':	0,
+			'userId':	4,
+			'username':	'string'
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+			var data = response.data.content
+			if (data) {
+				app.data.push({
+					name_cn: data.nameCn,
+					name_en: data.nameEn,
+					type: data.gmcReportType,
+					certificate: data.gmcReportUrl,
+					description: data.description
+				})
+			}
+		})
+	}
   },
   watch: {
     '$route.path' () {
