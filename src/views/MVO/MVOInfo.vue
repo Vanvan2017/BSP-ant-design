@@ -115,15 +115,16 @@ export default {
   methods: {
     // handler
     handleSubmit (e) {
-		// var app = this
+		var app = this
 		e.preventDefault()
 		console.log(this.form)
 		this.form.validateFields((err, values) => {
         if (!err) {
 			console.log('Received values of form: ', values)
+			console.log(values['name-en'])
 			var manManufacturerDto = {
-				'nameEn':	values.nameEn,
-				'nameCn':	values.nameCn,
+				'nameEn':	values['name-en'],
+				'nameCn':	values['name-cn'],
 				'gmcReportType':	values.type,
 				'description':	values.description,
 				'gmcReportUrl':	values.certificate
@@ -141,13 +142,39 @@ export default {
 			}).then(function (response) {
 				console.log('sdsd')
 				console.log(response)
-				// if (response.data.success) {
-				// 	app.$router.push('/dashboard/mvo-workplace')
-				// }
+				if (response.data.success) {
+					app.$router.push('/dashboard/mvo-workplace')
+				}
 			})
         }
       })
     },
+	getMVOInfo () {
+		// var app = this
+		console.log('hhh')
+		request.post('CompanyInformationController/getCompanyInfo',
+		{
+			'manBuyerId':	0,
+			'userId':	4,
+			'username':	'string'
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+			// var data = response.data.content
+			// if (data) {
+			// 	app.data.push({
+			// 		manId: data.manId,
+			// 		name_cn: data.nameCn,
+			// 		name_en: data.nameEn,
+			// 		type: data.gmcReportType,
+			// 		certificate: data.gmcReportUrl,
+			// 		description: data.description
+			// 	})
+			// 	app.MVOInfo = data
+			// 	app.getBrandList()
+			// }
+		})
+	},
     handleCancel () {
       this.$router.push('/dashboard/mvo-workplace')
     },
