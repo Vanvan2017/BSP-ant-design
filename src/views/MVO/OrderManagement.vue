@@ -18,6 +18,14 @@
 </template>
 
 <script>
+import axios from 'axios'
+
+const request = axios.create({ // eslint-disable-line no-unused-vars
+  // API 请求的默认前缀
+  baseURL: 'http://localhost:9000/system/',
+  timeout: 6000 // 请求超时时间
+})
+
 const getActiveKey = (path) => {
   switch (path) {
     case '/mvo/order-management/unpaid':
@@ -57,28 +65,133 @@ export default {
     })
   },
   methods: {
-    handleTabChange (key) {
-      this.tabActiveKey = key
-      switch (key) {
-        case '1':
-          this.$router.push('/mvo/order-management/unpaid')
-          break
-        case '2':
-          this.$router.push('/mvo/order-management/unshipped')
-          break
-        case '3':
-          this.$router.push('/mvo/order-management/shipped')
-          break
-        case '4':
-          this.$router.push('/mvo/order-management/finished')
-          break
-        case '5':
-          this.$router.push('/mvo/order-management/cancelled')
-          break
-        default:
-          this.$router.push('/home')
-      }
-    }
+	find () {
+		console.log('weq')
+		console.log(this.tabActiveKey)
+	},
+	handleTabChange (key) {
+		this.tabActiveKey = key
+		var app = this
+		var sts = ''
+		switch (key) {
+			case '1':
+				sts = 'AwaitingPayment'
+				break
+			case '2':
+				sts = 'AwaitingShipment'
+				break
+			case '3':
+				sts = 'SHIPPED'
+				break
+			case '4':
+				sts = 'Complete'
+				break
+			case '5':
+				sts = 'Canceled'
+				break
+			default:
+				sts = 'unknown'
+		}
+		request.post('SaOSalesOrderController/getSaoSalesOrderList',
+		{
+			'SysUserDto': {
+				'manBuyerId':	0,
+				'userId':	4,
+				'username':	'string'
+			},
+			'ORDER_STS': sts
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+					// var data = response.data.content
+					// if (data) {
+					// 	app.data.push({
+					// 		manId: data.manId,
+					// 		name_cn: data.nameCn,
+					// 		name_en: data.nameEn,
+					// 		type: data.gmcReportType,
+					// 		certificate: data.gmcReportUrl,
+					// 		description: data.description
+					// 	})
+					// 	app.MVOInfo = data
+					// 	app.getBrandList()
+					// }
+			if (key === '2') {
+				app.changeToShipment()
+			} else if (key === '3') {
+				app.getExpress()
+			}
+		})
+		switch (key) {
+			case '1':
+				this.$router.push('/mvo/order-management/unpaid')
+				break
+			case '2':
+				this.$router.push('/mvo/order-management/unshipped')
+				break
+			case '3':
+				this.$router.push('/mvo/order-management/shipped')
+				break
+			case '4':
+				this.$router.push('/mvo/order-management/finished')
+				break
+			case '5':
+				this.$router.push('/mvo/order-management/cancelled')
+				break
+			default:
+				this.$router.push('/home')
+		}
+	},
+	changeToShipment () {
+		request.post('SaOSalesOrderController/changeToSHIPPED',
+		{
+			'saoId':	2
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+		})
+	},
+	getExpress () {
+		request.post('ExpressController/getState',
+		{
+			'com':	'suning',
+			'nu': 'SN6600018167160'
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+		})
+	},
+	getItemDetail () {
+		request.post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList',
+		{
+			'saoId': 1
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+		})
+	}
+    // handleTabChange (key) {
+    //   this.tabActiveKey = key
+    //   switch (key) {
+    //     case '1':
+    //       this.$router.push('/mvo/order-management/unpaid')
+    //       break
+    //     case '2':
+    //       this.$router.push('/mvo/order-management/unshipped')
+    //       break
+    //     case '3':
+    //       this.$router.push('/mvo/order-management/shipped')
+    //       break
+    //     case '4':
+    //       this.$router.push('/mvo/order-management/finished')
+    //       break
+    //     case '5':
+    //       this.$router.push('/mvo/order-management/cancelled')
+    //       break
+    //     default:
+    //       this.$router.push('/home')
+    //   }
+    // }
   }
 }
 </script>
