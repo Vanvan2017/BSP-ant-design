@@ -190,9 +190,9 @@ export default {
     },
 
     handlePhoneCheck (rule, value, callback) {
-      console.log('handlePhoneCheck, rule:', rule)
-      console.log('handlePhoneCheck, value', value)
-      console.log('handlePhoneCheck, callback', callback)
+      // console.log('handlePhoneCheck, rule:', rule)
+      // console.log('handlePhoneCheck, value', value)
+      // console.log('handlePhoneCheck, callback', callback)
 
       callback()
     },
