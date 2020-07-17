@@ -1,137 +1,292 @@
 <template>
-  <page-header-wrapper content="表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。">
-    <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
-      <a-form @submit="handleSubmit" :form="form">
-        <a-form-item
-          label="标题"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-          <a-input
-            v-decorator="[
-              'name',
-              {rules: [{ required: true, message: '请输入标题' }]}
-            ]"
-            name="name"
-            placeholder="给目标起个名字" />
-        </a-form-item>
-        <a-form-item
-          label="起止日期"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-          <a-range-picker
-            name="buildTime"
-            style="width: 100%"
-            v-decorator="[
-              'buildTime',
-              {rules: [{ required: true, message: '请选择起止日期' }]}
-            ]" />
-        </a-form-item>
-        <a-form-item
-          label="目标描述"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-          <a-textarea
-            rows="4"
-            placeholder="请输入你阶段性工作目标"
-            v-decorator="[
-              'description',
-              {rules: [{ required: true, message: '请输入目标描述' }]}
-            ]" />
-        </a-form-item>
-        <a-form-item
-          label="衡量标准"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-          <a-textarea
-            rows="4"
-            placeholder="请输入衡量标准"
-            v-decorator="[
-              'type',
-              {rules: [{ required: true, message: '请输入衡量标准' }]}
-            ]" />
-        </a-form-item>
-        <a-form-item
-          label="客户"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-          <a-input
-            placeholder="请描述你服务的客户，内部客户直接 @姓名／工号"
-            v-decorator="[
-              'customer',
-              {rules: [{ required: true, message: '请描述你服务的客户' }]}
-            ]" />
-        </a-form-item>
-        <a-form-item
-          label="邀评人"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-          :required="false"
-        >
-          <a-input placeholder="请直接 @姓名／工号，最多可邀请 5 人" />
-        </a-form-item>
-        <a-form-item
-          label="权重"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-          :required="false"
-        >
-          <a-input-number :min="0" :max="100" />
-          <span> %</span>
-        </a-form-item>
-        <a-form-item
-          label="目标公开"
-          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-          :required="false"
-          help="客户、邀评人默认被分享"
-        >
-          <a-radio-group v-decorator="['target', { initialValue: 1 }]">
-            <a-radio :value="1">公开</a-radio>
-            <a-radio :value="2">部分公开</a-radio>
-            <a-radio :value="3">不公开</a-radio>
-          </a-radio-group>
-          <a-form-item v-show="form.getFieldValue('target') === 2">
-            <a-select mode="multiple">
-              <a-select-option value="4">同事一</a-select-option>
-              <a-select-option value="5">同事二</a-select-option>
-              <a-select-option value="6">同事三</a-select-option>
-            </a-select>
-          </a-form-item>
-        </a-form-item>
-        <a-form-item
-          :wrapperCol="{ span: 24 }"
-          style="text-align: center"
-        >
-          <a-button htmlType="submit" type="primary">提交</a-button>
-          <a-button style="margin-left: 8px">保存</a-button>
-        </a-form-item>
-      </a-form>
+  <page-header-wrapper>
+    <a-card :bordered="false">
+      <a-row>
+        <a-col :sm="8" :xs="24">
+          <info title="商品数量" value="50个商品" :bordered="true" />
+        </a-col>
+        <a-col :sm="8" :xs="24">
+          <info title="已上架商品" value="5个商品" :bordered="true" />
+        </a-col>
+        <a-col :sm="8" :xs="24">
+          <info title="已失效商品" value="20个商品" />
+        </a-col>
+      </a-row>
+    </a-card>
+
+    <a-card style="margin-top: 24px" :bordered="false" title="商品列表">
+      <div slot="extra">
+        <a-radio-group v-model="status">
+          <a-radio-button value="all">全部</a-radio-button>
+          <a-radio-button value="processing">Amazon</a-radio-button>
+          <a-radio-button value="waiting">Ebay</a-radio-button>
+        </a-radio-group>
+        <a-input-search style="margin-left: 16px; width: 272px;" />
+      </div>
+
+      <a-list
+        size="large"
+        :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 5, total: 50}"
+      >
+        <a-list-item :key="index" v-for="(item, index) in data">
+          <a-list-item-meta :description="item.description">
+            <a-avatar slot="avatar" size="large" shape="square" :src="item.avatar" />
+            <a slot="title">{{ item.title }}</a>
+          </a-list-item-meta>
+          <div slot="actions">
+            <a @click="borrow(item)">Borrow</a>
+          </div>
+          <div slot="actions">
+            <a-dropdown>
+              <a-menu slot="overlay">
+                <a-menu-item>
+                  <a>入仓</a>
+                </a-menu-item>
+                <a-menu-item>
+                  <a @click="sub(item)">删除</a>
+                </a-menu-item>
+              </a-menu>
+              <a>
+                更多
+                <a-icon type="down" />
+              </a>
+            </a-dropdown>
+          </div>
+          <div class="list-content">
+            <div class="list-content-item">
+              <span>品牌</span>
+              <p>{{ item.owner }}</p>
+            </div>
+            <div class="list-content-item">
+              <span>创建时间</span>
+              <p>{{ item.startAt }}</p>
+            </div>
+            <div class="list-content-item">
+              <a-progress
+                :show-info="false"
+                :percent="item.progress.value"
+                :status="!item.progress.status ? null : item.progress.status"
+                style="width: 180px"
+              />
+            </div>
+          </div>
+        </a-list-item>
+      </a-list>
     </a-card>
   </page-header-wrapper>
 </template>
 
 <script>
+// 演示如何使用 this.$dialog 封装 modal 组件
+import TaskForm from './modules/TaskForm'
+import Info from './components/Info'
+import axios from 'Axios'
+const data = []
+data.push({
+  title: 'Alipay',
+  avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
+  description: '支付工具',
+  owner: 'Ma Kun',
+  startAt: '2018-07-26 22:44',
+  progress: {
+    value: 100
+  }
+})
+// data.push({
+//   title: 'Angular',
+//   avatar: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
+//   description: '前端框架',
+//   owner: 'Ma Kun',
+//   startAt: '2018-07-26 22:44',
+//   progress: {
+//     value: 25
+//   }
+// })
+// data.push({
+//   title: 'Ant Design',
+//   avatar: 'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
+//   description: 'UI框架',
+//   owner: 'Ma Kun',
+//   startAt: '2018-07-26 22:44',
+//   progress: {
+//     value: 75
+//   }
+// })
+// data.push({
+//   title: 'Ant Design Pro',
+//   avatar: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
+//   description: '懒人福利',
+//   owner: 'Ma Kun',
+//   startAt: '2018-07-26 22:44',
+//   progress: {
+//     value: 50
+//   }
+// })
+// data.push({
+//   title: 'Bootstrap',
+//   avatar: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
+//   description: '啥也不是',
+//   owner: 'Ma Kun',
+//   startAt: '2018-07-26 22:44',
+//   progress: {
+//     status: 'exception',
+//     value: 100
+//   }
+// })
+
 export default {
-  name: 'BaseForm',
-  data () {
+  name: 'StandardList',
+  components: {
+    TaskForm,
+    Info
+  },
+  data() {
     return {
-      form: this.$form.createForm(this)
+      data,
+      status: 'all'
     }
   },
+  mounted(){
+    this.getData()
+  },
   methods: {
-    // handler
-    handleSubmit (e) {
-      e.preventDefault()
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values)
+    add() {
+      this.$dialog(
+        TaskForm,
+        // component props
+        {
+          record: {},
+          on: {
+            ok() {
+              console.log('ok 回调')
+            },
+            cancel() {
+              console.log('cancel 回调')
+            },
+            close() {
+              console.log('modal close 回调')
+            }
+          }
+        },
+        // modal props
+        {
+          title: '新增',
+          width: 700,
+          centered: true,
+          maskClosable: false
         }
-      })
+      )
+    },
+    sub(record) {
+      var _this = this
+      axios
+        .post('http://localhost:9000/system/bvo/wishlist/delete', {
+          witId: '2'
+        })
+        .then(function(response) {
+          console.log(response)
+          if(response.data.success==true){
+            _this.$message.info(`Delete Succeed`)
+          }else{
+            _this.$message.error(`Delete Failed`)
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
+    // edit (record) { // 心愿单没有编辑功能，界面不能照搬照抄
+    //   console.log('record', record)
+    //   this.$dialog(TaskForm,
+    //     // component props
+    //     {
+    //       record,
+    //       on: {
+    //         ok () {
+    //           console.log('ok 回调')
+    //         },
+    //         cancel () {
+    //           console.log('cancel 回调')
+    //         },
+    //         close () {
+    //           console.log('modal close 回调')
+    //         }
+    //       }
+    //     },
+    //     // modal props
+    //     {
+    //       title: '操作',
+    //       width: 700,
+    //       centered: true,
+    //       maskClosable: false
+    //     })
+    // }
+    getData(){
+      axios
+        .post('http://localhost:9000/system/bvo/wishlist/list', {
+          page: 0,
+          size: 10,
+          userId: '4'
+        })
+        .then(function(response) {
+          console.log(response)
+          // 列表在这里response.data.content.list
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
+     borrow(record) {
+      var _this = this
+      axios
+        .post('http://localhost:9000/system/bvo/borrow', {
+          dsrId: '1', // 真正的dsr_id
+          proId: '1',
+          strId: '1',
+          ofpId: '5',
+          dropshipPrice: '12',
+          dropshipStatus: 'A',
+          createdBy: 'ccc',
+          shelfStock: '99',
+          preferDate: '2020-07-19 00:00:00',
+          witId:'1'
+        })
+        .then(function(response) {
+          console.log(response)
+          if (response.data.success == true) {
+            _this.$message.info(`Borrow Succeed`)
+          } else {
+            _this.$message.error(`Borrow Failed`)
+          }
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-@import '~ant-design-vue/lib/style/themes/default.less';
+.ant-avatar-lg {
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+}
+
+.list-content-item {
+  color: rgba(0, 0, 0, 0.45);
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  margin-left: 100px;
+  span {
+    line-height: 20px;
+  }
+  p {
+    margin-top: 4px;
+    margin-bottom: 0;
+    line-height: 22px;
+  }
+}
 </style>
