@@ -37,15 +37,15 @@
     </div>
 
     <div style="margin-top: 24px">
-      <a-list rowKey="id" :grid="{gutter: 24, lg: 3, md: 2, sm: 1, xs: 1}" :dataSource="dataSource">
-        <a-list-item slot="renderItem" slot-scope="item">
+      <a-list rowKey="id" :grid="{gutter: 24, xxl:5, xl:4, lg: 3, md: 3, sm: 2, xs: 1}" :dataSource="dataSource" style="display: table;">
+        <a-list-item slot="renderItem" slot-scope="item" style="display: table-cell;">
           <template v-if="!item || item.id === undefined">
             <a-button class="new-btn" type="dashed">
               <a-icon type="plus" />新增品牌
             </a-button>
           </template>
           <template v-else>
-            <a-card :hoverable="true">
+            <a-card :hoverable="true" class="new-btn">
               <a-card-meta>
                 <a slot="title">{{ item.title }}</a>
                 <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large" />
@@ -79,7 +79,7 @@ for (let i = 0; i < 11; i++) {
     title: 'Alipay',
     avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
     content:
-      '支付宝（中国）网络技术有限公司是国内的第三方支付平台，致力于提供“简单、安全、快速”的支付解决方案。支付宝公司从2004年建立开始，始终以“信任”作为产品和服务的核心。'
+      '支付宝（中国）网络技术有限公司是国内的第三方支付平台。'
   })
 }
 
@@ -217,6 +217,7 @@ export default {
 
 .ant-card-actions {
   background: #f7f9fa;
+  flex: 1;
 
   li {
     float: left;
@@ -224,6 +225,8 @@ export default {
     margin: 12px 0;
     color: rgba(0, 0, 0, 0.45);
     width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:not(:last-child) {
       border-right: 1px solid #e8e8e8;
@@ -245,6 +248,6 @@ export default {
   background-color: #fff;
   border-radius: 2px;
   width: 100%;
-  height: 188px;
+  height: 100%;
 }
 </style>

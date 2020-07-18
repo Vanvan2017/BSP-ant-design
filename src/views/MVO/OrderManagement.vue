@@ -4,15 +4,6 @@
     :tab-active-key="tabActiveKey"
     :tab-change="handleTabChange"
   >
-    <template v-slot:content>
-      <div class="ant-pro-page-header-search">
-        <a-input-search size="large" style="width: 80%; max-width: 522px;">
-          <template v-slot:enterButton>
-            搜索
-          </template>
-        </a-input-search>
-      </div>
-    </template>
     <router-view />
   </page-header-wrapper>
 </template>

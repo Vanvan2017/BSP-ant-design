@@ -177,7 +177,7 @@ export const asyncRouterMap = [
         path: '/form',
         redirect: '/form/base-form',
         component: RouteView,
-        meta: { title: '表单页', icon: 'form', permission: ['admin'] },
+        meta: { title: '表单页', icon: 'form', permission: ['table'] },
         children: [
           {
             path: '/form/base-form',
@@ -206,7 +206,7 @@ export const asyncRouterMap = [
         name: 'list',
         component: RouteView,
         redirect: '/list/table-list',
-        meta: { title: '列表页', icon: 'table', permission: ['admin'] },
+        meta: { title: '列表页', icon: 'table', permission: ['table'] },
         children: [
           {
             path: '/list/table-list/:pageNo([1-9]\\d*)?',
@@ -263,7 +263,7 @@ export const asyncRouterMap = [
         name: 'profile',
         component: RouteView,
         redirect: '/profile/basic',
-        meta: { title: '详情页', icon: 'profile', permission: ['admin'] },
+        meta: { title: '详情页', icon: 'profile', permission: ['table'] },
         children: [
           {
             path: '/profile/basic',

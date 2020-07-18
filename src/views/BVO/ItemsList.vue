@@ -5,7 +5,7 @@
         <a-list
           :loading="loading"
           :data-source="data"
-          :grid="{gutter:24,xxl:4,xl:4,lg:3,md:3,sm:2,xs:1 }"
+          :grid="{gutter:24,xxl:5,xl:4,lg:3,md:3,sm:2,xs:1 }"
         >
           <a-list-item slot="renderItem" slot-scope="item">
             <a-card class="ant-pro-pages-account-projects-card" hoverable @click="showDetail">
@@ -28,13 +28,17 @@
                   </avatar-list>
                 </div>
               </div>
-              <a-modal v-model="visible" title="Item Detail" @ok="handleOk" :maskStyle="{opacity:0.2}" :mask="true">
-                <item-detail></item-detail>
-              </a-modal>
             </a-card>
           </a-list-item>
         </a-list>
       </div>
+      <detail
+        ref="detail"
+        :visible="visible"
+        :loading="confirmLoading"
+        @ok="handleOk"
+        @cancel="handleCancel"
+      />
     </a-card>
   </page-header-wrapper>
 </template>
@@ -43,6 +47,7 @@
 import moment from 'moment'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
 import { ItemDetail } from '@/views/BVO/ItemDetail'
+import Detail from './Detail'
 const TagSelectOption = TagSelect.Option
 const AvatarListItem = AvatarList.AvatarItem
 
@@ -55,14 +60,16 @@ export default {
     TagSelect,
     TagSelectOption,
     StandardFormRow,
-    ItemDetail
+    ItemDetail,
+    Detail
   },
   data () {
     return {
       data: [],
       form: this.$form.createForm(this),
       loading: true,
-      visible: false
+      visible: false,
+      confirmLoading: false
     }
   },
   filters: {
@@ -88,8 +95,16 @@ export default {
     showDetail () {
       this.visible = true
     },
-    handleOk (e) {
-      console.log(e)
+    afterVisibleChange (val) {
+      console.log('visible', val)
+    },
+    handleCancel () {
+      this.visible = false
+    },
+    handleOK (e) {
+      this.confirmLoading = true
+      console.log('Loading Successfully!')
+      this.confirmLoading = false
       this.visible = false
     }
   }

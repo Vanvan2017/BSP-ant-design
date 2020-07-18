@@ -6,16 +6,12 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="商品标题">
-                <a-input v-model="queryParam.id" placeholder=""/>
+                <a-input v-model="queryParam.id" placeholder="标题"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="SKU">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">sku11111</a-select-option>
-                  <a-select-option value="1">sku22222</a-select-option>
-                  <a-select-option value="2">sku33333</a-select-option>
-                </a-select>
+                <a-input v-model="queryParam.status" placeholder="SKU"/>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
@@ -27,15 +23,6 @@
               <a-col :md="8" :sm="24">
                 <a-form-item label="更新日期">
                   <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
                 </a-form-item>
               </a-col>
             </template>
