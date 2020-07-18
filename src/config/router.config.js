@@ -58,7 +58,7 @@ export const asyncRouterMap = [
         name: 'BVO',
         redirect: '/bvo/bvo-info',
         component: RouteView,
-        meta: { title: 'BVO', keepAlive: true, icon: 'form', permission: ['admin'] },
+        meta: { title: 'BVO', keepAlive: true, icon: 'form', permission: ['dashboard'] },
         children: [
           {
             path: '/bvo/bvo-info',
@@ -79,7 +79,7 @@ export const asyncRouterMap = [
             meta: { title: 'ItemsList', keepAlive: false }
           },
           {
-            path: '/bvo/wishlist',
+            path: '/bvo/wish-list',
             name: 'WishList',
             component: () => import('@/views/BVO/WishList'),
             meta: { title: 'WishList', keepAlive: false }
@@ -95,6 +95,18 @@ export const asyncRouterMap = [
             name: 'BVO-MyWallet',
             component: () => import('@/views/BVO/MyWallet'),
             meta: { title: 'BVO-MyWallet', keepAlive: false }
+          },
+          {
+            path: '/bvo/item-detail',
+            name: 'ItemDetail',
+            component: () => import('@/views/BVO/ItemDetail'),
+            meta: { title: 'ItemDetail', keepAlive: false }
+          },
+          {
+            path: '/bvo/payment',
+            name: 'Payment',
+            component: () => import('@/views/BVO/Payment'),
+            meta: { title: 'Payment', keepAlive: false }
           }]
       },
 
