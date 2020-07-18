@@ -1,5 +1,5 @@
 <template>
-  <page-header-wrapper content="MVO information, welcome to use BSP!">
+  <page-header-wrapper content="BVO information, welcome to use BSP!">
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
       <a-form @submit="handleSubmit" :form="form">
         <a-form-item
