@@ -171,6 +171,33 @@ export const asyncRouterMap = [
           }
           ]
       },
+      {
+        path: '/gvo',
+        name: 'GVO',
+        redirect: '/gvo/gvo-info',
+        component: RouteView,
+        meta: { title: 'GVO', keepAlive: true, icon: 'table' },
+        children: [
+          {
+            path: '/gvo/data-dict',
+            name: 'DataDict',
+            component: () => import('@/views/GVO/DataDict'),
+            meta: { title: 'DataDict', keepAlive: false }
+          },
+          {
+            path: '/gvo/para-management',
+            name: 'ParameterManagement',
+            component: () => import('@/views/GVO/ParameterManagement'),
+            meta: { title: 'ParameterManagement', keepAlive: false }
+          },
+          {
+            path: '/gvo/perm-management',
+            name: 'PermissionManagement',
+            component: () => import('@/views/GVO/PermissionManagement'),
+            meta: { title: 'PermissionManagement', keepAlive: false }
+          }
+        ]
+      },
 
       // forms
       {

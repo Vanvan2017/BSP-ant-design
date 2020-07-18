@@ -101,10 +101,7 @@ export default {
     handleCancel () {
       this.visible = false
     },
-    handleOK (e) {
-      this.confirmLoading = true
-      console.log('Loading Successfully!')
-      this.confirmLoading = false
+    handleOK () {
       this.visible = false
     }
   }
