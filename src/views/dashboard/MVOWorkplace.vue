@@ -248,6 +248,6 @@ export default {
   background-color: #fff;
   border-radius: 2px;
   width: 100%;
-  height: 100%;
+  height: 23vh;
 }
 </style>
