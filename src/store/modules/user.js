@@ -1,7 +1,18 @@
 import storage from 'store'
-import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { welcome } from '@/utils/util'
+import {
+  login,
+  getInfo,
+  logout
+} from '@/api/login'
+import {
+  getMenuList
+} from '@/api/menu'
+import {
+  ACCESS_TOKEN
+} from '@/store/mutation-types'
+import {
+  welcome
+} from '@/utils/util'
 
 const user = {
   state: {
@@ -17,7 +28,10 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_NAME: (state, { name, welcome }) => {
+    SET_NAME: (state, {
+      name,
+      welcome
+    }) => {
       state.name = name
       state.welcome = welcome
     },
@@ -34,7 +48,9 @@ const user = {
 
   actions: {
     // 登录
-    Login ({ commit }, userInfo) {
+    Login ({
+      commit
+    }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
           const result = response.content
@@ -48,31 +64,41 @@ const user = {
     },
 
     // 获取用户信息
-    GetInfo ({ commit }) {
+    GetInfo ({
+      commit
+    }) {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
-          const result = response.result
+          const result = response.content
 
-          if (result.role && result.role.permissions.length > 0) {
-            const role = result.role
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => { return action.action })
-                per.actionList = action
-              }
+          getMenuList().then(menuRes => {
+            const content = menuRes.content
+            const role = {}
+            role.permissions = content
+            role.permissionList = role.permissions.map(permission => {
+              return permission.permissionId
             })
-            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
-            commit('SET_ROLES', result.role)
-            commit('SET_INFO', result)
-          } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
-          }
+            result.roles = role
+            commit('SET_ROLES', role)
+            resolve(result)
+          })
+          // if (result.role && result.role.permissions.length > 0) {
+          //   const role = result.role
+          //   role.permissions = result.role.permissions
+          //   role.permissionList = role.permissions.map(permission => {
+          //     return permission.permissionId
+          //   })
+          // commit('SET_ROLES', result.roles)
+          commit('SET_INFO', result)
+          // } else {
+          //   reject(new Error('getInfo: roles must be a non-null array !'))
+          // }
 
-          commit('SET_NAME', { name: result.name, welcome: welcome() })
+          commit('SET_NAME', {
+            name: result.name,
+            welcome: welcome()
+          })
           commit('SET_AVATAR', result.avatar)
-
-          resolve(response)
         }).catch(error => {
           reject(error)
         })
@@ -80,7 +106,10 @@ const user = {
     },
 
     // 登出
-    Logout ({ commit, state }) {
+    Logout ({
+      commit,
+      state
+    }) {
       return new Promise((resolve) => {
         logout(state.token).then(() => {
           resolve()
