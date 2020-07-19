@@ -62,7 +62,13 @@
 
 <script>
 import { STable } from '@/components'
+import axios from 'axios'
 
+const request = axios.create({ // eslint-disable-line no-unused-vars
+  // API 请求的默认前缀
+  baseURL: 'http://localhost:9000/system/',
+  timeout: 6000 // 请求超时时间
+})
 export default {
   name: 'TableList',
   components: {
@@ -161,7 +167,43 @@ export default {
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
-    }
+    },
+		getParameterList () {
+			request.post('parameterController/getParameterList',
+			{
+				'userId':	3,
+				'rights':	1
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+			})
+		},
+		saveParameter () {
+			request.post('parameterController/saveParameter',
+			{
+				'ParParameterDto': {
+					'description': 'string',
+					'paramCd': 'string',
+					'paramValue': 'string',
+					'remark': 'stringtest'
+				},
+				'SysUserDto': {
+					'userId':	3
+				}
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+			})
+		},
+		removeParameter () {
+			request.post('parameterController/removeParameter',
+			{
+				'parId': '3'
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+			})
+		}
   },
   watch: {
     /*

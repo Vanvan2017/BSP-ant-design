@@ -62,7 +62,13 @@
 
 <script>
 import { STable } from '@/components'
+import axios from 'axios'
 
+const request = axios.create({ // eslint-disable-line no-unused-vars
+  // API 请求的默认前缀
+  baseURL: 'http://localhost:9000/system/',
+  timeout: 6000 // 请求超时时间
+})
 export default {
   name: 'TableList',
   components: {
@@ -74,12 +80,12 @@ export default {
       columns: [
         {
           title: '编号',
-          dataIndex: 'no',
+          dataIndex: 'cdmId',
           width: '120px'
         },
         {
           title: '字典类型',
-          dataIndex: 'id',
+          dataIndex: 'codeType',
           width: '120px',
           scopedSlots: { customRender: 'description' }
         },
@@ -90,34 +96,35 @@ export default {
         },
         {
           title: '编码',
-          dataIndex: 'callNo',
+          dataIndex: 'typeCd',
           width: '150px',
           scopedSlots: { customRender: 'callNo' }
           // customRender: (text) => text + ' 次'
         },
         {
           title: '编码值',
-          dataIndex: 'status',
+          dataIndex: 'codeVal',
           width: '100px',
           scopedSlots: { customRender: 'status' }
-        },
-        {
-          table: '操作',
-          dataIndex: 'action',
-          width: '120px',
-          scopedSlots: { customRender: 'action' }
         }
+        // {
+        //   table: '操作',
+        //   dataIndex: 'action',
+        //   width: '120px',
+        //   scopedSlots: { customRender: 'action' }
+        // }
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return this.$http
-          .get('/service', {
-            params: Object.assign(parameter, this.queryParam)
-          })
-          .then(res => {
-            console.log(res.result)
-            return res.result
-          })
+        return 	request.post('CodeMasterController/getCdmList',
+			{
+				'userId':	3,
+				'rights':	1
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+				return response.data.content
+			})
       },
 
       selectedRowKeys: [],
@@ -166,7 +173,44 @@ export default {
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
-    }
+    },
+		getcdmList () {
+			request.post('CodeMasterController/getCdmList',
+			{
+				'userId':	3,
+				'rights':	1
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+			})
+		},
+		addCdm () {
+			request.post('CodeMasterController/saveCdm',
+			{
+				'CdmCodeMasterDto': {
+					'codeType': 'string',
+					'codeVal': 'string',
+					'description': 'testCase',
+					'remark': 'string',
+					'typeCd': 'string'
+				},
+				'SysUserDto': {
+					'userId':	3
+				}
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+			})
+		},
+		removeCdm () {
+			request.post('CodeMasterController/removeCdm',
+			{
+				'cdmId': '3'
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+			})
+		}
   },
   watch: {
     /*

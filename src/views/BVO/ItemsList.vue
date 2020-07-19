@@ -8,7 +8,7 @@
           :grid="{gutter:24,xxl:5,xl:4,lg:3,md:3,sm:2,xs:1 }"
         >
           <a-list-item slot="renderItem" slot-scope="item">
-            <a-card class="ant-pro-pages-account-projects-card" hoverable @click="showDetail">
+            <a-card class="ant-pro-pages-account-projects-card" hoverable @click="showDetail(item)">
               <img slot="cover" :src="item.cover" :alt="item.title" />
               <a-card-meta :title="item.title">
                 <template slot="description">
@@ -16,7 +16,7 @@
                 </template>
               </a-card-meta>
               <div class="cardItemContent">
-                <span style="color: red">¥ 100</span>
+                <span style="color: red"> $ {{ item.retail_price}}</span>
                 <div class="avatarList">
                   <avatar-list>
                     <avatar-list-item
@@ -33,7 +33,8 @@
         </a-list>
       </div>
       <detail
-        ref="detail"
+		ref="detail"
+		:item="item"
         :visible="visible"
         :loading="confirmLoading"
         @ok="handleOk"
@@ -48,6 +49,7 @@ import moment from 'moment'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
 import { ItemDetail } from '@/views/BVO/ItemDetail'
 import Detail from './Detail'
+import axios from 'axios'
 const TagSelectOption = TagSelect.Option
 const AvatarListItem = AvatarList.AvatarItem
 
@@ -65,11 +67,12 @@ export default {
   },
   data () {
     return {
-      data: [],
-      form: this.$form.createForm(this),
-      loading: true,
-      visible: false,
-      confirmLoading: false
+		data: [],
+		form: this.$form.createForm(this),
+		loading: true,
+		visible: false,
+		confirmLoading: false,
+		item: {}
     }
   },
   filters: {
@@ -78,22 +81,40 @@ export default {
       return moment(date).fromNow()
     }
   },
-  mounted () {
-    this.getList()
+  created () {
+	var _this = this
+		axios.post('http://localhost:9000/system/bvo/product/listA',
+		{
+			page: 0,
+			size: 10
+		}).then(function (response) {
+              console.log(response)
+              _this.data = response.data.content.list
+              _this.loading = false
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
   },
+  // mounted () {
+  //   this.getList()
+  // },
   methods: {
     handleChange (value) {
       console.log(`selected ${value}`)
     },
-    getList () {
-      this.$http.get('/list/article', { params: { count: 10 } }).then(res => {
-        console.log('res', res)
-        this.data = res.result
-        this.loading = false
-      })
-    },
-    showDetail () {
-      this.visible = true
+    // getList () {
+    //   this.$http.get('/list/article', { params: { count: 10 } }).then(res => {
+    //     console.log('res', res)
+    //     this.data = res.result
+    //     this.loading = false
+    //   })
+    // },
+    showDetail (Oneitem) {
+		console.log(Oneitem)
+		this.item = Oneitem
+		this.visible = true
+		console.log(this.visible)
     },
     afterVisibleChange (val) {
       console.log('visible', val)
@@ -103,7 +124,40 @@ export default {
     },
     handleOK () {
       this.visible = false
-    }
+    },
+	getOnlineStores () {
+		var app = this
+		console.log('hhh')
+		axios.post('http://localhost:9000/system/StrStoreController/getOnlineStores', {
+			'manBuyerId': 0,
+			'userId': 3,
+			'username': 'string'
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+			response.data.content.forEach(item => {
+				if (item.plataeformType === '1') {
+					app.AmazonData.push(item)
+				} else if (item.plataeformType === '2') {
+					console.log(item)
+					app.EbayData.push(item)
+				}
+			})
+			// var data = response.data.content
+			// if (data) {
+			// 	app.data.push({
+			// 		manId: data.manId,
+			// 		name_cn: data.nameCn,
+			// 		name_en: data.nameEn,
+			// 		type: data.gmcReportType,
+			// 		certificate: data.gmcReportUrl,
+			// 		description: data.description
+			// 	})
+			// 	app.MVOInfo = data
+			// 	app.getBrandList()
+			// }
+		})
+	}
   }
 }
 </script>
