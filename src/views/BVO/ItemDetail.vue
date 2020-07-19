@@ -2,10 +2,15 @@
 <template>
   <div>
     <a-row>
+<<<<<<< Updated upstream
       <a-col :span="8">
         <img
           style="width: 20vw; height: 20vw"
           :src="url"></img>
+=======
+      <a-col :span="13">
+        <img style="width: 15vw; height: 15vw" :src="url" />
+>>>>>>> Stashed changes
       </a-col>
       <a-col :span="5">
         <div>
@@ -56,7 +61,7 @@ export default {
       Ebaydes: '114514',
       Amazondes: '1919810',
       Name: 'Shirakami Fubuki',
-      Price: '$12121',
+      Price: '$122222',
       Brand: 'Hololive',
       Sku: '14552',
       Stock: '1'
