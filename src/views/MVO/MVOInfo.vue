@@ -9,10 +9,11 @@
         >
           <a-input
             v-decorator="[
-              'name-cn',
-              {rules: [{ required: true, message: '请输入名称（中文）' }]}
+              'nameCn',
+              {rules: [{ required: true, message: '请输入名称（中文）' }],
+				initialValue: form1.nameCn}
             ]"
-            name="name-cn"
+            name="nameCn"
             placeholder="请输入公司中文名称（中文）"
           />
         </a-form-item>
@@ -23,10 +24,11 @@
         >
           <a-input
             v-decorator="[
-              'name-en',
-              {rules: [{ required: true, message: '请输入英文名称（English）' }]}
+              'nameEn',
+              {rules: [{ required: true, message: '请输入英文名称（English）' }],
+				initialValue: form1.nameEn}
             ]"
-            name="name-en"
+            name="nameEn"
             placeholder="请输入公司名称（English）"
           />
         </a-form-item>
@@ -40,7 +42,8 @@
             placeholder="请输入你的公司简介"
             v-decorator="[
               'description',
-              {rules: [{ required: true, message: '请输入公司简介' }]}
+              {rules: [{ required: true, message: '请输入公司简介' }],
+				initialValue: form1.description}
             ]"
           />
         </a-form-item>
@@ -52,8 +55,9 @@
           <a-input
             placeholder="请输入认证类型"
             v-decorator="[
-              'type',
-              {rules: [{ required: true, message: '请输入认证类型' }]}
+              'gmcReportType',
+              {rules: [{ required: true, message: '请输入认证类型' }],
+				initialValue: form1.gmcReportType}
             ]"
           />
         </a-form-item>
@@ -65,14 +69,15 @@
           <a-input
             placeholder="请输入证书地址"
             v-decorator="[
-              'certificate',
-              {rules: [{ required: true, message: '请输入证书地址' }]}
+              'gmcReportUrl',
+              {rules: [{ required: true, message: '请输入证书地址' }],
+				initialValue: form1.gmcReportUrl}
             ]"
           />
         </a-form-item>
 
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-          <a-button htmlType="submit" type="primary">保存</a-button>
+          <a-button htmlType="submit" type="primary" @click="handleSubmit">保存</a-button>
           <a-button style="margin-left: 8px" @click="handleCancel">取消</a-button>
         </a-form-item>
       </a-form>
@@ -87,11 +92,16 @@
 
 import ATextarea from 'ant-design-vue/es/input/TextArea'
 import AInput from 'ant-design-vue/es/input/Input'
+import axios from 'axios'
 // 动态切换组件
 import List from '@/views/list/table/List'
 import Edit from '@/views/list/table/Edit'
 // import router from '../../router'
-
+const request = axios.create({ // eslint-disable-line no-unused-vars
+  // API 请求的默认前缀
+  baseURL: 'http://localhost:9000/system/',
+  timeout: 6000 // 请求超时时间
+})
 export default {
   name: 'BaseForm',
   components: {
@@ -104,20 +114,84 @@ export default {
     return {
       form: this.$form.createForm(this),
       currentComponet: 'List',
-      record: ''
+      record: '',
+		form1: {
+			nameCn: '',
+			nameEn: '',
+			manId: '',
+			description: '',
+			gmcReportType: '',
+			gmcReportUrl: ''
+		}
     }
+  },
+  mounted () {
+	this.getMVOInfo()
   },
   methods: {
     // handler
     handleSubmit (e) {
-      e.preventDefault()
-      this.form.validateFields((err, values) => {
+		var app = this
+		e.preventDefault()
+		console.log(this.form)
+		this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values)
-          this.$router.push('/dashboard/mvo-workplace')
+			console.log('Received values of form: ', values)
+			console.log(values['name-en'])
+			var manManufacturerDto = {
+				'nameEn':	values['nameEn'],
+				'nameCn':	values['nameCn'],
+				'gmcReportType':	values.gmcReportType,
+				'description':	values.description,
+				'gmcReportUrl':	values.gmcReportUrl
+			}
+			console.log(manManufacturerDto)
+			request.post('CompanyInformationController/saveCompanyInfo',
+			{
+				'SysUserDto':	{
+					'manBuyerId':	0,
+					'userId':	4,
+					'username':	'string'
+				},
+				'ManManufacturerDto':	manManufacturerDto
+
+			}).then(function (response) {
+				console.log('sdsd')
+				console.log(response)
+				if (response.data.success) {
+					app.$router.push('/dashboard/mvo-workplace')
+				}
+			})
         }
       })
     },
+	getMVOInfo () {
+		var app = this
+		console.log('hhh')
+		request.post('CompanyInformationController/getCompanyInfo',
+		{
+			'manBuyerId':	0,
+			'userId':	4,
+			'username':	'string'
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+			app.form1 = response.data.content
+			// var data = response.data.content
+			// if (data) {
+			// 	app.data.push({
+			// 		manId: data.manId,
+			// 		name_cn: data.nameCn,
+			// 		name_en: data.nameEn,
+			// 		type: data.gmcReportType,
+			// 		certificate: data.gmcReportUrl,
+			// 		description: data.description
+			// 	})
+			// 	app.MVOInfo = data
+			// 	app.getBrandList()
+			// }
+		})
+	},
     handleCancel () {
       this.$router.push('/dashboard/mvo-workplace')
     },
@@ -129,7 +203,30 @@ export default {
     handleGoBack () {
       this.record = ''
       this.currentComponet = 'List'
-    }
+    },
+	getForm () {
+		var app = this
+		console.log('hhh')
+		request.post('CompanyInformationController/getCompanyInfo',
+		{
+			'manBuyerId':	0,
+			'userId':	4,
+			'username':	'string'
+		}).then(function (response) {
+			console.log('sdsd')
+			console.log(response)
+			var data = response.data.content
+			if (data) {
+				app.data.push({
+					name_cn: data.nameCn,
+					name_en: data.nameEn,
+					type: data.gmcReportType,
+					certificate: data.gmcReportUrl,
+					description: data.description
+				})
+			}
+		})
+	}
   },
   watch: {
     '$route.path' () {
