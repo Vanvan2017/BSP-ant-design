@@ -2,6 +2,21 @@
   <page-header-wrapper content="BVO information, welcome to use BSP!">
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
       <a-form @submit="handleSubmit" :form="form">
+		<a-form-item
+			label="userId"
+			:labelCol="{lg: {span: 7}, sm: {span: 7}}"
+			:wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
+			<a-input
+				readOnly="true"
+				v-decorator="[
+				'userId',
+				{rules: [{ required: true, message: '请输入id' }],
+					initialValue: form1.userId}
+			]"
+			name="userId"
+			placeholder="请输入id"
+			/>
+		</a-form-item>
         <a-form-item
           label="姓名"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
@@ -10,7 +25,8 @@
           <a-input
             v-decorator="[
               'name',
-              {rules: [{ required: true, message: '请输入姓名' }]}
+              {rules: [{ required: true, message: '请输入姓名' }],
+					initialValue: form1.name}
             ]"
             name="name"
             placeholder="请输入姓名"
@@ -24,9 +40,10 @@
           <a-input
             v-decorator="[
               'email',
-              {rules: [{ required: true, message: '请输入邮箱' }]}
+              {rules: [{ required: true, message: '请输入邮箱' }],
+					initialValue: form1.email}
             ]"
-            v-model="email"
+            name="email"
             placeholder="请输入邮箱"
           />
         </a-form-item>
@@ -39,7 +56,8 @@
             placeholder="请输入电话"
             v-decorator="[
               'phone',
-              {rules: [{ required: true, message: '请输入电话' }]}
+              {rules: [{ required: true, message: '请输入电话' }],
+					initialValue: form1.phone}
             ]"
           />
         </a-form-item>
@@ -51,7 +69,8 @@
           <a-input
             v-decorator="[
               'number',
-              {rules: [{ required: false, message: '请输入请输入固化号码' }]}
+              {rules: [{ required: false, message: '请输入请输入固化号码' }],
+					initialValue: form1.number}
             ]"
             v-model="number"
             placeholder="请输入固话号码"
@@ -98,6 +117,13 @@ export default {
 		// form: {
 		// 	name: ''
 		// },
+		form1: {
+			userId: 0,
+			name: '',
+			email: '',
+			phone: '',
+			number: ''
+		},
       currentComponet: 'List',
       record: ''
     }
@@ -109,12 +135,21 @@ export default {
     // handler
     handleSubmit (e) {
       e.preventDefault()
+		var app = this
+		var flag = false
       this.form.validateFields((err, values) => {
         if (!err) {
+			flag = true
           console.log('Received values of form: ', values)
-          this.$router.push('/dashboard/mvo-workplace')
+			app.form1 = values
+          // this.$router.push('/dashboard/mvo-workplace')
+			// app.saveBVOInfo(values)
         }
       })
+		if (flag) {
+			console.log(app.form1)
+			app.saveBVOInfo()
+		}
     },
 	getBVOInfo () {
 		var app = this
@@ -128,7 +163,11 @@ export default {
 			console.log('sdsd')
 			console.log(response)
 			var data = response.data.content
-			app.form.name = data.name
+			app.form1.userId = data.userId
+			app.form1.name = data.name
+			app.form1.email = data.email
+			app.form1.phone = data.phone
+			app.form1.number = data.number
 			// if (data) {
 			// 	app.data.push({
 			// 		manId: data.manId,
@@ -144,17 +183,12 @@ export default {
 		})
 	},
 	saveBVOInfo	() {
-		// var app = this
+		var app = this
+		// console.log(values)
+		console.log(this.form1)
 		request.post('DsrDropshipperController/saveBVOInfo',
 		{
-			'SysUserDto':	{
-				'bz': 'null',
-				'email': '12345123@163.com',
-				'name': 'BBO',
-				'number': '12345678',
-				'phone': '12345678909',
-				'userId': '3'
-			}
+			'SysUserDto': app.form1
 		}).then(function (response) {
 			console.log('sdsd')
 			console.log(response)
