@@ -22,7 +22,7 @@
           <a href="_self">条款</a>
         </div>
         <div class="copyright">
-          Copyright &copy; 2020 Vanvan Chen
+          Copyright &copy; 2020 Cross-Border E-Commerce BSP
         </div>
       </div>
     </div>
