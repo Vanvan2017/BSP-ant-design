@@ -26,22 +26,17 @@ export const asyncRouterMap = [
         meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
         children: [
           {
-            path: '/dashboard/mvo-workplace',
-            name: 'MVO Workplace',
-            component: () => import('@/views/dashboard/MVOWorkplace'),
-            meta: { title: 'MVO Workplace', keepAlive: false }
+            path: '/dashboard/workplace',
+            name: 'Workplace',
+            component: () => import('@/views/dashboard/Workplace'),
+            meta: { title: 'Workplace', keepAlive: false }
           },
           {
             path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
             name: 'Analysis',
+            hidden: true,
             component: () => import('@/views/dashboard/Analysis'),
             meta: { title: 'menu.dashboard.analysis', keepAlive: false, permission: ['dashboard'] }
-          },
-          {
-            path: '/dashboard/workplace',
-            name: 'Workplace',
-            component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['admin'] }
           }
         ]
       },
