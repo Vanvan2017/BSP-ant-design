@@ -228,13 +228,13 @@ export const asyncRouterMap = [
                 path: '/mvo/my-wallet/register',
                 name: 'mvo-wallet-register',
                 component: () => import('@/views/MVO/WalletRegister'),
-                meta: { title: 'Wallet Register', keepAlive: false, hidden: true }
+                meta: { title: 'Wallet Register', keepAlive: false }
               },
               {
                 path: '/mvo/my-wallet/record',
                 name: 'mvo-wallet-record',
                 component: () => import('@/views/MVO/WalletRecord'),
-                meta: { title: 'Wallet Record', keepAlive: false, hidden: true }
+                meta: { title: 'Wallet Record', keepAlive: false }
               }
             ]
           }

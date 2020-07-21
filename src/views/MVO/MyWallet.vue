@@ -202,7 +202,7 @@ export default {
           } else {
             // 该用户没有注册过钱包，显示注册页面
             _this.$message.error('Please register at first!')
-            this.$router.push('mvo/my-wallet/register')
+            this.$router.push('/mvo/my-wallet/register')
           }
         })
         .catch(function(error) {

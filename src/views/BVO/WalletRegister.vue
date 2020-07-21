@@ -96,6 +96,7 @@ export default {
           console.log(response)
           if (response.data.success === true) {
             // 跳转页面
+            _this.$router.push('/bvo/my-wallet')
           } else {
             _this.$message.error(`Register Failed`)
           }

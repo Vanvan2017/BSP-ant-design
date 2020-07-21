@@ -202,7 +202,7 @@ export default {
           } else {
             // 该用户没有注册过钱包，显示注册页面
             _this.$message.error(`Please register at first!`)
-            _this.$router.push('bvo/my-wallet/register')
+            _this.$router.push('/bvo/my-wallet/register')
           }
         })
         .catch(function(error) {
@@ -210,7 +210,7 @@ export default {
         })
     },
     record() {
-      this.$router.push('bvo/my-wallet/record')
+      this.$router.push('/bvo/my-wallet/record')
     }
   }
 }
