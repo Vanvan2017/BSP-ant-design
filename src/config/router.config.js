@@ -52,7 +52,7 @@ export const asyncRouterMap = [
         ]
       },
 
-      // BVO 啦啦啦啦啦我是卖报的小航家！
+      // BVO
       {
         path: '/bvo',
         name: 'BVO',
@@ -144,7 +144,7 @@ export const asyncRouterMap = [
           }]
       },
 
-      // MVO 啦啦啦啦啦我是卖报的小航家！
+      // MVO
       {
         path: '/mvo',
         name: 'MVO',
@@ -225,6 +225,7 @@ export const asyncRouterMap = [
           }
         ]
       },
+      // GVO
       {
         path: '/gvo',
         name: 'GVO',
