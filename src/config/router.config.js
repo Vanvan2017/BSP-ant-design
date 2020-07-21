@@ -37,12 +37,6 @@ export const asyncRouterMap = [
             component: () => import('@/views/dashboard/Analysis'),
             meta: { title: 'menu.dashboard.analysis', keepAlive: false, permission: ['dashboard'] }
           },
-          // 外部链接
-          {
-            path: 'https://www.baidu.com/',
-            name: 'Monitor',
-            meta: { title: 'menu.dashboard.monitor', target: '_blank' }
-          },
           {
             path: '/dashboard/workplace',
             name: 'Workplace',
@@ -88,6 +82,7 @@ export const asyncRouterMap = [
             path: '/bvo/my-orders',
             name: 'MyOrders',
             component: () => import('@/views/BVO/MyOrders'),
+            // hideChildrenInMenu: true,
             meta: { title: 'MyOrders', keepAlive: true },
             children: [
               {
@@ -124,7 +119,8 @@ export const asyncRouterMap = [
                 path: '/bvo/my-orders/pay',
                 name: 'PayNow',
                 component: () => import('@/views/BVO/orders/pay/PayNow'),
-                meta: { hidden: true, title: 'Pay Now', keepAlive: true }
+                hidden: true,
+                meta: { show: false, title: 'Pay Now', keepAlive: true }
               }
             ]
           },
