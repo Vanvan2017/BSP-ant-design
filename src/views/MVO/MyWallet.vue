@@ -201,7 +201,8 @@ export default {
             _this.data = response.data.content
           } else {
             // 该用户没有注册过钱包，显示注册页面
-            _this.$message.error(`www`)
+            _this.$message.error('Please register at first!')
+            this.$router.push('mvo/my-wallet/register')
           }
         })
         .catch(function(error) {
@@ -209,7 +210,7 @@ export default {
         })
     },
     record() {
-      this.$router.push({ path: '/MVO/WalletRecord' })
+      this.$router.push('/mvo/my-wallet/record')
     }
   }
 }
