@@ -62,7 +62,7 @@ export const asyncRouterMap = [
         ]
       },
 
-      // BVO 啦啦啦啦啦我是卖报的小航家！
+      // BVO
       {
         path: '/bvo',
         name: 'BVO',
@@ -71,8 +71,7 @@ export const asyncRouterMap = [
         meta: {
           title: 'BVO',
           keepAlive: true,
-          icon: 'form',
-          permission: ['bvo']
+          icon: 'form'
         },
         children: [{
             path: '/bvo/bvo-info',
@@ -80,8 +79,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/BVO/BVOInfo'),
             meta: {
               title: 'BVO-Info',
-              keepAlive: false,
-              permission: ['bvo']
+              keepAlive: false
             }
           },
           {
@@ -90,8 +88,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/BVO/MyStores'),
             meta: {
               title: 'MyStores',
-              keepAlive: false,
-              permission: ['bvo']
+              keepAlive: false
             }
           },
           {
@@ -100,8 +97,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/BVO/ItemsList'),
             meta: {
               title: 'ItemsList',
-              keepAlive: false,
-              permission: ['bvo']
+              keepAlive: false
             }
           },
           {
@@ -110,8 +106,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/BVO/WishList'),
             meta: {
               title: 'WishList',
-              keepAlive: false,
-              permission: ['bvo']
+              keepAlive: false
             }
           },
           {
@@ -120,8 +115,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/BVO/MyOrders'),
             meta: {
               title: 'MyOrders',
-              keepAlive: false,
-              permission: ['bvo']
+              keepAlive: false
             }
           },
           {
@@ -130,14 +124,13 @@ export const asyncRouterMap = [
             component: () => import('@/views/BVO/MyWallet'),
             meta: {
               title: 'BVO-MyWallet',
-              keepAlive: false,
-              permission: ['bvo']
+              keepAlive: false
             }
           }
         ]
       },
 
-      // MVO 啦啦啦啦啦我是卖报的小航家！
+      // MVO
       {
         path: '/mvo',
         name: 'MVO',
@@ -578,11 +571,6 @@ export const constantRouterMap = [{
         path: 'register-result',
         name: 'registerResult',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
-      },
-      {
-        path: 'recover',
-        name: 'recover',
-        component: undefined
       }
     ]
   },

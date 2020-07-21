@@ -10,7 +10,7 @@ const userApi = {
   SendSmsErr: '/account/sms_err',
   // get my info
   UserInfo: '/system/user/info',
-  UserMenu: '/user/nav'
+  UserMenu: '/system/auth/menu'
 }
 
 /**
@@ -50,10 +50,11 @@ export function getInfo () {
   })
 }
 
+// 动态获取菜单信息，千万别删
 export function getCurrentUserNav () {
   return request({
     url: userApi.UserMenu,
-    method: 'get'
+    method: 'post'
   })
 }
 

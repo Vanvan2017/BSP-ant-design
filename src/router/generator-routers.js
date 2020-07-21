@@ -1,6 +1,4 @@
-// eslint-disable-next-line
 import * as loginService from '@/api/login'
-// eslint-disable-next-line
 import { BasicLayout, BlankLayout, PageView, RouteView } from '@/layouts'
 
 // 前端路由表
@@ -10,28 +8,35 @@ const constantRouterComponents = {
   BlankLayout: BlankLayout,
   RouteView: RouteView,
   PageView: PageView,
-  '403': () => import(/* webpackChunkName: "error" */ '@/views/exception/403'),
-  '404': () => import(/* webpackChunkName: "error" */ '@/views/exception/404'),
-  '500': () => import(/* webpackChunkName: "error" */ '@/views/exception/500'),
+
+  'MVOWorkplace': () => import('@/views/dashboard/MVOWorkplace'),
+  'Analysis': () => import('@/views/dashboard/Analysis'),
+
+  'BVOInfo': () => import('@/views/BVO/BVOInfo'),
+  'MyStores': () => import('@/views/BVO/MyStores'),
+  'ItemsList': () => import('@/views/BVO/ItemsList'),
+
+  'WishList': () => import('@/views/BVO/WishList'),
+  'MyOrders': () => import('@/views/BVO/MyOrders'),
+  'BVOMyWallet': () => import('@/views/BVO/MyWallet'),
+
+  'MVOInfo': () => import('@/views/MVO/MVOInfo'),
+  'AddItems': () => import('@/views/MVO/AddItems'),
+  'ItemsCategory': () => import('@/views/MVO/ItemsCategory'),
+
+  'OrderManagement': () => import('@/views/MVO/OrderManagement'),
+  'Unpaid': () => import('@/views/MVO/table/List'),
+  'Unshipped': () => import('@/views/MVO/table/List'),
+  'Shipped': () => import('@/views/MVO/table/List'),
+  'Finished': () => import('@/views/MVO/table/List'),
+  'Cancelled': () => import('@/views/MVO/table/List'),
+  'MVOMyWallet': () => import('@/views/MVO/MyWallet'),
 
   // 你需要动态引入的页面组件
   'Workplace': () => import('@/views/dashboard/Workplace'),
-  'Analysis': () => import('@/views/dashboard/Analysis'),
+  // 'Analysis': () => import('@/views/dashboard/Analysis'),
 
-  // form
-  'BasicForm': () => import('@/views/form/BasicForm'),
-  'StepForm': () => import('@/views/form/stepForm/StepForm'),
-  'AdvanceForm': () => import('@/views/form/advancedForm/AdvancedForm'),
-
-  // list
-  'TableList': () => import('@/views/list/TableList'),
-  'StandardList': () => import('@/views/list/StandardList'),
-  'CardList': () => import('@/views/list/CardList'),
-  'SearchLayout': () => import('@/views/list/search/SearchLayout'),
-  'SearchArticles': () => import('@/views/list/search/Article'),
-  'SearchProjects': () => import('@/views/list/search/Projects'),
-  'SearchApplications': () => import('@/views/list/search/Applications'),
-  'ProfileBasic': () => import('@/views/profile/basic/Index'),
+  // 'ProfileBasic': () => import('@/views/profile/basic/Index'),
   'ProfileAdvanced': () => import('@/views/profile/advanced/Advanced'),
 
   // result
@@ -44,7 +49,6 @@ const constantRouterComponents = {
   'Exception500': () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
 
   // account
-  'AccountCenter': () => import('@/views/account/center/Index'),
   'AccountSettings': () => import('@/views/account/settings/Index'),
   'BaseSettings': () => import('@/views/account/settings/BaseSetting'),
   'SecuritySettings': () => import('@/views/account/settings/Security'),
@@ -64,7 +68,7 @@ const notFoundRouter = {
 const rootRouter = {
   key: '',
   name: 'index',
-  path: '',
+  path: '/',
   component: 'BasicLayout',
   redirect: '/dashboard',
   meta: {
@@ -75,24 +79,32 @@ const rootRouter = {
 
 /**
  * 动态生成菜单
- * @param token
+ * @param roleId
  * @returns {Promise<Router>}
  */
-export const generatorDynamicRouter = (token) => {
+export const generatorDynamicRouter = (roleId) => {
+  console.log('roleIdroleIdroleId')
+  console.log(roleId)
   return new Promise((resolve, reject) => {
-    loginService.getCurrentUserNav(token).then(res => {
+    loginService.getCurrentUserNav(roleId).then(res => {
+      console.log('我在getCurrentUserNavgetCurrentUserNavgetCurrentUserNavgetCurrentUserNav')
       console.log('res', res)
-      const { result } = res
+      const { content } = res
       const menuNav = []
       const childrenNav = []
       //      后端数据, 根级树数组,  根级 PID
-      listToTree(result, childrenNav, 0)
+      listToTree(content, childrenNav, 0)
+
       rootRouter.children = childrenNav
+
       menuNav.push(rootRouter)
       console.log('menuNav', menuNav)
+
       const routers = generator(menuNav)
       routers.push(notFoundRouter)
+
       console.log('routers', routers)
+
       resolve(routers)
     }).catch(err => {
       reject(err)
@@ -109,12 +121,13 @@ export const generatorDynamicRouter = (token) => {
  */
 export const generator = (routerMap, parent) => {
   return routerMap.map(item => {
-    const { title, show, hideChildren, hiddenHeaderContent, target, icon } = item.meta || {}
+    const { title, show, hideChildren, hiddenHeaderContent, target, icon, keepAlive } = item.meta || {}
     const currentRouter = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/workplace
       path: item.path || `${parent && parent.path || ''}/${item.key}`,
       // 路由名称，建议唯一
       name: item.name || item.key || '',
+      title: item.title || item.key || '',
       // 该路由对应页面的 组件 :方案1
       // component: constantRouterComponents[item.component || item.key],
       // 该路由对应页面的 组件 :方案2 (动态加载)
@@ -126,7 +139,8 @@ export const generator = (routerMap, parent) => {
         icon: icon || undefined,
         hiddenHeaderContent: hiddenHeaderContent,
         target: target,
-        permission: item.name
+        keepAlive: keepAlive || false
+        // permission: item.name
       }
     }
     // 是否设置了隐藏菜单
@@ -162,6 +176,7 @@ const listToTree = (list, tree, parentId) => {
   list.forEach(item => {
     // 判断是否为父级菜单
     if (item.parentId === parentId) {
+      console.log('进来了进来了进来了')
       const child = {
         ...item,
         key: item.key || item.name,

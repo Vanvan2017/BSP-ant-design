@@ -155,6 +155,8 @@ export default {
       return this.$store.getters.userInfo
     }
   },
+  mounted () {
+  },
   created () {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
