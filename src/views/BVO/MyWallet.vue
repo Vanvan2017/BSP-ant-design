@@ -201,7 +201,8 @@ export default {
             _this.data = response.data.content
           } else {
             // 该用户没有注册过钱包，显示注册页面
-            _this.$message.error(`www`)
+            _this.$message.error(`Please register at first!`)
+            _this.$router.push('bvo/my-wallet/register')
           }
         })
         .catch(function(error) {
