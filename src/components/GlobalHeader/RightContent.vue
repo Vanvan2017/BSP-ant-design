@@ -49,10 +49,13 @@ export default {
   },
   mounted () {
     setTimeout(() => {
+      const nickname = this.$store.getters.nickname
+      const avatar = this.$store.getters.avatar
       this.currentUser = {
-        name: 'Serati Ma'
+        name: nickname,
+        avatar: avatar
       }
-    }, 1500)
+    }, 300)
   }
 }
 </script>

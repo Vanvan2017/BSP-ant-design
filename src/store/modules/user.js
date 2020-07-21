@@ -65,22 +65,8 @@ const user = {
     }) {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
-          const result = response.result
-
-          if (result.role && result.role.permissions.length > 0) {
-            const role = result.role
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => {
-                  return action.action
-                })
-                per.actionList = action
-              }
-            })
-            role.permissionList = role.permissions.map(permission => {
-              return permission.permissionId
-            })
+          const result = response.content
+          if (result.role && result.role.length > 0) {
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
           } else {
@@ -88,10 +74,10 @@ const user = {
           }
 
           commit('SET_NAME', {
-            name: result.name,
+            name: result.info.name,
             welcome: welcome()
           })
-          commit('SET_AVATAR', result.avatar)
+          commit('SET_AVATAR', result.info.avatar)
 
           resolve(response)
         }).catch(error => {

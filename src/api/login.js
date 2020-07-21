@@ -6,12 +6,22 @@ const userApi = {
   ForgePassword: '/auth/forge-password',
   Register: '/system/signup',
 
+  Kaptcha: '/system/kaptcha/image-code/',
+
   twoStepCode: '/auth/2step-code',
   SendSms: '/account/sms',
   SendSmsErr: '/account/sms_err',
   // get my info
   UserInfo: '/system/user/info',
   UserMenu: '/system/auth/menu'
+}
+
+export function getKaptcha (parameter) {
+  return request({
+    url: userApi.Kaptcha + '/' + parameter.imageCodeToken,
+    method: 'get',
+    data: parameter
+  })
 }
 
 /**
@@ -28,6 +38,14 @@ const userApi = {
 export function login (parameter) {
   return request({
     url: userApi.Login,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function signup (parameter) {
+  return request({
+    url: userApi.Register,
     method: 'post',
     data: parameter
   })

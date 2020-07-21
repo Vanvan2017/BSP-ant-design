@@ -90,7 +90,7 @@
       </a-form-item>
 
       <div class="user-login-other">
-        <span>其他登录方式</span>
+        <!-- <span>其他登录方式</span>
         <a>
           <a-icon class="item-icon" type="alipay-circle"></a-icon>
         </a>
@@ -99,7 +99,7 @@
         </a>
         <a>
           <a-icon class="item-icon" type="weibo-circle"></a-icon>
-        </a>
+        </a> -->
         <router-link class="register" :to="{ name: 'register' }">注册账户</router-link>
       </div>
     </a-form>
@@ -249,8 +249,7 @@ export default {
     loginSuccess (res) {
       // check res.homePage define, set $router.push name res.homePage
       // Why not enter onComplete
-      this.$router.push({ name: 'analysis' }, () => {
-        console.log('onComplete')
+      this.$router.push({ name: 'Workplace' }, () => {
         this.$notification.success({
           message: '欢迎',
           description: `${timeFix()}，欢迎回来`

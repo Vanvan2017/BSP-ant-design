@@ -1,65 +1,24 @@
 <template>
   <div class="page-header-index-wide page-header-wrapper-grid-content-main">
     <a-row :gutter="24">
-      <a-col :md="24" :lg="7">
+      <a-col :md="24" :lg="24">
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="avatar">
+              <img :src="avatar" />
             </div>
             <div class="username">{{ nickname }}</div>
-            <div class="bio">大鹏展翅不知其几千里也！</div>
+            <div class="bio">{{ bz }}</div>
           </div>
           <div class="account-center-detail">
             <p>
-              <i class="title"></i>交互专家
-            </p>
-            <p>
-              <i class="group"></i>马kunkun技术有限分公司
-            </p>
-            <p>
-              <i class="address"></i>
-              <span>天津市</span>
-              <span>南开区</span>
+              <i class="title"></i>前端专家
             </p>
           </div>
-          <a-divider/>
+          <a-divider />
 
-          <div class="account-center-tags">
-            <div class="tagsTitle">标签</div>
-            <div>
-              <template v-for="(tag, index) in tags">
-                <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
-                  <a-tag
-                    :key="tag"
-                    :closable="index !== 0"
-                    :close="() => handleTagClose(tag)"
-                  >{{ `${tag.slice(0, 20)}...` }}</a-tag>
-                </a-tooltip>
-                <a-tag
-                  v-else
-                  :key="tag"
-                  :closable="index !== 0"
-                  :close="() => handleTagClose(tag)"
-                >{{ tag }}</a-tag>
-              </template>
-              <a-input
-                v-if="tagInputVisible"
-                ref="tagInput"
-                type="text"
-                size="small"
-                :style="{ width: '78px' }"
-                :value="tagInputValue"
-                @change="handleInputChange"
-                @blur="handleTagInputConfirm"
-                @keyup.enter="handleTagInputConfirm"
-              />
-              <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
-                <a-icon type="plus"/>New Tag
-              </a-tag>
-            </div>
-          </div>
-          <a-divider :dashed="true"/>
+          <div class="account-center-tags"></div>
+          <a-divider :dashed="true" />
 
           <div class="account-center-team">
             <div class="teamTitle">团队</div>
@@ -68,7 +27,7 @@
                 <a-row>
                   <a-col :span="12" v-for="(item, index) in teams" :key="index">
                     <a>
-                      <a-avatar size="small" :src="item.avatar"/>
+                      <a-avatar size="small" :src="item.avatar" />
                       <span class="member">{{ item.name }}</span>
                     </a>
                   </a-col>
@@ -76,19 +35,6 @@
               </div>
             </a-spin>
           </div>
-        </a-card>
-      </a-col>
-      <a-col :md="24" :lg="17">
-        <a-card
-          style="width:100%"
-          :bordered="false"
-          :tabList="tabListNoTitle"
-          :activeTabKey="noTitleKey"
-          @tabChange="key => handleTabChange(key, 'noTitleKey')"
-        >
-          <article-page v-if="noTitleKey === 'article'"></article-page>
-          <app-page v-else-if="noTitleKey === 'app'"></app-page>
-          <project-page v-else-if="noTitleKey === 'project'"></project-page>
         </a-card>
       </a-col>
     </a-row>
@@ -111,28 +57,12 @@ export default {
   },
   data () {
     return {
-      tags: ['很有想法的', '专注设计', '辣~', '大长腿', '川妹子', '海纳百川'],
-
       tagInputVisible: false,
       tagInputValue: '',
 
       teams: [],
       teamSpinning: true,
 
-      tabListNoTitle: [
-        {
-          key: 'article',
-          tab: '文章(8)'
-        },
-        {
-          key: 'app',
-          tab: '应用(8)'
-        },
-        {
-          key: 'project',
-          tab: '项目(8)'
-        }
-      ],
       noTitleKey: 'app'
     }
   },
@@ -144,10 +74,14 @@ export default {
   },
   methods: {
     getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
+        this.teams = [
+          { avatar: this.avatar, name: '刘宸绪' },
+          { avatar: this.avatar, name: '常铂雨' },
+          { avatar: this.avatar, name: '马焜' },
+          { avatar: this.avatar, name: '陈禹帆' },
+          { avatar: this.avatar, name: '李思宽' }
+        ]
         this.teamSpinning = false
-      })
     },
 
     handleTabChange (key, type) {
