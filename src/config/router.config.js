@@ -123,22 +123,30 @@ export const asyncRouterMap = [
               {
                 path: '/bvo/my-orders/pay',
                 name: 'PayNow',
+                hidden: true,
                 component: () => import('@/views/BVO/orders/pay/PayNow'),
-                meta: { hidden: true, title: 'Pay Now', keepAlive: true }
+                meta: { title: 'Pay Now', keepAlive: true }
               }
             ]
           },
           {
             path: '/bvo/my-wallet',
-            name: 'BVO-MyWallet',
+            name: 'bvo-wallet',
             component: () => import('@/views/BVO/MyWallet'),
-            meta: { title: 'BVO-MyWallet', keepAlive: false, hideChildrenInMenu: true },
+            hideChildrenInMenu: true,
+            meta: { title: 'BVO MyWallet', keepAlive: false },
             children: [
               {
                 path: '/bvo/my-wallet/register',
-                name: 'BVO-MyWallet-Register',
+                name: 'bvo-wallet-register',
                 component: () => import('@/views/BVO/WalletRegister'),
-                meta: { hidden: true, title: 'Register Wallet', keepAlive: true }
+                meta: { title: 'Register Wallet', keepAlive: true }
+              },
+              {
+                path: '/bvo/my-wallet/record',
+                name: 'bvo-wallet-record',
+                component: () => import('@/views/BVO/WalletRegister'),
+                meta: { title: 'Register Wallet', keepAlive: true }
               }
             ]
           }]
@@ -213,13 +221,20 @@ export const asyncRouterMap = [
             path: '/mvo/my-wallet',
             name: 'MVO-MyWallet',
             component: () => import('@/views/MVO/MyWallet'),
-            meta: { title: 'MVO-MyWallet', keepAlive: false, hideChildrenInMenu: true },
+            hideChildrenInMenu: true,
+            meta: { title: 'MVO-MyWallet', keepAlive: false },
             children: [
               {
                 path: '/mvo/my-wallet/register',
-                name: 'MVO-Wallet-Register',
+                name: 'mvo-wallet-register',
                 component: () => import('@/views/MVO/WalletRegister'),
                 meta: { title: 'Wallet Register', keepAlive: false, hidden: true }
+              },
+              {
+                path: '/mvo/my-wallet/record',
+                name: 'mvo-wallet-record',
+                component: () => import('@/views/MVO/WalletRecord'),
+                meta: { title: 'Wallet Record', keepAlive: false, hidden: true }
               }
             ]
           }

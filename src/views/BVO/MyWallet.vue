@@ -209,7 +209,7 @@ export default {
         })
     },
     record() {
-      this.$router.push({ path: '/BVO/WalletRecord' })
+      this.$router.push('bvo/my-wallet/record')
     }
   }
 }
