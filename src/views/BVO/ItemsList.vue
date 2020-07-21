@@ -36,7 +36,7 @@
         ref="detail"
         :visible="visible"
         :loading="confirmLoading"
-        @ok="handleOk"
+        @okay="handleOk"
         @cancel="handleCancel"
       />
     </a-card>
@@ -46,7 +46,6 @@
 <script>
 import moment from 'moment'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
-import { ItemDetail } from '@/views/BVO/ItemDetail'
 import Detail from './Detail'
 const TagSelectOption = TagSelect.Option
 const AvatarListItem = AvatarList.AvatarItem
@@ -60,7 +59,6 @@ export default {
     TagSelect,
     TagSelectOption,
     StandardFormRow,
-    ItemDetail,
     Detail
   },
   data () {
@@ -101,7 +99,8 @@ export default {
     handleCancel () {
       this.visible = false
     },
-    handleOK () {
+    handleOk () {
+      console.log('===========================')
       this.visible = false
     }
   }

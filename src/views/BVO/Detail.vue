@@ -4,7 +4,7 @@
     :width="640"
     :visible="visible"
     :confirmLoading="loading"
-    @ok="() => { $emit('ok') }"
+    @ok="handleOKay"
     @cancel="() => { $emit('cancel') }"
   >
     <a-spin :spinning="loading">
@@ -91,6 +91,9 @@ export default {
   methods: {
     callback (key) {
       console.log(key)
+    },
+    handleOKay () {
+      this.$emit('okay')
     }
   }
 }

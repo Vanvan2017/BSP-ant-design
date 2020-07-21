@@ -88,7 +88,39 @@ export const asyncRouterMap = [
             path: '/bvo/my-orders',
             name: 'MyOrders',
             component: () => import('@/views/BVO/MyOrders'),
-            meta: { title: 'MyOrders', keepAlive: false }
+            meta: { title: 'MyOrders', keepAlive: false },
+            children: [
+              {
+                path: '/bvo/my-orders/unpaid',
+                name: 'Unpaid',
+                component: () => import('@/views/BVO/orders/AwaitingPayment'),
+                meta: { title: 'Unpaid', keepAlive: false }
+              },
+              {
+                path: '/bvo/my-orders/unshipped',
+                name: 'Unshipped',
+                component: () => import('@/views/BVO/orders/AwaitingShippment'),
+                meta: { title: 'Unshipped', keepAlive: false }
+              },
+              {
+                path: '/bvo/my-orders/shipped',
+                name: 'Shipped',
+                component: () => import('@/views/BVO/orders/Shipped'),
+                meta: { title: 'Shipped', keepAlive: false }
+              },
+              {
+                path: '/bvo/my-orders/finished',
+                name: 'Finished',
+                component: () => import('@/views/BVO/orders/Finished'),
+                meta: { title: 'Finished', keepAlive: false }
+              },
+              {
+                path: '/bvo/my-orders/cancelled',
+                name: 'Cancelled',
+                component: () => import('@/views/BVO/orders/Cancelled'),
+                meta: { title: 'Cancelled', keepAlive: false }
+              }
+            ]
           },
           {
             path: '/bvo/my-wallet',
@@ -133,33 +165,33 @@ export const asyncRouterMap = [
             children: [
               {
                 path: '/mvo/order-management/unpaid',
-                name: 'Unpaid',
-                component: () => import('@/views/MVO/table/List'),
+                name: 'MVOUnpaid',
+                component: () => import('@/views/MVO/orders/AwaitingPayment'),
                 meta: { title: 'Unpaid', keepAlive: false }
               },
               {
                 path: '/mvo/order-management/unshipped',
-                name: 'Unshipped',
-                component: () => import('@/views/MVO/table/List'),
+                name: 'MVOUnshipped',
+                component: () => import('@/views/MVO/orders/AwaitingShippment'),
                 meta: { title: 'Unshipped', keepAlive: false }
               },
               {
                 path: '/mvo/order-management/shipped',
-                name: 'Shipped',
-                component: () => import('@/views/MVO/table/List'),
+                name: 'MVOShipped',
+                component: () => import('@/views/MVO/orders/Shipped'),
                 meta: { title: 'Shipped', keepAlive: false }
               },
               {
                 path: '/mvo/order-management/finished',
-                name: 'Finished',
-                component: () => import('@/views/MVO/table/List'),
+                name: 'MVOFinished',
+                component: () => import('@/views/MVO/orders/Finished'),
                 meta: { title: 'Finished', keepAlive: false }
               },
               {
                 path: '/mvo/order-management/cancelled',
-                name: 'Cancelled',
-                component: () => import('@/views/MVO/table/List'),
-                meta: { title: 'Cancelled', keepAlive: false }
+                name: 'MVOCancelled',
+                component: () => import('@/views/MVO/orders/Cancelled'),
+                meta: { title: 'mancelled', keepAlive: false }
               }
             ]
           },
@@ -169,7 +201,7 @@ export const asyncRouterMap = [
             component: () => import('@/views/MVO/stepForm/StepForm'),
             meta: { title: 'MVO-MyWallet', keepAlive: false }
           }
-          ]
+        ]
       },
       {
         path: '/gvo',
@@ -189,6 +221,12 @@ export const asyncRouterMap = [
             name: 'ParameterManagement',
             component: () => import('@/views/GVO/ParameterManagement'),
             meta: { title: 'ParameterManagement', keepAlive: false }
+          },
+          {
+            path: '/gvo/check-bill',
+            name: 'CheckBill',
+            component: () => import('@/views/GVO/CheckBill'),
+            meta: { title: 'CheckBill', keepAlive: false }
           },
           {
             path: '/gvo/perm-management',
