@@ -1,56 +1,68 @@
 <template>
-  <a-table :data-source="data" :columns="columns" rowKey="saoId">
-    <div
-      slot="filterDropdown"
-      slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
-      style="padding: 8px"
-    >
-      <a-input
-        v-ant-ref="c => (searchInput = c)"
-        :placeholder="`Search ${column.dataIndex}`"
-        :value="selectedKeys[0]"
-        style="width: 188px; margin-bottom: 8px; display: block;"
-        @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
-        @pressEnter="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+  <div>
+    <!-- fakeData测试用，连后端用data -->
+    <a-table :data-source="fakeData" :columns="columns" rowKey="saoId">
+      <div
+        slot="filterDropdown"
+        slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
+        style="padding: 8px"
+      >
+        <a-input
+          v-ant-ref="c => (searchInput = c)"
+          :placeholder="`Search ${column.dataIndex}`"
+          :value="selectedKeys[0]"
+          style="width: 188px; margin-bottom: 8px; display: block;"
+          @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
+          @pressEnter="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+        />
+        <a-button
+          type="primary"
+          icon="search"
+          size="small"
+          style="width: 90px; margin-right: 8px"
+          @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+        >Search</a-button>
+        <a-button size="small" style="width: 90px" @click="() => handleReset(clearFilters)">Reset</a-button>
+      </div>
+      <a-icon
+        slot="filterIcon"
+        slot-scope="filtered"
+        type="search"
+        :style="{ color: filtered ? '#108ee9' : undefined }"
       />
-      <a-button
-        type="primary"
-        icon="search"
-        size="small"
-        style="width: 90px; margin-right: 8px"
-        @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
-      >Search</a-button>
-      <a-button size="small" style="width: 90px" @click="() => handleReset(clearFilters)">Reset</a-button>
-    </div>
-    <a-icon
-      slot="filterIcon"
-      slot-scope="filtered"
-      type="search"
-      :style="{ color: filtered ? '#108ee9' : undefined }"
-    />
-    <template slot="customRender" slot-scope="text, record, index, column">
-      <span v-if="searchText && searchedColumn === column.dataIndex">
-        <template
-          v-for="(fragment, i) in text
-            .toString()
-            .split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
-        >
-          <mark
-            v-if="fragment.toLowerCase() === searchText.toLowerCase()"
-            :key="i"
-            class="highlight"
-          >{{ fragment }}</mark>
-          <template v-else>{{ fragment }}</template>
-        </template>
+      <template slot="customRender" slot-scope="text, record, index, column">
+        <span v-if="searchText && searchedColumn === column.dataIndex">
+          <template
+            v-for="(fragment, i) in text
+              .toString()
+              .split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
+          >
+            <mark
+              v-if="fragment.toLowerCase() === searchText.toLowerCase()"
+              :key="i"
+              class="highlight"
+            >{{ fragment }}</mark>
+            <template v-else>{{ fragment }}</template>
+          </template>
+        </span>
+        <template v-else>{{ text }}</template>
+      </template>
+      <span slot="action" slot-scope="record">
+        <a @click="() => showModal(record)">Detail</a>
       </span>
-      <template v-else>{{ text }}</template>
-    </template>
-    <a slot="action" slot-scope="record" @click="() => ship(record)">Ship</a>
-  </a-table>
+    </a-table>
+    <order-detail
+      ref="order-detail"
+      :visible="visi"
+      @okay="handleOk"
+      @cancel="handleCancel"
+    />
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
+import OrderDetail from './OrderDetail'
 
 const request = axios.create({
   // eslint-disable-line no-unused-vars
@@ -58,18 +70,29 @@ const request = axios.create({
   baseURL: 'http://localhost:9000/system/',
   timeout: 6000 // 请求超时时间
 })
-const data = [
+const fakeData = [
   {
     orderNo: 'AS12345',
-    saoId: '2',
+    saoId: 1,
     productAmount: '32',
+    lastUpdateDate: '2020-07-20'
+  },
+  {
+    orderNo: 'AS12380',
+    saoId: 2,
+    productAmount: '321',
     lastUpdateDate: '2020-07-20'
   }
 ]
 export default {
+  components: {
+    OrderDetail
+  },
   data () {
     return {
-      data,
+      visi: false,
+      data: [],
+      fakeData,
       searchText: '',
       searchInput: null,
       searchedColumn: '',
@@ -193,6 +216,17 @@ export default {
     this.getAwaitingShippment()
   },
   methods: {
+    showModal (record) {
+      console.log(record)
+      this.$refs['order-detail'].getItemDetail(record.saoId)
+      this.visi = true
+    },
+    handleOk () {
+      this.visi = false
+    },
+    handleCancel () {
+      this.visi = false
+    },
     handleSearch (selectedKeys, confirm, dataIndex) {
       confirm()
       this.searchText = selectedKeys[0]
@@ -203,7 +237,7 @@ export default {
       this.searchText = ''
     },
     getAwaitingShippment () {
-      // var app = this
+      var app = this
       request
         .post('SaOSalesOrderController/getSaoSalesOrderList', {
           SysUserDto: {
@@ -216,9 +250,9 @@ export default {
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
-          // response.data.content.forEach(item => {
-          //   app.data.push(item)
-          // })
+          response.data.content.forEach(item => {
+            app.data.push(item)
+          })
           // var data = response.data.content
           // if (data) {
           // 	app.data.push({
@@ -240,14 +274,26 @@ export default {
       this.changeToShipment(record.saoId)
     },
     changeToShipment (sao) {
-		request.post('SaOSalesOrderController/changeToSHIPPED',
-		{
-			'saoId':	sao
-		}).then(function (response) {
-			console.log('sdsd')
-			console.log(response)
-		})
-	}
+      request
+        .post('SaOSalesOrderController/changeToSHIPPED', {
+          saoId: sao
+        })
+        .then(function (response) {
+          console.log('sdsd')
+          console.log(response)
+          console.log('shipped!!!')
+        })
+    },
+    getItemDetail () {
+      request
+        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+          saoId: 1
+        })
+        .then(function (response) {
+          console.log('sdsd')
+          console.log(response)
+        })
+    }
   }
 }
 </script>

@@ -88,7 +88,7 @@ export const asyncRouterMap = [
             path: '/bvo/my-orders',
             name: 'MyOrders',
             component: () => import('@/views/BVO/MyOrders'),
-            meta: { title: 'MyOrders', keepAlive: false },
+            meta: { title: 'MyOrders', keepAlive: true },
             children: [
               {
                 path: '/bvo/my-orders/unpaid',
@@ -119,6 +119,12 @@ export const asyncRouterMap = [
                 name: 'Cancelled',
                 component: () => import('@/views/BVO/orders/Cancelled'),
                 meta: { title: 'Cancelled', keepAlive: false }
+              },
+              {
+                path: '/bvo/my-orders/pay',
+                name: 'PayNow',
+                component: () => import('@/views/BVO/orders/pay/PayNow'),
+                meta: { hidden: true, title: 'Pay Now', keepAlive: true }
               }
             ]
           },
@@ -126,7 +132,15 @@ export const asyncRouterMap = [
             path: '/bvo/my-wallet',
             name: 'BVO-MyWallet',
             component: () => import('@/views/BVO/MyWallet'),
-            meta: { title: 'BVO-MyWallet', keepAlive: false }
+            meta: { title: 'BVO-MyWallet', keepAlive: false, hideChildrenInMenu: true },
+            children: [
+              {
+                path: '/bvo/my-wallet/register',
+                name: 'BVO-MyWallet-Register',
+                component: () => import('@/views/BVO/WalletRegister'),
+                meta: { hidden: true, title: 'Register Wallet', keepAlive: true }
+              }
+            ]
           }]
       },
 
@@ -191,15 +205,23 @@ export const asyncRouterMap = [
                 path: '/mvo/order-management/cancelled',
                 name: 'MVOCancelled',
                 component: () => import('@/views/MVO/orders/Cancelled'),
-                meta: { title: 'mancelled', keepAlive: false }
+                meta: { title: 'Cancelled', keepAlive: false }
               }
             ]
           },
           {
             path: '/mvo/my-wallet',
             name: 'MVO-MyWallet',
-            component: () => import('@/views/MVO/stepForm/StepForm'),
-            meta: { title: 'MVO-MyWallet', keepAlive: false }
+            component: () => import('@/views/MVO/MyWallet'),
+            meta: { title: 'MVO-MyWallet', keepAlive: false, hideChildrenInMenu: true },
+            children: [
+              {
+                path: '/mvo/my-wallet/register',
+                name: 'MVO-Wallet-Register',
+                component: () => import('@/views/MVO/WalletRegister'),
+                meta: { title: 'Wallet Register', keepAlive: false, hidden: true }
+              }
+            ]
           }
         ]
       },
@@ -423,7 +445,7 @@ export const asyncRouterMap = [
                 path: '/account/settings/base',
                 name: 'BaseSettings',
                 component: () => import('@/views/account/settings/BaseSetting'),
-                meta: { title: '基本设置', hidden: true, permission: ['user'] }
+                meta: { title: '基本设置', permission: ['user'] }
               },
               {
                 path: '/account/settings/security',

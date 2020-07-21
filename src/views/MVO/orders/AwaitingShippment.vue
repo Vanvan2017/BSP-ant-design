@@ -1,6 +1,7 @@
 <template>
   <div>
-    <a-table :data-source="data" :columns="columns" rowKey="saoId">
+    <!-- fakeData测试用，连后端用data -->
+    <a-table :data-source="fakeData" :columns="columns" rowKey="saoId">
       <div
         slot="filterDropdown"
         slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
@@ -55,7 +56,6 @@
     <order-detail
       ref="order-detail"
       :visible="visi"
-      @id="showModal"
       @okay="handleOk"
       @cancel="handleCancel"
     />
@@ -72,7 +72,7 @@ const request = axios.create({
   baseURL: 'http://localhost:9000/system/',
   timeout: 6000 // 请求超时时间
 })
-const data = [
+const fakeData = [
   {
     orderNo: 'AS12345',
     saoId: 1,
@@ -93,7 +93,8 @@ export default {
   data () {
     return {
       visi: false,
-      data,
+      data: [],
+      fakeData,
       searchText: '',
       searchInput: null,
       searchedColumn: '',
@@ -218,11 +219,9 @@ export default {
   },
   methods: {
     showModal (record) {
-      this.saoId = record.saoId
-      console.log('==========Detail==========')
-      console.log(record.saoId)
+      console.log(record)
+      this.$refs['order-detail'].getItemDetail(record.saoId)
       this.visi = true
-      return this.saoId
     },
     handleOk () {
       this.visi = false
@@ -240,7 +239,7 @@ export default {
       this.searchText = ''
     },
     getAwaitingShippment () {
-      // var app = this
+      var app = this
       request
         .post('SaOSalesOrderController/getSaoSalesOrderList', {
           SysUserDto: {
@@ -253,9 +252,9 @@ export default {
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
-          // response.data.content.forEach(item => {
-          //   app.data.push(item)
-          // })
+          response.data.content.forEach(item => {
+            app.data.push(item)
+          })
           // var data = response.data.content
           // if (data) {
           // 	app.data.push({
@@ -284,6 +283,7 @@ export default {
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
+          console.log('shipped!!!')
         })
     },
     getItemDetail () {

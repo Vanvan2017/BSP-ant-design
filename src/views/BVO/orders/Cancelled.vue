@@ -1,64 +1,65 @@
 <template>
-  <a-table :data-source="data" :columns="columns" rowKey="saoId">
-    <div
-      slot="filterDropdown"
-      slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
-      style="padding: 8px"
-    >
-      <a-input
-        v-ant-ref="c => (searchInput = c)"
-        :placeholder="`Search ${column.dataIndex}`"
-        :value="selectedKeys[0]"
-        style="width: 188px; margin-bottom: 8px; display: block;"
-        @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
-        @pressEnter="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
-      />
-      <a-button
-        type="primary"
-        icon="search"
-        size="small"
-        style="width: 90px; margin-right: 8px"
-        @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+  <div>
+    <a-table :data-source="data" :columns="columns" rowKey="saoId">
+      <div
+        slot="filterDropdown"
+        slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
+        style="padding: 8px"
       >
-        Search
-      </a-button>
-      <a-button size="small" style="width: 90px" @click="() => handleReset(clearFilters)">
-        Reset
-      </a-button>
-    </div>
-    <a-icon
-      slot="filterIcon"
-      slot-scope="filtered"
-      type="search"
-      :style="{ color: filtered ? '#108ee9' : undefined }"
-    />
-    <template slot="customRender" slot-scope="text, record, index, column">
-      <span v-if="searchText && searchedColumn === column.dataIndex">
-        <template
-          v-for="(fragment, i) in text
-            .toString()
-            .split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
-        >
-          <mark
-            v-if="fragment.toLowerCase() === searchText.toLowerCase()"
-            :key="i"
-            class="highlight"
-          >{{ fragment }}</mark
+        <a-input
+          v-ant-ref="c => (searchInput = c)"
+          :placeholder="`Search ${column.dataIndex}`"
+          :value="selectedKeys[0]"
+          style="width: 188px; margin-bottom: 8px; display: block;"
+          @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
+          @pressEnter="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+        />
+        <a-button
+          type="primary"
+          icon="search"
+          size="small"
+          style="width: 90px; margin-right: 8px"
+          @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+        >Search</a-button>
+        <a-button size="small" style="width: 90px" @click="() => handleReset(clearFilters)">Reset</a-button>
+      </div>
+      <a-icon
+        slot="filterIcon"
+        slot-scope="filtered"
+        type="search"
+        :style="{ color: filtered ? '#108ee9' : undefined }"
+      />
+      <template slot="customRender" slot-scope="text, record, index, column">
+        <span v-if="searchText && searchedColumn === column.dataIndex">
+          <template
+            v-for="(fragment, i) in text
+              .toString()
+              .split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
           >
-          <template v-else>{{ fragment }}</template>
-        </template>
-      </span>
-      <template v-else>
-        {{ text }}
+            <mark
+              v-if="fragment.toLowerCase() === searchText.toLowerCase()"
+              :key="i"
+              class="highlight"
+            >{{ fragment }}</mark>
+            <template v-else>{{ fragment }}</template>
+          </template>
+        </span>
+        <template v-else>{{ text }}</template>
       </template>
-    </template>
-  </a-table>
+      <span slot="action" slot-scope="record">
+        <a @click="() => showModal(record)">Detail</a>
+      </span>
+    </a-table>
+    <order-detail ref="order-detail" :visible="visi" @okay="handleOk" @cancel="handleCancel" />
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
+import OrderDetail from './OrderDetail'
 
-const request = axios.create({ // eslint-disable-line no-unused-vars
+const request = axios.create({
+  // eslint-disable-line no-unused-vars
   // API 请求的默认前缀
   baseURL: 'http://localhost:9000/system/',
   timeout: 6000 // 请求超时时间
@@ -72,8 +73,12 @@ const request = axios.create({ // eslint-disable-line no-unused-vars
 // ]
 
 export default {
+  components: {
+    OrderDetail
+  },
   data () {
     return {
+      visi: false,
       data: [],
       searchText: '',
       searchInput: null,
@@ -166,7 +171,8 @@ export default {
               })
             }
           }
-        }
+        },
+        { title: 'Action', dataIndex: '', key: 'x', scopedSlots: { customRender: 'action' } }
       ]
     }
   },
@@ -177,6 +183,17 @@ export default {
     this.getItemDetail()
   },
   methods: {
+    showModal (record) {
+      console.log(record)
+      this.$refs['order-detail'].getItemDetail(record.saoId)
+      this.visi = true
+    },
+    handleOk () {
+      this.visi = false
+    },
+    handleCancel () {
+      this.visi = false
+    },
     handleSearch (selectedKeys, confirm, dataIndex) {
       confirm()
       this.searchText = selectedKeys[0]
@@ -188,44 +205,46 @@ export default {
     },
     getCancelled () {
       var app = this
-      request.post('SaOSalesOrderController/getSaoSalesOrderList',
-		{
-			'SysUserDto': {
-				'manBuyerId':	0,
-				'userId':	4,
-				'username':	'string'
-			},
-			'ORDER_STS': 'Canceled'
-		}).then(function (response) {
-			console.log('sdsd')
-      console.log(response)
-      response.data.content.forEach(item => {
-        app.data.push(item)
-      })
-					// var data = response.data.content
-					// if (data) {
-					// 	app.data.push({
-					// 		manId: data.manId,
-					// 		name_cn: data.nameCn,
-					// 		name_en: data.nameEn,
-					// 		type: data.gmcReportType,
-					// 		certificate: data.gmcReportUrl,
-					// 		description: data.description
-					// 	})
-					// 	app.MVOInfo = data
-					// 	app.getBrandList()
-					// }
-		})
-  },
+      request
+        .post('SaOSalesOrderController/getSaoSalesOrderList', {
+          SysUserDto: {
+            manBuyerId: 0,
+            userId: 4,
+            username: 'string'
+          },
+          ORDER_STS: 'Canceled'
+        })
+        .then(function (response) {
+          console.log('sdsd')
+          console.log(response)
+          response.data.content.forEach(item => {
+            app.data.push(item)
+          })
+          // var data = response.data.content
+          // if (data) {
+          // 	app.data.push({
+          // 		manId: data.manId,
+          // 		name_cn: data.nameCn,
+          // 		name_en: data.nameEn,
+          // 		type: data.gmcReportType,
+          // 		certificate: data.gmcReportUrl,
+          // 		description: data.description
+          // 	})
+          // 	app.MVOInfo = data
+          // 	app.getBrandList()
+          // }
+        })
+    },
     getItemDetail () {
-		request.post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList',
-		{
-			'saoId': 1
-		}).then(function (response) {
-			console.log('sdsd')
-			console.log(response)
-		})
-	}
+      request
+        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+          saoId: 1
+        })
+        .then(function (response) {
+          console.log('sdsd')
+          console.log(response)
+        })
+    }
   }
 }
 </script>

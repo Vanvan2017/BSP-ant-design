@@ -53,7 +53,6 @@
     <order-detail
       ref="order-detail"
       :visible="visi"
-      :saoId="saoId"
       @okay="handleOk"
       @cancel="handleCancel"
     />
@@ -97,7 +96,6 @@ export default {
   },
   data () {
     return {
-      saoId: null,
       innerColumns,
       innerData,
       data: [],
@@ -207,8 +205,7 @@ export default {
   methods: {
     showModal (record) {
       console.log(record)
-      this.saoId = record.saoId
-      this.$refs['order-detail'].getItemDetail(this.saoId)
+      this.$refs['order-detail'].getItemDetail(record.saoId)
       this.visi = true
     },
     handleOk () {

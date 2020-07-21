@@ -18,7 +18,7 @@
         on-ok="handleOk"
         :footer="null"
         width="50vw"
-        :centered='true'
+        centered="ture"
       >
         <a-form @submit="handleSubmit" :form="form">
           <a-form-item
@@ -97,7 +97,7 @@
       </a-modal>
     </div>
 
-    <a-card style="margin-top: 26px">
+    <a-card style="margin-top: 26px" ref="list1">
       <a-list item-layout="horizontal" :data-source="AmazonData">
         <a-list-item slot="renderItem" slot-scope="item">
           <a-list-item-meta
@@ -113,7 +113,7 @@
       </a-list>
     </a-card>
 
-    <a-card style="margin-top: 26px">
+    <a-card style="margin-top: 26px" ref="list2">
       <a-list item-layout="horizontal" :data-source="EbayData">
         <a-list-item slot="renderItem" slot-scope="item">
           <a-list-item-meta
@@ -172,11 +172,12 @@ export default {
         if (!err) {
 		  console.log('Received values of form: ', values)
 		  //Change the next method.
-		  this.saveBVOInfo()
+		  this.saveOnlineStore(values)
 		  this.form.resetFields()
           this.visible = false
         }
       })
+	  location.reload()
     },
     getOnlineStores() {
       var app = this
@@ -184,57 +185,59 @@ export default {
       request
         .post('StrStoreController/getOnlineStores', {
           manBuyerId: 0,
-          userId: 3,
+          userId: 5,
           username: 'string'
         })
         .then(function(response) {
           console.log('sdsd')
           console.log(response)
-          response.data.content.forEach(item => {
-            if (item.plataeformType === '1') {
-              app.AmazonData.push(item)
-            } else if (item.plataeformType === '2') {
-              console.log(item)
-              app.EbayData.push(item)
-            }
-          })
-          // var data = response.data.content
-          // if (data) {
-          // 	app.data.push({
-          // 		manId: data.manId,
-          // 		name_cn: data.nameCn,
-          // 		name_en: data.nameEn,
-          // 		type: data.gmcReportType,
-          // 		certificate: data.gmcReportUrl,
-          // 		description: data.description
-          // 	})
-          // 	app.MVOInfo = data
-          // 	app.getBrandList()
-          // }
+		  app.EbayData = []
+		  app.AmazonData = []
+		  if(response.data.success){
+			  response.data.content.forEach(item => {
+				if (item.plataeformType === '1') {
+					app.AmazonData.push(item)
+				} else if (item.plataeformType === '2') {
+					console.log(item)
+					app.EbayData.push(item)
+				}
+			})
+		  }else{
+			app.$message.info('you are a new user please add a new store')
+			app.visible = true
+		  }
         })
     },
-    saveBVOInfo() {
-      // var app = this
+    saveOnlineStore(values) {
+      var app = this
       request
         .post('StrStoreController/addOnlineStore', {
           SysUserDto: {
-            userId: 3
+            userId: 5
           },
           StrStoreDto: {
-            storeName: 'addias',
-            plataeformType: '2'
+            storeName: values.storeName,
+            plataeformType: values.plataeformType
           },
-          token: 'ABS1234',
-          APPId: '1231',
-          key: '13243424'
+          token: values.token,
+          APPId: values.APPId,
+          key: values.key
         })
         .then(function(response) {
-          console.log('sdsd')
-          console.log(response)
-          console.log(response.data)
+			console.log('sdsd')
+			console.log(response)
+			console.log(response.data)
+			console.log(app.$refs)
+			console.log(app.AmazonData.length)
+			// app.$forceUpdate(true)
+			// for (var i=0; i<app.AmazonData.;i++){
+			// 	app.AmazonData.pop()
+			// }
+			// app.$refs.list.refresh(true)
           // if (response.data.success) {
           // 	app.$router.push('/dashboard/mvo-workplace')
           // }
+			
         })
 	},
 	handleCancel() {

@@ -76,13 +76,14 @@
 // }
 import axios from 'axios'
 
-const request = axios.create({ // eslint-disable-line no-unused-vars
+const request = axios.create({
+  // eslint-disable-line no-unused-vars
   // API 请求的默认前缀
   baseURL: 'http://localhost:9000/system/',
   timeout: 6000 // 请求超时时间
 })
 
-const getActiveKey = (path) => {
+const getActiveKey = path => {
   switch (path) {
     case '/bvo/my-orders/unpaid':
       return '1'
@@ -116,66 +117,69 @@ export default {
   created () {
     this.tabActiveKey = getActiveKey(this.$route.path)
 
-    this.$watch('$route', (val) => {
+    this.$watch('$route', val => {
       this.tabActiveKey = getActiveKey(val.path)
     })
   },
   methods: {
-	find () {
-		console.log('weq')
-		console.log(this.tabActiveKey)
-	},
-	handleTabChange (key) {
-		this.tabActiveKey = key
+    find () {
+      console.log('weq')
+      console.log(this.tabActiveKey)
+    },
+    handleTabChange (key) {
+      this.tabActiveKey = key
 
-		switch (key) {
-			case '1':
-				this.$router.push('/bvo/my-orders/unpaid')
-				break
-			case '2':
-				this.$router.push('/bvo/my-orders/unshipped')
-				break
-			case '3':
-				this.$router.push('/bvo/my-orders/shipped')
-				break
-			case '4':
-				this.$router.push('/bvo/my-orders/finished')
-				break
-			case '5':
-				this.$router.push('/bvo/my-orders/cancelled')
-				break
-			default:
-				this.$router.push('/home')
-		}
-	},
-	changeToShipment () {
-		request.post('SaOSalesOrderController/changeToSHIPPED',
-		{
-			'saoId':	2
-		}).then(function (response) {
-			console.log('sdsd')
-			console.log(response)
-		})
-	},
-	getExpress () {
-		request.post('ExpressController/getState',
-		{
-			'com':	'suning',
-			'nu': 'SN6600018167160'
-		}).then(function (response) {
-			console.log('sdsd')
-			console.log(response)
-		})
-	},
-	getItemDetail () {
-		request.post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList',
-		{
-			'saoId': 1
-		}).then(function (response) {
-			console.log('sdsd')
-			console.log(response)
-		})
-	}
+      switch (key) {
+        case '1':
+          this.$router.push('/bvo/my-orders/unpaid')
+          break
+        case '2':
+          this.$router.push('/bvo/my-orders/unshipped')
+          break
+        case '3':
+          this.$router.push('/bvo/my-orders/shipped')
+          break
+        case '4':
+          this.$router.push('/bvo/my-orders/finished')
+          break
+        case '5':
+          this.$router.push('/bvo/my-orders/cancelled')
+          break
+        default:
+          this.$router.push('/home')
+      }
+    },
+    changeToShipment () {
+      request
+        .post('SaOSalesOrderController/changeToSHIPPED', {
+          saoId: 2
+        })
+        .then(function (response) {
+          console.log('sdsd')
+          console.log(response)
+        })
+    },
+    getExpress () {
+      request
+        .post('ExpressController/getState', {
+          com: 'suning',
+          nu: 'SN6600018167160'
+        })
+        .then(function (response) {
+          console.log('sdsd')
+          console.log(response)
+        })
+    },
+    getItemDetail () {
+      request
+        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+          saoId: 1
+        })
+        .then(function (response) {
+          console.log('sdsd')
+          console.log(response)
+        })
+    }
     // handleTabChange (key) {
     //   this.tabActiveKey = key
     //   switch (key) {
