@@ -113,7 +113,7 @@
 
 
 <script>
-import axios from 'axios'
+import {axios as request} from '@/utils/request'
 
 export default {
   name: 'MyWallet',
@@ -140,15 +140,15 @@ export default {
       var _this = this
       this.form1.validateFields((err, values) => {
         if (!err) {
-          axios
-            .post('http://localhost:9000/system/wallet/changepwd', {
+          request
+            .post('/system/wallet/changepwd', {
               accountName: 'LSKReno3',
               old_password: values.oldPwd,
               new_password: values.newPwd
             })
             .then(function(response) {
               console.log(response)
-              if (response.data.success === true) {
+              if (response.success === true) {
                 _this.$message.info(`Change Succeed`)
                 _this.form1.resetFields()
                 _this.PwdVisible = false
@@ -166,8 +166,8 @@ export default {
       var _this = this
       this.form2.validateFields((err, values) => {
         if (!err) {
-          axios
-            .post('http://localhost:9000/system/wallet/deposit', {
+          request
+            .post('/system/wallet/deposit', {
               accountName: 'LSKReno3',
               password: values.password,
               depositingMoney: values.amount,
@@ -175,12 +175,12 @@ export default {
             })
             .then(function(response) {
               console.log(response)
-              if (response.data.success === true) {
+              if (response.success === true) {
                 _this.$message.info(`Deposit Submitted`)
                 _this.form2.resetFields()
                 _this.DepositVisible = false
               } else {
-                _this.$message.error(response.data.message)
+                _this.$message.error(response.message)
               }
             })
             .catch(function(error) {
@@ -191,14 +191,14 @@ export default {
     },
     getAccountData() {
       var _this = this
-      axios
-        .post('http://localhost:9000/system/wallet/querylist', {
+      request
+        .post('/system/wallet/querylist', {
           accountName: 'LSKReno3'
         })
         .then(function(response) {
           console.log(response)
-          if (response.data.success === true) {
-            _this.data = response.data.content
+          if (response.success === true) {
+            _this.data = response.content
           } else {
             // 该用户没有注册过钱包，显示注册页面
             _this.$message.error(`Please register at first!`)

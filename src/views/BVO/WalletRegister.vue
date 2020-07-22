@@ -60,14 +60,8 @@ import AInput from 'ant-design-vue/es/input/Input'
 import List from '@/views/list/table/List'
 import Edit from '@/views/list/table/Edit'
 // import router from '../../router'
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 export default {
   name: 'BaseForm',
   components: {
@@ -87,14 +81,14 @@ export default {
     handleSubmit () {
       var _this = this
       request
-        .post('wallet/register', {
+        .post('/system/wallet/register', {
           accountName: _this.formform.name,
           email: _this.form.email,
           password: _this.form.password
         })
         .then(function (response) {
           console.log(response)
-          if (response.data.success === true) {
+          if (response.success === true) {
             // 跳转页面
             _this.$router.push('/bvo/my-wallet')
           } else {

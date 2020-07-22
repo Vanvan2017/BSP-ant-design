@@ -63,16 +63,10 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 import OrderDetail from './OrderDetail'
 import ExpressDetail from './ExpressDetail'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 // const data = [
 //   {
 //     orderNo: 'AS12345',
@@ -273,7 +267,7 @@ export default {
     getShipped () {
       var app = this
       request
-        .post('SaOSalesOrderController/getBVOOrderList', {
+        .post('/system/SaOSalesOrderController/getBVOOrderList', {
           SysUserDto: {
             manBuyerId: 0,
             userId: 4,
@@ -285,7 +279,7 @@ export default {
           console.log('sdsd')
           console.log(response)
 			var list = []
-          response.data.content.forEach(item => {
+          response.content.forEach(item => {
             // app.data.push(item)
 			item.saoSalesOrderDtos.forEach(item1 => {
 				console.log(item1)
@@ -296,7 +290,7 @@ export default {
 			list.forEach(item => {
 				app.data.push(item)
 			})
-          // var data = response.data.content
+          // var data = response.content
           // if (data) {
           // 	app.data.push({
           // 		manId: data.manId,
@@ -313,7 +307,7 @@ export default {
     },
     getItemDetail () {
       request
-        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+        .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
           saoId: 1
         })
         .then(function (response) {
@@ -325,13 +319,13 @@ export default {
       var app = this
       console.log('我是马焜啊啊啊啊啊啊我好帅啊！！')
       request
-        .post('AddressController/getAddress', {
+        .post('/system/AddressController/getAddress', {
           saoId: 1
         })
         .then(function (response) {
           console.log('=======Address========')
           console.log(response)
-          app.companyName = response.data.content.carrierName
+          app.companyName = response.content.carrierName
         })
     },
     cancel (record) {

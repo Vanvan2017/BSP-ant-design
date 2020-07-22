@@ -8,8 +8,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-
+import {axios as request} from '@/utils/request'
 
 const columns = [
   {
@@ -76,16 +75,16 @@ export default {
   methods: {
      record() {
       var _this = this
-      axios
-        .post('http://localhost:9000/system/wallet/queryrecord', {
+      request
+        .post('/system/wallet/queryrecord', {
           accountName: 'LSKReno3',
           page: 0,
           size: 10
         })
         .then(function(response) {
           console.log(response)
-          if (response.data.success === true) {
-            _this.data = response.data.content.list
+          if (response.success === true) {
+            _this.data = response.content.list
             for(let item of _this.data){
               let tmp=new Date(item.createTime)
               item.createTime=tmp.toLocaleString('chinese',{hour12:false})

@@ -132,16 +132,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {axios as request} from '@/utils/request'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
-// const AmazonData = []
-// const EbayData = []
 export default {
   name: 'MyStores',
   data() {
@@ -183,7 +175,7 @@ export default {
       var app = this
       console.log('hhh')
       request
-        .post('StrStoreController/getOnlineStores', {
+        .post('/system/StrStoreController/getOnlineStores', {
           manBuyerId: 0,
           userId: 5,
           username: 'string'
@@ -193,8 +185,8 @@ export default {
           console.log(response)
 		  app.EbayData = []
 		  app.AmazonData = []
-		  if(response.data.success){
-			  response.data.content.forEach(item => {
+		  if(response.success){
+			  response.content.forEach(item => {
 				if (item.plataeformType === '1') {
 					app.AmazonData.push(item)
 				} else if (item.plataeformType === '2') {
@@ -211,7 +203,7 @@ export default {
     saveOnlineStore(values) {
       var app = this
       request
-        .post('StrStoreController/addOnlineStore', {
+        .post('/system/StrStoreController/addOnlineStore', {
           SysUserDto: {
             userId: 5
           },
@@ -226,7 +218,7 @@ export default {
         .then(function(response) {
 			console.log('sdsd')
 			console.log(response)
-			console.log(response.data)
+			console.log(response)
 			console.log(app.$refs)
 			console.log(app.AmazonData.length)
 			// app.$forceUpdate(true)
@@ -234,7 +226,7 @@ export default {
 			// 	app.AmazonData.pop()
 			// }
 			// app.$refs.list.refresh(true)
-          // if (response.data.success) {
+          // if (response.success) {
           // 	app.$router.push('/dashboard/mvo-workplace')
           // }
 			
