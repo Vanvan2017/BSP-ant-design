@@ -84,12 +84,3 @@
    }).$mount('#app')
 
    ```
-
-
-
-## 其他 减少打包大小
-
-
-
-1.   Ant Design Vue 1.2.x 版本起，采用的 ant-design 官方方案 svg Icon 组件，整个项目打包会变大很多，图标进行按需加载可参考 https://github.com/HeskeyBaozi/reduce-antd-icons-bundle-demo
-2. moment 按需加载 可参考 https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
