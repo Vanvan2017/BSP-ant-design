@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- fakeData测试用，连后端用data -->
-    <a-table :data-source="fakeData" :columns="columns" rowKey="saoId">
+    <a-table :data-source="data" :columns="columns" rowKey="saoId">
       <div
         slot="filterDropdown"
         slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
@@ -239,7 +239,7 @@ export default {
     getAwaitingShippment () {
       var app = this
       request
-        .post('SaOSalesOrderController/getSaoSalesOrderList', {
+        .post('SaOSalesOrderController/getBVOOrderList', {
           SysUserDto: {
             manBuyerId: 0,
             userId: 4,
@@ -250,9 +250,18 @@ export default {
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
+			var list = []
           response.data.content.forEach(item => {
-            app.data.push(item)
+            // app.data.push(item)
+			item.saoSalesOrderDtos.forEach(item1 => {
+				console.log(item1)
+				list.push(item1)
+			})
           })
+			console.log(list)
+			list.forEach(item => {
+				app.data.push(item)
+			})
           // var data = response.data.content
           // if (data) {
           // 	app.data.push({

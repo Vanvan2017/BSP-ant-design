@@ -191,6 +191,7 @@ export default {
   methods: {
     payNow (record) {
       console.log(record)
+		sessionStorage.setItem('record', JSON.stringify(record))
       this.$router.push('/bvo/my-orders/pay')
     },
     showModal (record) {
@@ -216,7 +217,7 @@ export default {
     getAwaitingPayment () {
       var app = this
       request
-        .post('SaOSalesOrderController/getSaoSalesOrderList', {
+        .post('SaOSalesOrderController/getBVOOrderList', {
           SysUserDto: {
             manBuyerId: 0,
             userId: 4,
@@ -227,9 +228,19 @@ export default {
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
+			var list = []
           response.data.content.forEach(item => {
-            app.data.push(item)
+			// console.log(item.saoSalesOrderDtos)
+			item.saoSalesOrderDtos.forEach(item1 => {
+				console.log(item1)
+				list.push(item1)
+			})
+            // app.data.push(item.saoSalesOrderB)
           })
+			console.log(list)
+			list.forEach(item => {
+				app.data.push(item)
+			})
           // var data = response.data.content
           // if (data) {
           // 	app.data.push({
@@ -245,10 +256,10 @@ export default {
           // }
         })
     },
-    getItemDetail () {
+    getItemDetail (values) {
       request
         .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
-          saoId: 1
+          saoId: values
         })
         .then(function (response) {
           console.log('sdsd')

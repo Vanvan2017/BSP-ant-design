@@ -278,13 +278,14 @@ export default {
           console.log(this.currSaoId)
           this.cancelOrder(password, this.currSaoId)
           this.form.resetFields()
-          this.visible = false
+          this.visiCancel = false
           this.currSaoId = null
         }
       })
       // location.reload()
     },
     cancelOrder (password, saoId) {
+      var app = this
       request.post('wallerController/cancel', {
         'SysUserDto': {
           'manBuyerId': 0,
@@ -298,6 +299,11 @@ export default {
       }).then(function (response) {
         console.log('======我makun被取消了========')
         console.log(response)
+        if (response.data.success === false) {
+          app.$message.error(response.data.message)
+        } else {
+          app.$message.success('Successfully cancelled!')
+        }
       })
     },
     track (record) {
