@@ -1,9 +1,9 @@
 <template>
   <div>
     <a-form>
-		
+
       <a-result :is-success="success" style="max-width: 560px; margin: 40px auto 0;">
-<!--        <div class="information">
+        <!--        <div class="information">
           <a-row>
             <a-col :sm="8" :xs="24">付款账户：</a-col>
             <a-col :sm="16" :xs="24">ant-design@alipay.com</a-col>

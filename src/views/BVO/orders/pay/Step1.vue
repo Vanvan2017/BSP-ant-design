@@ -1,93 +1,93 @@
 <template>
   <div>
     <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
-	<a-form-item
-		label="CountryName"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
+      <a-form-item
+        label="CountryName"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
       >
-		<a-input
-			disabled = "true"
-			v-decorator="['countryName', { initialValue: form1.countryName}]"/>
-	</a-form-item>
-	<a-form-item
-		label="cityName"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
-		>
-		<a-input
-			disabled = "true"
-			v-decorator="['cityName', { initialValue: form1.cityName}]"/>
-	</a-form-item>
-	<a-form-item
-		label="addressLine1"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
-		>
-		<a-input
-			disabled = "true"
-			v-decorator="['addressLine1', { initialValue: form1.addressLine1}]"/>
-	</a-form-item>
-	<a-form-item
-		label="addressLine2"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
-		>
-		<a-input
-			disabled = "true"
-			v-decorator="['addressLine2', { initialValue: form1.addressLine2}]"/>
-	</a-form-item>
-	<a-form-item
-		label="addressLine3"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
-		>
-		<a-input
-			disabled = "true"
-			v-decorator="['addressLine3', { initialValue: form1.addressLine3}]"/>
-	</a-form-item>
-	<a-form-item
-		label="postalCd"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
-		>
-		<a-input
-			disabled = "true"
-			v-decorator="['postalCd', { initialValue: form1.postalCd}]"/>
-	</a-form-item>
-	<a-form-item
-		label="contactPhoneNo"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
-		>
-		<a-input
-			disabled = "true"
-			v-decorator="['contactPhoneNo', { initialValue: form1.contactPhoneNo}]"/>
-	</a-form-item>
-	<a-form-item
-		label="carrierName"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
-		>
-		<a-input
-			disabled = "true"
-			v-decorator="['carrierName', { initialValue: form1.carrierName}]"/>
-	</a-form-item>
-	<a-form-item
-		label="productAmount"
-		:labelCol="labelCol"
-		:wrapperCol="wrapperCol"
-		>
-		<a-input
-			disabled = "true"
-			v-decorator="['productAmount', { initialValue: record.productAmount}]"/>
-	</a-form-item>
+        <a-input
+          disabled="true"
+          v-decorator="['countryName', { initialValue: form1.countryName}]"/>
+      </a-form-item>
+      <a-form-item
+        label="cityName"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          disabled="true"
+          v-decorator="['cityName', { initialValue: form1.cityName}]"/>
+      </a-form-item>
+      <a-form-item
+        label="addressLine1"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          disabled="true"
+          v-decorator="['addressLine1', { initialValue: form1.addressLine1}]"/>
+      </a-form-item>
+      <a-form-item
+        label="addressLine2"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          disabled="true"
+          v-decorator="['addressLine2', { initialValue: form1.addressLine2}]"/>
+      </a-form-item>
+      <a-form-item
+        label="addressLine3"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          disabled="true"
+          v-decorator="['addressLine3', { initialValue: form1.addressLine3}]"/>
+      </a-form-item>
+      <a-form-item
+        label="postalCd"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          disabled="true"
+          v-decorator="['postalCd', { initialValue: form1.postalCd}]"/>
+      </a-form-item>
+      <a-form-item
+        label="contactPhoneNo"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          disabled="true"
+          v-decorator="['contactPhoneNo', { initialValue: form1.contactPhoneNo}]"/>
+      </a-form-item>
+      <a-form-item
+        label="carrierName"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          disabled="true"
+          v-decorator="['carrierName', { initialValue: form1.carrierName}]"/>
+      </a-form-item>
+      <a-form-item
+        label="productAmount"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+      >
+        <a-input
+          disabled="true"
+          v-decorator="['productAmount', { initialValue: record.productAmount}]"/>
+      </a-form-item>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
         <a-button type="primary" @click="nextStep">Next</a-button>
       </a-form-item>
     </a-form>
     <a-divider />
-<!--    <div class="step-form-style-desc">
+    <!--    <div class="step-form-style-desc">
       <h3>说明</h3>
       <h4>转账到支付宝账户</h4>
       <p>如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。</p>
