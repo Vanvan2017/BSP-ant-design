@@ -15,7 +15,7 @@
           </div>
         </div>
       </template>
-      <template v-slot:extraContent>
+      <!-- <template v-slot:extraContent>
         <div class="extra-content">
           <div class="stat-item">
             <a-statistic title="商品数" :value="56" />
@@ -27,7 +27,7 @@
             <a-statistic title="访问量" :value="2223" />
           </div>
         </div>
-      </template>
+      </template> -->
       <div style="margin-bottom: 24px">
         <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
           <a-table :columns="columns" :data-source="data" :pagination="false">
@@ -217,8 +217,8 @@ export default {
     }),
     currentUser () {
       return {
-        name: 'Kunkun Ma',
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
+        name: storage.get('username'),
+        avatar: this.$store.getters.avatar
       }
     },
     userInfo () {
@@ -260,6 +260,7 @@ export default {
     },
     getMVOInfo () {
       var app = this
+		console.log('weqw')
       request
         .post('/system/CompanyInformationController/getCompanyInfo', {
           manBuyerId: 0,
@@ -279,15 +280,17 @@ export default {
             }
             app.data.push({
               manId: data.manId,
-              name_cn: data.nameCn,
-              name_en: data.nameEn,
-              type: type,
-              certificate: data.gmcReportUrl,
-              description: data.description
-            })
-            app.MVOInfo = data
-            app.getBrandList()
-          }
+				name_cn: data.nameCn,
+				name_en: data.nameEn,
+				type: type,
+				certificate: data.gmcReportUrl,
+				description: data.description
+			})
+			app.MVOInfo = data
+			app.getBrandList()
+          }	else {
+				app.toMVOInfo()
+			}
         })
     },
     addBrand (values) {
