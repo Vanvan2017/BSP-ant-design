@@ -158,7 +158,7 @@ export default {
       await updateRoleApi(form)
 
       // 更新角色权限
-      await updatePermissionApi({ checkedPermissions: this.checkedPermissions })
+      await updatePermissionApi({ permissions: JSON.stringify(this.checkedPermissions) })
       this.visible = false
     }
   }
