@@ -1,21 +1,21 @@
 <template>
-	<div>
-		<page-header-wrapper>
-			<template v-slot:content>
-				<div class="page-header-content">
-					<div class="avatar">
-						<a-avatar size="large" :src="currentUser.avatar" />
-					</div>
-					<div class="content">
-						<div class="content-title">
-							{{ timeFix }}，{{ user.name }}
-							<span class="welcome-text">，{{ welcome }}</span>
-						</div>
-						<!-- <div>蓝图的总工程师 | cross-boarder事业群 - 马kunkun国际</div> -->
-					</div>
-				</div>
-			</template>
-<!-- 			<template v-slot:extraContent>
+  <div>
+    <page-header-wrapper>
+      <template v-slot:content>
+        <div class="page-header-content">
+          <div class="avatar">
+            <a-avatar size="large" :src="currentUser.avatar" />
+          </div>
+          <div class="content">
+            <div class="content-title">
+              {{ timeFix }}，{{ user.name }}
+              <span class="welcome-text">，{{ welcome }}</span>
+            </div>
+            <!-- <div>蓝图的总工程师 | cross-boarder事业群 - 马kunkun国际</div> -->
+          </div>
+        </div>
+      </template>
+      <!-- 			<template v-slot:extraContent>
 				<div class="extra-content">
 					<div class="stat-item">
 						<a-statistic title="商品数" :value="56" />
@@ -28,62 +28,62 @@
 					</div>
 				</div>
 			</template> -->
-			<div style="margin-bottom: 24px">
-				<a-card :body-style="{padding: '24px 32px'}" :bordered="false">
-					<a-table :columns="columns" :data-source="data" :pagination="false">
-						<a slot="action" @click="toMVOInfo">编辑</a>
-						<p slot="expandedRowRender" slot-scope="record" style="margin: 0">{{ record.description }}</p>
-					</a-table>
-				</a-card>
-			</div>
+      <div style="margin-bottom: 24px">
+        <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
+          <a-table :columns="columns" :data-source="data" :pagination="false">
+            <a slot="action" @click="toMVOInfo">编辑</a>
+            <p slot="expandedRowRender" slot-scope="record" style="margin: 0">{{ record.description }}</p>
+          </a-table>
+        </a-card>
+      </div>
 
-			<div style="margin-top: 24px">
-				<a-list
-					rowKey="id"
-					:grid="{gutter: 24, xxl:5, xl:4, lg: 3, md: 3, sm: 2, xs: 1}"
-					:dataSource="dataSource">
-					<a-list-item slot="renderItem" slot-scope="item">
-						<template v-if="!item || item.brdId === undefined">
-							<a-button class="new-btn" type="dashed" @click="AddEditVisible=true">
-								<a-icon type="plus" />新增品牌
-							</a-button>
-						</template>
-						<template v-else>
-							<a-card :hoverable="true" class="new-btn">
-								<a-card-meta>
-									<a slot="title">{{ item.nameEn }}</a>
-									<!-- <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large" /> -->
-									<div class="meta-content" slot="description">{{ item.nameCn }}</div>
-									<div class="meta-content" slot="description">{{ item.remark }}</div>
-								</a-card-meta>
-								<template class="ant-card-actions" slot="actions">
-									<a @click="saveBrand(item)">编辑</a>
-									<a @ @click="removeBrand(item)">删除</a>
-								</template>
-							</a-card>
-						</template>
-					</a-list-item>
-				</a-list>
-			</div>
-		</page-header-wrapper>
-		<a-modal v-model="AddEditVisible" title="Brand Information" @ok="handleOk">
+      <div style="margin-top: 24px">
+        <a-list
+          rowKey="id"
+          :grid="{gutter: 24, xxl:5, xl:4, lg: 3, md: 3, sm: 2, xs: 1}"
+          :dataSource="dataSource">
+          <a-list-item slot="renderItem" slot-scope="item">
+            <template v-if="!item || item.brdId === undefined">
+              <a-button class="new-btn" type="dashed" @click="AddEditVisible=true">
+                <a-icon type="plus" />新增品牌
+              </a-button>
+            </template>
+            <template v-else>
+              <a-card :hoverable="true" class="new-btn">
+                <a-card-meta>
+                  <a slot="title">{{ item.nameEn }}</a>
+                  <!-- <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large" /> -->
+                  <div class="meta-content" slot="description">{{ item.nameCn }}</div>
+                  <div class="meta-content" slot="description">{{ item.remark }}</div>
+                </a-card-meta>
+                <template class="ant-card-actions" slot="actions">
+                  <a @click="saveBrand(item)">编辑</a>
+                  <a @ @click="removeBrand(item)">删除</a>
+                </template>
+              </a-card>
+            </template>
+          </a-list-item>
+        </a-list>
+      </div>
+    </page-header-wrapper>
+    <a-modal v-model="AddEditVisible" title="Brand Information" @ok="handleOk">
       <a-form :form="form">
-		<a-form-item
-			label="id"
-			:labelCol="{lg: {span: 7}, sm: {span: 7}}"
-			:wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-		>
-			<a-input
-			v-decorator="[
-				'brdId',
-				{rules: [{ required: false, message: 'input brand name(En)' }],
-					initialValue: form1.brdId}
-			]"
-			disabled="true"
-			name="brdId"
-			placeholder="input brand name(En)"
-			/>
-		</a-form-item>
+        <a-form-item
+          label="id"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+        >
+          <a-input
+            v-decorator="[
+              'brdId',
+              {rules: [{ required: false, message: 'input brand name(En)' }],
+               initialValue: form1.brdId}
+            ]"
+            disabled="true"
+            name="brdId"
+            placeholder="input brand name(En)"
+          />
+        </a-form-item>
         <a-form-item
           label="brandName(Cn)"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
@@ -93,7 +93,7 @@
             v-decorator="[
               'nameCn',
               {rules: [{ required: true, message: 'input brand name(Cn)' }],
-					initialValue: form1.nameCn}
+               initialValue: form1.nameCn}
             ]"
             name="nameCn"
             placeholder="input brand name(Cn)"
@@ -108,7 +108,7 @@
             v-decorator="[
               'nameEn',
               {rules: [{ required: true, message: 'input brand name(En)' }],
-					initialValue: form1.nameEn}
+               initialValue: form1.nameEn}
             ]"
             name="nameEn"
             placeholder="input brand name(En)"
@@ -124,13 +124,13 @@
             v-decorator="[
               'remark',
               {rules: [{ required: false, message: 'input description' }],
-					initialValue: form1.remark}
+               initialValue: form1.remark}
             ]"
           />
         </a-form-item>
       </a-form>
-		</a-modal>
-	</div>
+    </a-modal>
+  </div>
 </template>
 
 <script>

@@ -134,6 +134,7 @@ export const asyncRouterMap = [
             name: 'bvo-wallet',
             component: () => import('@/views/BVO/MyWallet'),
             hideChildrenInMenu: true,
+            redirect: '/bvo/my-wallet/register',
             meta: { title: 'BVO MyWallet', keepAlive: false },
             children: [
               {

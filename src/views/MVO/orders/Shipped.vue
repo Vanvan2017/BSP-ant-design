@@ -56,12 +56,42 @@
       </span>
     </a-table>
     <order-detail ref="order-detail" :visible="visi" @okay="handleOk" @cancel="handleCancel" />
+
     <express-detail
       ref="express-detail"
       :visible="visiExp"
       @okay="handleOkExp"
       @cancel="handleCancelExp"
     />
+
+    <a-modal
+      v-model="visiCancel"
+      title="Cancel Oreder"
+      :footer="null"
+      width="50vw"
+    >
+      <a-form @submit="handleSubmit" :form="form">
+        <a-form-item
+          label="密码"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+        >
+          <a-input
+            v-decorator="[
+              'password',
+              {rules: [{ required: true, message: '请输入密码' }]}
+            ]"
+            name="password"
+            placeholder="password"
+          />
+        </a-form-item>
+
+        <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
+          <a-button htmlType="submit" type="primary">提交</a-button>
+          <a-button style="margin-left: 20px" @click="handleCancelCancel">取消</a-button>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -106,8 +136,11 @@ export default {
   },
   data () {
     return {
+      form: this.$form.createForm(this),
+      visiCancel: false,
       visi: false,
       visiExp: false,
+      currSaoId: null,
       data: [],
       companyName: '?',
       fakeData,
@@ -234,6 +267,39 @@ export default {
     this.getShipped()
   },
   methods: {
+    handleSubmit (e) {
+      e.preventDefault()
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values)
+          // Change the next method.
+          var password = Number(values.password)
+          console.log(password)
+          console.log(this.currSaoId)
+          this.cancelOrder(password, this.currSaoId)
+          this.form.resetFields()
+          this.visible = false
+          this.currSaoId = null
+        }
+      })
+      // location.reload()
+    },
+    cancelOrder (password, saoId) {
+      request.post('wallerController/cancel', {
+        'SysUserDto': {
+          'manBuyerId': 0,
+          'userId': 3,
+          'username': 'string'
+        },
+        'password': password,
+        'SaoSalesOrderDto': {
+          'saoId': saoId
+        }
+      }).then(function (response) {
+        console.log('======我makun被取消了========')
+        console.log(response)
+      })
+    },
     track (record) {
       this.getAddress()
       // console.log(record)
@@ -329,6 +395,12 @@ export default {
     },
     cancel (record) {
       console.log(record.saoId)
+      this.currSaoId = record.saoId
+      this.visiCancel = true
+    },
+    handleCancelCancel () {
+      this.form.resetFields()
+      this.visiCancel = false
     }
   }
 }
