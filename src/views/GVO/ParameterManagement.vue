@@ -87,13 +87,8 @@
 
 <script>
 import { STable } from '@/components'
-import axios from 'axios'
+import {axios as request} from '@/utils/request'
 
-const request = axios.create({ // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 export default {
   name: 'TableList',
   components: {
@@ -140,18 +135,16 @@ export default {
       loadData: parameter => {
 		const requestParameters = Object.assign({}, parameter, this.queryParam)
 		console.log('loadData request parameters:', requestParameters)
-        return 	request.post('parameterController/getParameterList',
+        return 	request.post('/system/parameterController/getParameterList',
 				{
-					'userId':	3,
+					'userId':	storage.get('userId'),
 					'rights':	1
 				}).then(function (response) {
-					console.log('sdsd')
-					console.log(response)
-					response.data.content.forEach(item => {
+					response.content.forEach(item => {
 						item.editable = false
 					})
 					var result = {
-						'data': response.data.content,
+						'data': response.content,
 						'pageNo': parameter.pageNo,
 						'pageSize': 10
 					}
@@ -179,7 +172,7 @@ export default {
 			this.form.validateFields((err, values) => {
 				if (!err) {
 				console.log('Received values of form: ', values);
-				request.post('parameterController/saveParameter',
+				request.post('/system/parameterController/saveParameter',
 				{
 					'ParParameterDto': {
 						'description': values.description,
@@ -188,11 +181,9 @@ export default {
 						'remark': values.remark
 					},
 					'SysUserDto': {
-						'userId':	3
+						'userId':	storage.get('userId')
 					}
 				}).then(function (response) {
-					console.log('sdsd')
-					console.log(response)
 					_this.visible = false
 					_this.$refs.table.refresh(true)
 				})
@@ -219,12 +210,10 @@ export default {
         onOk () {
           console.log('OK')
           // 在这里调用删除接口
-			request.post('parameterController/removeParameter',
+			request.post('/system/parameterController/removeParameter',
 			{
 				'parId': row.parId
 			}).then(function (response) {
-				console.log('sdsd')
-				console.log(response)
 				_this.$refs.table.refresh(true)
 			})
           // return new Promise((resolve, reject) => {
@@ -246,15 +235,13 @@ export default {
 			this.$message.warning('the paramValue can not be null')
 			this.$refs.table.refresh(true)
 		} else {
-			request.post('parameterController/saveParameter',
+			request.post('/system/parameterController/saveParameter',
 			{
 		  	'ParParameterDto': row,
 		  	'SysUserDto': {
-		  		'userId':	3
+		  		'userId':	storage.get('userId')
 		  	}
 		  }).then(function (response) {
-		  	console.log('sdsd')
-		  	console.log(response)
 		  })
 	  }
     },

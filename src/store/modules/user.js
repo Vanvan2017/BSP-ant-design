@@ -52,6 +52,7 @@ const user = {
         login(userInfo).then(response => {
           const result = response.content
           storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
+          storage.set('userId', result.userId)
           commit('SET_TOKEN', result.token)
           resolve()
         }).catch(error => {
@@ -100,6 +101,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           storage.remove(ACCESS_TOKEN)
+          storage.remove('userId')
         })
       })
     }

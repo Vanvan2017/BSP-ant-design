@@ -97,14 +97,7 @@
 <script>
 import { STable } from '@/components'
 import {axios as request} from '@/utils/request'
-
-// const request = axios.create({
-//   // eslint-disable-line no-unused-vars
-//   // API 请求的默认前缀
-//   baseURL: 'http://localhost:9000/system/',
-//   timeout: 6000 // 请求超时时间
-// })
-
+import storage from 'store'
 
 export default {
   name: 'TableList',
@@ -126,7 +119,7 @@ export default {
           title: '字典类型',
           dataIndex: 'codeType',
           width: '120px',
-          scopedSlots: { customRender: 'description' }
+          scopedSlots: { customRender: 'codeType' }
         },
         {
           title: '用途描述',
@@ -137,14 +130,14 @@ export default {
           title: '编码',
           dataIndex: 'typeCd',
           width: '150px',
-          scopedSlots: { customRender: 'callNo' }
+          scopedSlots: { customRender: 'typeCd' }
           // customRender: (text) => text + ' 次'
         },
         {
           title: '编码值',
           dataIndex: 'codeVal',
           width: '100px',
-          scopedSlots: { customRender: 'status' }
+          scopedSlots: { customRender: 'codeVal' }
         },
         {
           table: '操作',
@@ -159,7 +152,7 @@ export default {
         console.log('loadData request parameters:', requestParameters)
         return request
           .post('/system/CodeMasterController/getCdmList', {
-            userId: 3,
+            userId: storage.get('userId'),
             rights: 1
           })
           .then(function(response) {
@@ -210,7 +203,7 @@ export default {
             .post('/system/CodeMasterController/saveCdm', {
               CdmCodeMasterDto: values,
               SysUserDto: {
-                userId: 3
+                userId: storage.get('userId')
               }
             })
             .then(function(response) {
@@ -267,10 +260,10 @@ export default {
         row.editable = false
         console.log(row)
         request
-          .post('CodeMasterController/saveCdm', {
+          .post('/system/CodeMasterController/saveCdm', {
             CdmCodeMasterDto: row,
             SysUserDto: {
-              userId: 3
+              userId: storage.get('userId')
             }
           })
           .then(function(response) {
