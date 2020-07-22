@@ -304,8 +304,7 @@ export const asyncRouterMap = [{
           component: () => import('@/views/MVO/MyWallet'),
           meta: {
             title: 'MVO-MyWallet',
-            keepAlive: false,
-            hideChildrenInMenu: true
+            keepAlive: false
           },
           children: [{
               path: '/mvo/my-wallet/register',
@@ -313,8 +312,7 @@ export const asyncRouterMap = [{
               component: () => import('@/views/MVO/WalletRegister'),
               meta: {
                 title: 'Wallet Register',
-                keepAlive: false,
-                hidden: true
+                keepAlive: false
               }
             },
             {

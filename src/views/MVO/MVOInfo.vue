@@ -170,7 +170,7 @@ export default {
               console.log('sdsd')
               console.log(response)
               if (response.success) {
-                app.$router.push('/dashboard/mvo-workplace')
+                app.$router.push('/dashboard/workplace')
               }
             })
         }
@@ -211,7 +211,7 @@ export default {
         })
     },
     handleCancel () {
-      this.$router.push('/dashboard/mvo-workplace')
+      this.$router.push('/dashboard/workplace')
     },
     handleEdit (record) {
       this.record = record || ''
