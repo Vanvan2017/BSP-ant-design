@@ -3,7 +3,7 @@ import request from '@/utils/request'
 const api = {
   Role: '/system/role',
   UpdateRole: '/system/role/update',
-  UpdatePermission: '/system/permission/change'
+  UpdatePermission: '/system/permission/update'
 }
 
 export default api
@@ -30,7 +30,7 @@ export function updatePermission (parameter) {
     method: 'post',
     params: parameter,
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
   })
 }
