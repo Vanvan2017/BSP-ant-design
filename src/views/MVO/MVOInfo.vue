@@ -173,7 +173,9 @@ export default {
                 app.$router.push('/dashboard/workplace')
               }
             })
-        }
+        } else {
+					app.$message.warning('please fill in the blank with red star', 5)
+				}
       })
     },
     getMVOInfo () {
