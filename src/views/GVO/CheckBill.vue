@@ -35,19 +35,19 @@
         </a-form-item>
 
         <a-row class="clearfix" style="margin-top: 24px; text-align:center" justify="center" type="flex">
-          <a-col :span='24'>
-          <a-upload :file-list="fileList" :remove="handleRemove" :before-upload="beforeUpload">
-            <a-button>
-              <a-icon type="upload" />Select File
-            </a-button>
-          </a-upload>
-          <a-button
-            type="primary"
-            :disabled="fileList.length === 0"
-            :loading="uploading"
-            style="margin-top: 16px"
-            @click="handleUpload"
-          >{{ uploading ? 'Uploading' : 'Start Upload' }}</a-button>
+          <a-col :span="24">
+            <a-upload :file-list="fileList" :remove="handleRemove" :before-upload="beforeUpload">
+              <a-button>
+                <a-icon type="upload" />Select File
+              </a-button>
+            </a-upload>
+            <a-button
+              type="primary"
+              :disabled="fileList.length === 0"
+              :loading="uploading"
+              style="margin-top: 16px"
+              @click="handleUpload"
+            >{{ uploading ? 'Uploading' : 'Start Upload' }}</a-button>
           </a-col>
         </a-row>
 
