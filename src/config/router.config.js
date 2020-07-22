@@ -21,14 +21,14 @@ export const asyncRouterMap = [{
   meta: {
     title: 'menu.home'
   },
-  redirect: '/dashboard/workplace',
+  redirect: '/dashboard/analysis',
   children: [
 
     // dashboard
     {
       path: '/dashboard',
       name: 'dashboard',
-      redirect: '/dashboard/workplace',
+      redirect: '/dashboard/analysis',
       component: RouteView,
       meta: {
         title: 'menu.dashboard',
@@ -178,8 +178,7 @@ export const asyncRouterMap = [{
           component: () => import('@/views/BVO/MyWallet'),
           meta: {
             title: 'BVO-MyWallet',
-            keepAlive: false,
-            hideChildrenInMenu: true
+            keepAlive: false
           },
           children: [{
               path: '/bvo/my-wallet/register',

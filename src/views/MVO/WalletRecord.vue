@@ -1,16 +1,13 @@
-<script>
-/*eslint-disable*/
-</script>
 <template>
   <a-table :columns="columns" :data-source="data">
-    <a slot="transactionNumber" slot-scope="text">{{ text}}</a>
+    <a slot="transactionNumber" slot-scope="text">{{ text }}</a>
     <p slot="transactionMoney" slot-scope="text">$ {{ text }}</p>
     <p slot="createTime" slot-scope="text">{{ text }}</p>
   </a-table>
 </template>
 
 <script>
-import {axios as request} from '@/utils/request'
+import { axios as request } from '@/utils/request'
 import storage from 'store'
 
 const columns = [
@@ -38,43 +35,20 @@ const columns = [
   }
 ]
 
-// const data = [
-//   {
-//     key: '1',
-//     serial: '1321431351',
-//     balance: '787888',
-//     time: '2020-07-20 09:12:11',
-//     status: 'operating'
-//   },
-//   {
-//     key: '2',
-//     serial: '1321431351',
-//     balance: '787888',
-//     time: '2020-07-20 09:12:11',
-//     status: 'operating'
-//   },
-//   {
-//     key: '3',
-//     serial: '1321431351',
-//     balance: '787888',
-//     time: '2020-07-20 09:12:11',
-//     status: 'operating'
-//   },
-// ]
 export default {
-  name: 'BaseForm',
+  name: 'MVOWalletRecord',
   components: {},
-  data() {
+  data () {
     return {
       data: [],
       columns
     }
   },
-  mounted() {
+  mounted () {
     this.record()
   },
   methods: {
-    record() {
+    record () {
       var _this = this
       request
         .post('/system/wallet/queryrecord', {
@@ -82,18 +56,18 @@ export default {
           page: 0,
           size: 10
         })
-        .then(function(response) {
+        .then(function (response) {
           console.log(response)
           if (response.success === true) {
             _this.data = response.content.list
-            for (let item of _this.data) {
-              let tmp = new Date(item.createTime)
+            for (const item of _this.data) {
+              const tmp = new Date(item.createTime)
               item.createTime = tmp.toLocaleString('chinese', { hour12: false })
-              if (item.status == 2) {
+              if (item.status === 2) {
                 item.status = 'Applying'
-              } else if (item.status == 4) {
+              } else if (item.status === 4) {
                 item.status = 'Completed'
-              } else if (item.status == 1) {
+              } else if (item.status === 1) {
                 item.status = 'Failed'
               }
             }
@@ -101,7 +75,7 @@ export default {
             _this.$message.error(`No Record Found`)
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
     }

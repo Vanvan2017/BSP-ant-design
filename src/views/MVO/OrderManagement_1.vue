@@ -17,7 +17,7 @@
 
 <script>
 import { axios as request } from '@/utils/request'
-import storage from 'store'
+// import storage from 'store'
 
 const getActiveKey = path => {
   switch (path) {

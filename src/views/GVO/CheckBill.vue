@@ -34,7 +34,12 @@
           />
         </a-form-item>
 
-        <a-row class="clearfix" style="margin-top: 24px; text-align:center" justify="center" type="flex">
+        <a-row
+          class="clearfix"
+          style="margin-top: 24px; text-align:center"
+          justify="center"
+          type="flex"
+        >
           <a-col :span="24">
             <a-upload :file-list="fileList" :remove="handleRemove" :before-upload="beforeUpload">
               <a-button>
@@ -61,6 +66,8 @@
 </template>
 <script>
 import request from '../../utils/request'
+import { getTransactionAuditList as getTransactionAuditListAPI } from '@/api/transactionAudit'
+
 const columns = [
   {
     title: 'Account Name',
@@ -115,7 +122,12 @@ export default {
       form: this.$form.createForm(this)
     }
   },
+  mounted () {},
   methods: {
+    async _loadData () {
+      const res = await getTransactionAuditListAPI()
+      console.log(res)
+    },
     handleRemove (file) {
       const index = this.fileList.indexOf(file)
       const newFileList = this.fileList.slice()

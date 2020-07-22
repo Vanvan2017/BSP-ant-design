@@ -88,13 +88,6 @@
         <router-link class="register" :to="{ name: 'register' }">Sign up for an account</router-link>
       </div>
     </a-form>
-
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
   </div>
 </template>
 
@@ -103,7 +96,6 @@
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix, uuid } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
 
 export default {
   components: {
@@ -131,14 +123,6 @@ export default {
     }
   },
   created () {
-    get2step({})
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
-    // this.requiredTwoStepCaptcha = true
   },
   mounted () {
     this.getkaptcha()
@@ -204,54 +188,6 @@ export default {
         }
       })
     },
-    getCaptcha (e) {
-      e.preventDefault()
-      const {
-        form: { validateFields },
-        state
-      } = this
-
-      validateFields(['mobile'], { force: true }, (err, values) => {
-        if (!err) {
-          state.smsSendBtn = true
-
-          const interval = window.setInterval(() => {
-            if (state.time-- <= 0) {
-              state.time = 60
-              state.smsSendBtn = false
-              window.clearInterval(interval)
-            }
-          }, 1000)
-
-          const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile })
-            .then(res => {
-              setTimeout(hide, 2500)
-              this.$notification['success']({
-                message: '提示',
-                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                duration: 8
-              })
-            })
-            .catch(err => {
-              setTimeout(hide, 1)
-              clearInterval(interval)
-              state.time = 60
-              state.smsSendBtn = false
-              this.requestFailed(err)
-            })
-        }
-      })
-    },
-    stepCaptchaSuccess () {
-      this.loginSuccess()
-    },
-    stepCaptchaCancel () {
-      this.Logout().then(() => {
-        this.loginBtn = false
-        this.stepCaptchaVisible = false
-      })
-    },
     loginSuccess (res) {
       // check res.homePage define, set $router.push name res.homePage
       // Why not enter onComplete
@@ -261,14 +197,6 @@ export default {
           description: `${timeFix()}，欢迎回来`
         })
       })
-      // this.$router.push({ path: '/' })
-      // // 延迟 1 秒显示欢迎信息
-      // setTimeout(() => {
-      //   this.$notification.success({
-      //     message: '欢迎',
-      //     description: `${timeFix()}，欢迎回来`
-      //   })
-      // }, 1000)
       this.isLoginError = false
     },
     requestFailed (err) {
