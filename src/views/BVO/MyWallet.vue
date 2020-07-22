@@ -114,6 +114,7 @@
 
 <script>
 import {axios as request} from '@/utils/request'
+import storage from 'store'
 
 export default {
   name: 'MyWallet',
@@ -142,7 +143,7 @@ export default {
         if (!err) {
           request
             .post('/system/wallet/changepwd', {
-              accountName: 'LSKReno3',
+              accountName: storage.get('username'),
               old_password: values.oldPwd,
               new_password: values.newPwd
             })
@@ -168,7 +169,7 @@ export default {
         if (!err) {
           request
             .post('/system/wallet/deposit', {
-              accountName: 'LSKReno3',
+              accountName: storage.get('username'),
               password: values.password,
               depositingMoney: values.amount,
               currency: 'USD'
@@ -193,7 +194,7 @@ export default {
       var _this = this
       request
         .post('/system/wallet/querylist', {
-          accountName: 'LSKReno3'
+          accountName: storage.get('username')
         })
         .then(function(response) {
           console.log(response)

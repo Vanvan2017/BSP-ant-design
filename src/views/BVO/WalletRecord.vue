@@ -9,6 +9,7 @@
 
 <script>
 import {axios as request} from '@/utils/request'
+import storage from 'store'
 
 const columns = [
   {
@@ -77,7 +78,7 @@ export default {
       var _this = this
       request
         .post('/system/wallet/queryrecord', {
-          accountName: 'LSKReno3',
+          accountName: storage.get('username'),
           page: 0,
           size: 10
         })

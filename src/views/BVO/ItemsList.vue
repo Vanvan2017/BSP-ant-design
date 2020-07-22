@@ -114,6 +114,7 @@
 import moment from 'moment'
 import { TagSelect, StandardFormRow, Ellipsis } from '@/components'
 import { axios as request } from '@/utils/request'
+import storage from 'store'
 
 export default {
   name: 'ItemsList',
@@ -190,7 +191,7 @@ export default {
       // console.log(_this.item.pro_id)
      request
         .post('/system/bvo/wishlist/insert', {
-          dsrId: '4', // 就是userId，在后端会转换成真正的dsrId
+          dsrId: storage.get('userId'), // 就是userId，在后端会转换成真正的dsrId
           proId: _this.item.pro_id,
           createdBy: 'ccc'
         })
@@ -210,7 +211,7 @@ export default {
       var _this = this
      request
         .post('/system/bvo/borrow', {
-          dsrId: '4',
+          dsrId: storage.get('userId'),
           createdBy: 'ccc',
           proId: _this.item.pro_id,
           preferDate: '2020-07-19 00:00:00',

@@ -38,6 +38,7 @@
 import { axios as request } from '@/utils/request'
 import { TagSelect, StandardFormRow, Ellipsis } from '@/components'
 import WishlistDetail from './WishlistDetail'
+import storage from 'store'
 
 export default {
   name: 'StandardList',
@@ -73,7 +74,7 @@ export default {
         .post('/system/bvo/wishlist/list', {
           page: 0,
           size: 10,
-          userId: '4'
+          userId: storage.get('userId')
         })
         .then(function (response) {
           console.log(response)

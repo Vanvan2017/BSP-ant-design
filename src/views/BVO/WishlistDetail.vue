@@ -87,6 +87,7 @@
 
 <script>
 import {axios as request} from '@/utils/request'
+import storage from 'store'
 
 export default {
   datas: '',
@@ -142,7 +143,7 @@ export default {
       var _this = this
       request
         .post('/system/bvo/borrow', {
-          dsrId: '4',
+          dsrId: storage.get('userId'),
           createdBy: 'ccc',
           proId: _this.item.pro_id,
           preferDate: '2020-07-19 00:00:00',

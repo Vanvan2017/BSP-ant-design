@@ -133,6 +133,7 @@
 
 <script>
 import {axios as request} from '@/utils/request'
+import storage from 'store'
 
 export default {
   name: 'MyStores',
@@ -177,8 +178,8 @@ export default {
       request
         .post('/system/StrStoreController/getOnlineStores', {
           manBuyerId: 0,
-          userId: 5,
-          username: 'string'
+          userId: storage.get('userId'),
+          username: storage.get('username')
         })
         .then(function(response) {
           console.log('sdsd')
@@ -205,7 +206,7 @@ export default {
       request
         .post('/system/StrStoreController/addOnlineStore', {
           SysUserDto: {
-            userId: 5
+            userId: storage.get('userId')
           },
           StrStoreDto: {
             storeName: values.storeName,

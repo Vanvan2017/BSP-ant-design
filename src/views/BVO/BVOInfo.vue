@@ -97,6 +97,7 @@ import List from '@/views/list/table/List'
 import Edit from '@/views/list/table/Edit'
 // import router from '../../router'
 import { axios as request } from '@/utils/request'
+import storage from 'store'
 
 export default {
   name: 'BaseForm',
@@ -150,8 +151,8 @@ export default {
 		request.post('/system/DsrDropshipperController/getBVOInfo',
 		{
 			'manBuyerId':	0,
-			'userId':	3,
-			'username':	'string'
+			'userId':	storage.get('userId'),
+			'username':	storage.get('username')
 		}).then(function (response) {
 			console.log('sdsd')
 			console.log(response)
