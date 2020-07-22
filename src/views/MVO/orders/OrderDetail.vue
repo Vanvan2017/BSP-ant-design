@@ -7,13 +7,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
+import { axios as request } from '@/utils/request'
 
 const columns = [
   {
@@ -84,13 +78,13 @@ export default {
     getItemDetail (id) {
       var app = this
       request
-        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+        .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
           saoId: id
         })
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
-          response.data.content.forEach(item => {
+          response.content.forEach(item => {
             var pro = item.proProductDto
             var sal = item.salSalesOrderLineItemDto
             app.data.push({

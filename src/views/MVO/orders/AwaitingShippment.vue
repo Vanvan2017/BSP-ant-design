@@ -53,25 +53,15 @@
         <a @click="() => showModal(record)">Detail</a>
       </span>
     </a-table>
-    <order-detail
-      ref="order-detail"
-      :visible="visi"
-      @okay="handleOk"
-      @cancel="handleCancel"
-    />
+    <order-detail ref="order-detail" :visible="visi" @okay="handleOk" @cancel="handleCancel" />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import OrderDetail from './OrderDetail'
+import { axios as request } from '@/utils/request'
+import storage from 'store'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 const fakeData = [
   {
     orderNo: 'AS12345',
@@ -241,33 +231,18 @@ export default {
     getAwaitingShippment () {
       var app = this
       request
-        .post('SaOSalesOrderController/getSaoSalesOrderList', {
+        .post('/system/SaOSalesOrderController/getSaoSalesOrderList', {
           SysUserDto: {
             manBuyerId: 0,
-            userId: 4,
-            username: 'string'
+            userId: storage.get('userId'),
+            username: storage.get('username')
           },
           ORDER_STS: 'AwaitingShipment'
         })
         .then(function (response) {
-          console.log('sdsd')
-          console.log(response)
-          response.data.content.forEach(item => {
+          response.content.forEach(item => {
             app.data.push(item)
           })
-          // var data = response.data.content
-          // if (data) {
-          // 	app.data.push({
-          // 		manId: data.manId,
-          // 		name_cn: data.nameCn,
-          // 		name_en: data.nameEn,
-          // 		type: data.gmcReportType,
-          // 		certificate: data.gmcReportUrl,
-          // 		description: data.description
-          // 	})
-          // 	app.MVOInfo = data
-          // 	app.getBrandList()
-          // }
         })
     },
     ship (record) {
@@ -277,24 +252,19 @@ export default {
     },
     changeToShipment (sao) {
       request
-        .post('SaOSalesOrderController/changeToSHIPPED', {
+        .post('/system/SaOSalesOrderController/changeToSHIPPED', {
           saoId: sao
         })
         .then(function (response) {
-          console.log('sdsd')
-          console.log(response)
           console.log('shipped!!!')
         })
     },
     getItemDetail () {
       request
-        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+        .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
           saoId: 1
         })
-        .then(function (response) {
-          console.log('sdsd')
-          console.log(response)
-        })
+        .then(function (response) {})
     }
   }
 }

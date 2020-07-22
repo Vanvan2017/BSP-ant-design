@@ -7,13 +7,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
+import { axios as request } from '@/utils/request'
 
 export default {
   props: {
@@ -42,14 +36,14 @@ export default {
     getExpress () {
       var app = this
       request
-        .post('ExpressController/getState', {
+        .post('/system/ExpressController/getState', {
           com: 'suning',
           nu: 'SN6600018167160'
         })
         .then(function (response) {
           console.log('=======ExpressDetail=====')
           console.log(response)
-          response.data.showapi_res_body.data.forEach(item => {
+          response.showapi_res_body.data.forEach(item => {
             app.data.push(item)
             // console.log(item)
           })
@@ -59,13 +53,13 @@ export default {
     // getItemDetail (id) {
     //   var app = this
     //   request
-    //     .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+    //     .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
     //       saoId: id
     //     })
     //     .then(function (response) {
     //       console.log('sdsd')
     //       console.log(response)
-    //       response.data.content.forEach(item => {
+    //       response.content.forEach(item => {
     //         var pro = item.proProductDto
     //         var sal = item.salSalesOrderLineItemDto
     //         app.data.push({

@@ -55,15 +55,10 @@
 </template>
 
 <script>
-import axios from 'axios'
 import OrderDetail from './OrderDetail'
+import { axios as request } from '@/utils/request'
+import storage from 'store'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 // const data = [
 //   {
 //     orderNo: 'AS12345',
@@ -225,18 +220,18 @@ export default {
     getFinished () {
       var app = this
       request
-        .post('SaOSalesOrderController/getSaoSalesOrderList', {
+        .post('/system/SaOSalesOrderController/getSaoSalesOrderList', {
           SysUserDto: {
             manBuyerId: 0,
-            userId: 4,
-            username: 'string'
+            userId: storage.get('userId'),
+            username: storage.get('username')
           },
           ORDER_STS: 'Complete'
         })
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
-          response.data.content.forEach(item => {
+          response.content.forEach(item => {
             app.data.push(item)
           })
           // var data = response.data.content

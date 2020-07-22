@@ -16,14 +16,8 @@
 </template>
 
 <script>
-import axios from 'axios'
-
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
+import { axios as request } from '@/utils/request'
+import storage from 'store'
 
 const getActiveKey = path => {
   switch (path) {
@@ -91,18 +85,18 @@ export default {
       // 	default:
       // 		sts = 'unknown'
       // }
-      // request.post('SaOSalesOrderController/getSaoSalesOrderList',
+      // request.post('/system/SaOSalesOrderController/getSaoSalesOrderList',
       // {
       // 	'SysUserDto': {
       // 		'manBuyerId':	0,
-      // 		'userId':	4,
-      // 		'username':	'string'
+      // 		'userId':	storage.get('userId'),
+      // 		'username':	storage.get('username')
       // 	},
       // 	'ORDER_STS': sts
       // }).then(function (response) {
       // 	console.log('sdsd')
       // 	console.log(response)
-      // 			// var data = response.data.content
+      // 			// var data = response.content
       // 			// if (data) {
       // 			// 	app.data.push({
       // 			// 		manId: data.manId,
@@ -143,7 +137,7 @@ export default {
     },
     changeToShipment () {
       request
-        .post('SaOSalesOrderController/changeToSHIPPED', {
+        .post('/system/SaOSalesOrderController/changeToSHIPPED', {
           saoId: 2
         })
         .then(function (response) {
@@ -153,7 +147,7 @@ export default {
     },
     getExpress () {
       request
-        .post('ExpressController/getState', {
+        .post('/system/ExpressController/getState', {
           com: 'suning',
           nu: 'SN6600018167160'
         })
@@ -163,11 +157,10 @@ export default {
         })
     },
     getAddress () {
-      console.log('我是马焜啊啊啊啊啊啊我好帅啊！！')
     },
     getItemDetail () {
       request
-        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+        .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
           saoId: 1
         })
         .then(function (response) {

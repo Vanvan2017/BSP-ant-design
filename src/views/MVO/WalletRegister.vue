@@ -62,15 +62,10 @@ import AInput from 'ant-design-vue/es/input/Input'
 // 动态切换组件
 import List from '@/views/list/table/List'
 import Edit from '@/views/list/table/Edit'
-// import router from '../../router'
-import axios from 'axios'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
+import {axios as request} from '@/utils/request'
+import storage from 'store'
+
 export default {
   name: 'BaseForm',
   components: {
@@ -90,14 +85,14 @@ export default {
     handleSubmit() {
       var _this = this
       request
-        .post('wallet/register', {
-          accountName: form.name,
+        .post('/system/wallet/register', {
+          accountName: storage.get('username'),
           email: this.form.email,
           password: this.form.password
         })
         .then(function(response) {
           console.log(response)
-          if (response.data.success === true) {
+          if (response.success === true) {
             // 跳转页面
           } else {
             _this.$message.error(`Register Failed`)

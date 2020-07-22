@@ -113,7 +113,8 @@
 
 
 <script>
-import axios from 'axios'
+import {axios as request} from '@/utils/request'
+import storage from 'store'
 
 export default {
   name: 'MyWallet',
@@ -140,15 +141,15 @@ export default {
       var _this = this
       this.form1.validateFields((err, values) => {
         if (!err) {
-          axios
-            .post('http://localhost:9000/system/wallet/changepwd', {
-              accountName: 'LSKReno2',
+          request
+            .post('/system/wallet/changepwd', {
+              accountName: storage.get('username'),
               old_password: values.oldPwd,
               new_password: values.newPwd
             })
             .then(function(response) {
               console.log(response)
-              if (response.data.success === true) {
+              if (response.success === true) {
                 _this.$message.info(`Change Succeed`)
                 _this.form1.resetFields()
                 _this.PwdVisible = false
@@ -166,21 +167,21 @@ export default {
       var _this = this
       this.form2.validateFields((err, values) => {
         if (!err) {
-          axios
-            .post('http://localhost:9000/system/wallet/withdraw', {
-              accountName: 'LSKReno2',
+          request
+            .post('/system/wallet/withdraw', {
+              accountName: storage.get('username'),
               password: values.password,
               withdrawingMoney: values.amount,
               currency: 'USD'
             })
             .then(function(response) {
               console.log(response)
-              if (response.data.success === true) {
+              if (response.success === true) {
                 _this.$message.info(`Withdraw Submitted`)
                 _this.form2.resetFields()
                 _this.WithdrawVisible = false
               } else {
-                _this.$message.error(response.data.message)
+                _this.$message.error(response.message)
               }
             })
             .catch(function(error) {
@@ -191,14 +192,14 @@ export default {
     },
     getAccountData() {
       var _this = this
-      axios
-        .post('http://localhost:9000/system/wallet/querylist', {
-          accountName: 'LSKReno2'
+      request
+        .post('/system/wallet/querylist', {
+          accountName: storage.get('username')
         })
         .then(function(response) {
           console.log(response)
-          if (response.data.success === true) {
-            _this.data = response.data.content
+          if (response.success === true) {
+            _this.data = response.content
           } else {
             // 该用户没有注册过钱包，显示注册页面
             _this.$message.error('Please register at first!')
