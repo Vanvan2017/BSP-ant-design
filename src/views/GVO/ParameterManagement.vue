@@ -88,6 +88,7 @@
 <script>
 import { STable } from '@/components'
 import {axios as request} from '@/utils/request'
+import storage from 'store'
 
 export default {
   name: 'TableList',

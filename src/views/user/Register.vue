@@ -1,7 +1,7 @@
 <template>
   <div class="main user-layout-register">
     <h3>
-      <span>注册</span>
+      <span>SignUp</span>
     </h3>
     <a-form ref="formRegister" :form="form" id="formRegister">
       <a-form-item>
@@ -14,8 +14,8 @@
         <a-input
           size="large"
           type="text"
-          placeholder="邮箱"
-          v-decorator="['email', {rules: [{ required: true, type: 'email', message: '请输入邮箱地址' }], validateTrigger: ['change', 'blur']}]"
+          placeholder="email"
+          v-decorator="['email', {rules: [{ required: true, type: 'email', message: 'Please enter your email address' }], validateTrigger: ['change', 'blur']}]"
         ></a-input>
       </a-form-item>
 
@@ -28,7 +28,7 @@
         <template slot="content">
           <div :style="{ width: '240px' }">
             <div :class="['user-register', passwordLevelClass]">
-              强度：
+              Password Strength：
               <span>{{ passwordLevelName }}</span>
             </div>
             <a-progress
@@ -37,7 +37,7 @@
               :strokeColor=" passwordLevelColor "
             />
             <div style="margin-top: 10px;">
-              <span>请至少输入 6 个字符。请不要使用容易被猜到的密码。</span>
+              <span>Please enter at least 6 characters. Do not use passwords that are easy to guess.</span>
             </div>
           </div>
         </template>
@@ -45,8 +45,8 @@
           <a-input-password
             size="large"
             @click="handlePasswordInputClick"
-            placeholder="至少6位密码，区分大小写"
-            v-decorator="['password', {rules: [{ required: true, message: '至少6位密码，区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
+            placeholder="Passwords with at least 6 characters, case sensitive"
+            v-decorator="['password', {rules: [{ required: true, message: 'Passwords with at least 6 characters, case sensitive'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
           ></a-input-password>
         </a-form-item>
       </a-popover>
@@ -54,8 +54,8 @@
       <a-form-item>
         <a-input-password
           size="large"
-          placeholder="确认密码"
-          v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
+          placeholder="Confirm password"
+          v-decorator="['password2', {rules: [{ required: true, message: 'Passwords with at least 6 characters, case sensitive' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
         ></a-input-password>
       </a-form-item>
 
@@ -65,8 +65,8 @@
             <a-input
               size="large"
               type="text"
-              placeholder="验证码"
-              v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]"
+              placeholder="Kaptcha"
+              v-decorator="['captcha', {rules: [{ required: true, message: 'Please enter a Kaptcha' }], validateTrigger: 'blur'}]"
             >
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
@@ -74,12 +74,6 @@
         </a-col>
         <a-col class="gutter-row" :span="8">
           <img :src="kaptcha_src" @click="getkaptcha()" />
-          <!-- <a-button
-            class="getCaptcha"
-            size="large"
-            :disabled="state.smsSendBtn"
-            @click.stop.prevent="getCaptcha"
-          v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"></a-button>-->
         </a-col>
       </a-row>
 
@@ -92,8 +86,8 @@
           :loading="registerBtn"
           @click.stop.prevent="handleSubmit"
           :disabled="registerBtn"
-        >注册</a-button>
-        <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
+        >SignUp</a-button>
+        <router-link class="login" :to="{ name: 'login' }">Log in with an existing account</router-link>
       </a-form-item>
     </a-form>
   </div>
@@ -194,7 +188,7 @@ export default {
         if (level === 0) {
           this.state.percent = 10
         }
-        callback(new Error('密码强度不够'))
+        callback(new Error('Weak password'))
       }
     },
 
@@ -202,10 +196,10 @@ export default {
       const password = this.form.getFieldValue('password')
       // console.log('value', value)
       if (value === undefined) {
-        callback(new Error('请输入密码'))
+        callback(new Error('Please enter your password.'))
       }
       if (value && password && value.trim() !== password.trim()) {
-        callback(new Error('两次密码不一致'))
+        callback(new Error('The two passwords do not match'))
       }
       callback()
     },
@@ -293,8 +287,8 @@ export default {
     },
     requestFailed (err) {
       this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        message: 'Error',
+        description: ((err.response || {}).data || {}).message || 'There was an error in the request. Please try again later',
         duration: 4
       })
       this.registerBtn = false
