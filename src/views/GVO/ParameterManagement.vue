@@ -4,7 +4,7 @@
   <page-header-wrapper>
     <a-card :bordered="false">
       <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button type="primary" icon="plus" @click="handleAdd">add</a-button>
 <!--        <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1">
@@ -44,16 +44,16 @@
         <template slot="action" slot-scope="text, record">
           <div class="editable-row-operations">
             <span v-if="record.editable">
-              <a @click="() => save(record)">保存</a>
+              <a @click="() => save(record)">add</a>
               <a-divider type="vertical" />
               <a-popconfirm title="真的放弃编辑吗?" @confirm="() => cancel(record)">
                 <a>取消</a>
               </a-popconfirm>
             </span>
             <span v-else>
-              <a class="edit" @click="() => edit(record)">修改</a>
+              <a class="edit" @click="() => edit(record)">save</a>
               <a-divider type="vertical" />
-              <a class="delete" @click="() => del(record)">删除</a>
+              <a class="delete" @click="() => del(record)">delete</a>
             </span>
           </div>
         </template>
@@ -76,7 +76,7 @@
 			</a-form-item>
 			<a-form-item label="description">
 				<a-input
-					v-decorator="['typeCd', { rules: [{ required: true, message: 'please input description' }],
+					v-decorator="['description', { rules: [{ required: true, message: 'please input description' }],
 					initialValue: form1.description}]"
 				/>
 			</a-form-item>
@@ -102,31 +102,31 @@ export default {
 	  form: this.$form.createForm(this, { name: 'coordinated' }),
       columns: [
         {
-          title: '编号',
+          title: 'Id',
           dataIndex: 'parId',
           width: '70px'
         },
         {
-          title: '参数主键',
+          title: 'param Cd',
           dataIndex: 'paramCd',
           width: '90px',
           scopedSlots: { customRender: 'paramCd' }
         },
         {
-          title: '参数值',
+          title: 'param Value',
           dataIndex: 'paramValue',
           width: '90px',
           scopedSlots: { customRender: 'paramValue' }
         },
         {
-          title: '参数说明',
+          title: 'description',
           dataIndex: 'description',
           width: '200px',
           scopedSlots: { customRender: 'description' }
           // customRender: (text) => text + ' 次'
         },
         {
-          table: '操作',
+          table: 'action',
           dataIndex: 'action',
           width: '120px',
           scopedSlots: { customRender: 'action' }
@@ -149,14 +149,15 @@ export default {
 						'pageNo': parameter.pageNo,
 						'pageSize': 10
 					}
+					console.log(response)
 					return result
 				})
       },
 		visible: false,
 		form1: {
-			'description': 'string',
-			'paramCd': 'string',
-			'paramValue': 'string'
+			'description': '',
+			'paramCd': '',
+			'paramValue': ''
 		},
       selectedRowKeys: [],
       selectedRows: []
@@ -186,7 +187,11 @@ export default {
 					}
 				}).then(function (response) {
 					_this.visible = false
-					_this.$refs.table.refresh(true)
+					// _this.$refs.table.refresh(true)
+					if(response.success){
+						_this.$message.success('save success')
+						_this.$refs.table.refresh(true)
+					}
 				})
 				}
 			})
@@ -203,11 +208,11 @@ export default {
     del(row) {
 		var _this = this
       this.$confirm({
-        title: '警告',
-        content: `真的要删除 ${row.parId} 吗?`,
+        title: 'warning',
+        content: `relay delety ${row.parId} ?`,
         okText: 'yes',
         okType: 'danger',
-        cancelText: '取消',
+        cancelText: 'no',
         onOk () {
           console.log('OK')
           // 在这里调用删除接口
@@ -243,6 +248,7 @@ export default {
 		  		'userId':	storage.get('userId')
 		  	}
 		  }).then(function (response) {
+				this.$refs.table.refresh(true)
 		  })
 	  }
     },

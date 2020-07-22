@@ -141,17 +141,11 @@
 <script>
 import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 import { getRoleList, getServiceList } from '@/api/manage'
 // const DataSet = require('@antv/data-set')
 import { STable, Ellipsis } from '@/components'
-
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
+import storage from 'store'
 
 const columns = [
   {
@@ -266,18 +260,20 @@ export default {
     },
     getMVOInfo () {
       var app = this
+		console.log('weqw')
       request
-        .post('CompanyInformationController/getCompanyInfo', {
+        .post('/system/CompanyInformationController/getCompanyInfo', {
           manBuyerId: 0,
-          userId: 4,
+          userId: storage.get('userId'),
           username: 'string'
         })
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
-          var data = response.data.content
-          if (data) {
-            var type = ''
+          // var data = response.data.content
+			var data = response
+          if (response.success) {
+			var type = ''
             if (data.gmcReportType === '1') {
               type = 'TUV'
             } else {
@@ -285,15 +281,17 @@ export default {
             }
             app.data.push({
               manId: data.manId,
-              name_cn: data.nameCn,
-              name_en: data.nameEn,
-              type: type,
-              certificate: data.gmcReportUrl,
-              description: data.description
-            })
-            app.MVOInfo = data
-            app.getBrandList()
-          }
+				name_cn: data.nameCn,
+				name_en: data.nameEn,
+				type: type,
+				certificate: data.gmcReportUrl,
+				description: data.description
+			})
+			app.MVOInfo = data
+			app.getBrandList()
+          }	else {
+				app.toMVOInfo()
+			}
         })
     },
     addBrand (values) {
@@ -308,8 +306,8 @@ export default {
       console.log(values)
       console.log(brandDto.brdId)
       request
-        .post('BrdBrandController/saveBrand', {
-          UserId: 4,
+        .post('/system/BrdBrandController/saveBrand', {
+          UserId: storage.get('userId'),
           BrdBrandDto: brandDto
         })
         .then(function (response) {
@@ -359,8 +357,8 @@ export default {
         remark: item.remark
       }
       request
-        .post('BrdBrandController/removeBrand', {
-          UserId: 4,
+        .post('/system/BrdBrandController/removeBrand', {
+          UserId: storage.get('userId'),
           BrdBrandDto: brandDto
         })
         .then(function (response) {
@@ -380,7 +378,7 @@ export default {
       console.log('1232')
       console.log(this.MVOInfo)
       // console.log(this.data instanceof Array)
-      request.post('BrdBrandController/getBrandsList', this.MVOInfo).then(function (response) {
+      request.post('/system/BrdBrandController/getBrandsList', this.MVOInfo).then(function (response) {
         console.log(response)
         response.data.content.forEach(item => {
           console.log(item)
