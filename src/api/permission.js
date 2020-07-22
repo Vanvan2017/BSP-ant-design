@@ -25,7 +25,6 @@ export function updateRole (parameter) {
 }
 
 export function updatePermission (parameter) {
-  console.log(parameter)
   return request({
     url: api.UpdatePermission,
     method: 'post',
