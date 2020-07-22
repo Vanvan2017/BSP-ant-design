@@ -140,13 +140,13 @@ export const asyncRouterMap = [
                 path: '/bvo/my-wallet/register',
                 name: 'bvo-wallet-register',
                 component: () => import('@/views/BVO/WalletRegister'),
-                meta: { title: 'Register Wallet', keepAlive: true }
+                meta: { title: 'Wallet Regitster', keepAlive: true }
               },
               {
                 path: '/bvo/my-wallet/record',
                 name: 'bvo-wallet-record',
-                component: () => import('@/views/BVO/WalletRegister'),
-                meta: { title: 'Register Wallet', keepAlive: true }
+                component: () => import('@/views/BVO/WalletRecord'),
+                meta: { title: 'Wallet Record', keepAlive: true }
               }
             ]
           }]
@@ -222,7 +222,7 @@ export const asyncRouterMap = [
             name: 'MVO-MyWallet',
             component: () => import('@/views/MVO/MyWallet'),
             hideChildrenInMenu: true,
-            meta: { title: 'MVO-MyWallet', keepAlive: false },
+            meta: { title: 'MVO MyWallet', keepAlive: false },
             children: [
               {
                 path: '/mvo/my-wallet/register',
