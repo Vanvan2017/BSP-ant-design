@@ -239,7 +239,10 @@ export default {
           values.imageCode = values.captcha
           values.imageCodeToken = this.imageCodeToken
           values.username = values.email
-          signupAPI({ values }).then(res => {
+          delete values.email
+          delete values.captcha
+          delete values.password2
+          signupAPI(values).then(res => {
             $router.push({ name: 'registerResult', params: { ...values } })
           })
         }
@@ -299,7 +302,7 @@ export default {
   },
   watch: {
     'state.passwordLevel' (val) {
-      console.log(val)
+      // console.log(val)
     }
   }
 }
