@@ -26,14 +26,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 export default {
   name: 'Step2',
   data () {
@@ -53,7 +47,7 @@ export default {
 		var record = JSON.parse(sessionStorage.getItem('record'))
 		validateFields((err, values) => {
 			if (!err) {
-				request.post('wallerController/pay',
+				request.post('/system/wallerController/pay',
 				{
 					'SysUserDto': {
 						'userId':	3

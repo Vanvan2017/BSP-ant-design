@@ -98,14 +98,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 export default {
   name: 'Step1',
   data () {
@@ -134,14 +128,14 @@ export default {
 		app.record = JSON.parse(sessionStorage.getItem('record'))
 		sessionStorage.removeItem('record')
 		request
-			.post('AddressController/getAddress', {
+			.post('system/AddressController/getAddress', {
 			saoId: app.record.saoId
 		})
 		.then(function (response) {
 			console.log('=======Address========')
 			console.log(response)
-			app.form1 = response.data.content
-			// app.companyName = response.data.content.carrierName
+			app.form1 = response.content
+			// app.companyName = response.content.carrierName
 		})
 	}
   },

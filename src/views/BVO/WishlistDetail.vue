@@ -86,7 +86,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {axios as request} from '@/utils/request'
+
 export default {
   datas: '',
   id: '1',
@@ -139,8 +140,8 @@ export default {
     },
     borrow() {
       var _this = this
-      axios
-        .post('http://localhost:9000/system/bvo/borrow', {
+      request
+        .post('/system/bvo/borrow', {
           dsrId: '4',
           createdBy: 'ccc',
           proId: _this.item.pro_id,
@@ -153,7 +154,7 @@ export default {
         })
         .then(function(response) {
           console.log(response)
-          if (response.data.success === true) {
+          if (response.success === true) {
             _this.$message.info(`Borrow Succeed`)
           } else {
             _this.$message.error(`Borrow Failed`)
@@ -172,13 +173,13 @@ export default {
     },
     sub(id) {
       var _this = this
-      axios
-        .post('http://localhost:9000/system/bvo/wishlist/delete', {
+      request
+        .post('/system/bvo/wishlist/delete', {
           witId: id
         })
         .then(function(response) {
           console.log(response)
-          if (response.data.success === true) {
+          if (response.success === true) {
             _this.$message.info(`Delete Succeed`)
             _this.$emit('update', '1')
             _this.visible = false

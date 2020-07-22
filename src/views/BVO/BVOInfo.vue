@@ -96,13 +96,8 @@ import AInput from 'ant-design-vue/es/input/Input'
 import List from '@/views/list/table/List'
 import Edit from '@/views/list/table/Edit'
 // import router from '../../router'
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 
-const request = axios.create({ // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 export default {
   name: 'BaseForm',
   components: {
@@ -152,7 +147,7 @@ export default {
 	getBVOInfo () {
 		var app = this
 		console.log('hhh')
-		request.post('DsrDropshipperController/getBVOInfo',
+		request.post('/system/DsrDropshipperController/getBVOInfo',
 		{
 			'manBuyerId':	0,
 			'userId':	3,
@@ -160,7 +155,7 @@ export default {
 		}).then(function (response) {
 			console.log('sdsd')
 			console.log(response)
-			var data = response.data.content
+			var data = response.content
 			app.form1.userId = data.userId
 			app.form1.name = data.name
 			app.form1.email = data.email
@@ -184,14 +179,14 @@ export default {
 		var app = this
 		// console.log(values)
 		console.log(this.form1)
-		request.post('DsrDropshipperController/saveBVOInfo',
+		request.post('/system/DsrDropshipperController/saveBVOInfo',
 		{
 			'SysUserDto': app.form1
 		}).then(function (response) {
 			console.log('sdsd')
 			console.log(response)
-			console.log(response.data)
-			// if (response.data.success) {
+			console.log(response)
+			// if (response.success) {
 			// 	app.$router.push('/dashboard/mvo-workplace')
 			// }
 			// app.$message.info(`Update Succeed`)

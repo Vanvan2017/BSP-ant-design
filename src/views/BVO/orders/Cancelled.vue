@@ -55,15 +55,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 import OrderDetail from './OrderDetail'
 
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 // const data = [
 //   {
 //     orderNo: 'AS12345',
@@ -206,7 +200,7 @@ export default {
     getCancelled () {
       var app = this
       request
-        .post('SaOSalesOrderController/getBVOOrderList', {
+        .post('/system/SaOSalesOrderController/getBVOOrderList', {
           SysUserDto: {
             manBuyerId: 0,
             userId: 4,
@@ -218,7 +212,7 @@ export default {
           console.log('sdsd')
           console.log(response)
 			var list = []
-          response.data.content.forEach(item => {
+          response.content.forEach(item => {
             // app.data.push(item)
 			item.saoSalesOrderDtos.forEach(item1 => {
 				console.log(item1)
@@ -229,7 +223,7 @@ export default {
 			list.forEach(item => {
 				app.data.push(item)
 			})
-          // var data = response.data.content
+          // var data = response.content
           // if (data) {
           // 	app.data.push({
           // 		manId: data.manId,
@@ -246,7 +240,7 @@ export default {
     },
     getItemDetail () {
       request
-        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+        .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
           saoId: 1
         })
         .then(function (response) {

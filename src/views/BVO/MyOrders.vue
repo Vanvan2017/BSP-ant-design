@@ -74,14 +74,7 @@
 //     }
 //   }
 // }
-import axios from 'axios'
-
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
+import { axios as request } from '@/utils/request'
 
 const getActiveKey = path => {
   switch (path) {
@@ -151,7 +144,7 @@ export default {
     },
     changeToShipment () {
       request
-        .post('SaOSalesOrderController/changeToSHIPPED', {
+        .post('/system/SaOSalesOrderController/changeToSHIPPED', {
           saoId: 2
         })
         .then(function (response) {
@@ -161,7 +154,7 @@ export default {
     },
     getExpress () {
       request
-        .post('ExpressController/getState', {
+        .post('/system/ExpressController/getState', {
           com: 'suning',
           nu: 'SN6600018167160'
         })
@@ -172,7 +165,7 @@ export default {
     },
     getItemDetail () {
       request
-        .post('SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
+        .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
           saoId: 1
         })
         .then(function (response) {

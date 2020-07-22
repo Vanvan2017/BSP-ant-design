@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 import { TagSelect, StandardFormRow, Ellipsis } from '@/components'
 import WishlistDetail from './WishlistDetail'
 
@@ -69,15 +69,15 @@ export default {
     getData () {
       this.visible = false
       var _this = this
-      axios
-        .post('http://localhost:9000/system/bvo/wishlist/list', {
+      request
+        .post('/system/bvo/wishlist/list', {
           page: 0,
           size: 10,
           userId: '4'
         })
         .then(function (response) {
           console.log(response)
-          _this.data = response.data.content.list
+          _this.data = response.content.list
         })
         .catch(function (error) {
           console.log(error)

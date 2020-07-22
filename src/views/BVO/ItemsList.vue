@@ -113,7 +113,7 @@
 <script>
 import moment from 'moment'
 import { TagSelect, StandardFormRow, Ellipsis } from '@/components'
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
 
 export default {
   name: 'ItemsList',
@@ -147,14 +147,14 @@ export default {
   },
   created () {
     var _this = this
-    axios
-      .post('http://localhost:9000/system/bvo/product/listA', {
+   request
+      .post('/system/bvo/product/listA', {
         page: 0,
         size: 10
       })
       .then(function (response) {
         console.log(response)
-        _this.data = response.data.content.list
+        _this.data = response.content.list
         _this.loading = false
       })
       .catch(function (error) {
@@ -188,15 +188,15 @@ export default {
       // console.log("hhhhh")
       var _this = this
       // console.log(_this.item.pro_id)
-      axios
-        .post('http://localhost:9000/system/bvo/wishlist/insert', {
+     request
+        .post('/system/bvo/wishlist/insert', {
           dsrId: '4', // 就是userId，在后端会转换成真正的dsrId
           proId: _this.item.pro_id,
           createdBy: 'ccc'
         })
         .then(function (response) {
           console.log(response)
-          if (response.data.success === true) {
+          if (response.success === true) {
             _this.$message.info(`Add Succeed`)
           } else {
             _this.$message.error(`Add Failed`)
@@ -208,8 +208,8 @@ export default {
     },
     borrow () {
       var _this = this
-      axios
-        .post('http://localhost:9000/system/bvo/borrow', {
+     request
+        .post('/system/bvo/borrow', {
           dsrId: '4',
           createdBy: 'ccc',
           proId: _this.item.pro_id,
@@ -222,7 +222,7 @@ export default {
         })
         .then(function (response) {
           console.log(response)
-          if (response.data.success === true) {
+          if (response.success === true) {
             _this.$message.info(`Borrow Succeed`)
           } else {
             _this.$message.error(`Borrow Failed`)
