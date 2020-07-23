@@ -26,10 +26,10 @@
         >
           <a-textarea
             rows="4"
-            placeholder="请输入你不通过的原因"
+            placeholder="Please enter the reason you failed"
             v-decorator="[
               'reason',
-              {rules: [{ message: '请输入原因' }]}
+              {rules: [{ message: 'Please enter the reason' }]}
             ]"
           />
         </a-form-item>
@@ -70,17 +70,25 @@ import { getTransactionAuditList as getTransactionAuditListAPI } from '@/api/tra
 
 const columns = [
   {
-    title: 'Account Name',
-    dataIndex: 'name',
-    scopedSlots: { customRender: 'name' }
+    title: 'transactionAuditId',
+    dataIndex: 'transactionAuditId',
+    scopedSlots: { customRender: 'transactionAuditId' }
   },
   {
-    title: 'Age',
-    dataIndex: 'age'
+    title: 'buyerId',
+    dataIndex: 'buyerId'
   },
   {
-    title: 'Address',
-    dataIndex: 'address'
+    title: 'createBy',
+    dataIndex: 'createBy'
+  },
+  {
+    title: 'depositingMoneyBefore',
+    dataIndex: 'depositingMoneyBefore'
+  },
+  {
+    title: 'withdrawingMoneyBefore',
+    dataIndex: 'withdrawingMoneyBefore'
   },
   { title: 'Action', dataIndex: '', key: 'x', scopedSlots: { customRender: 'action' } }
 ]
@@ -122,11 +130,15 @@ export default {
       form: this.$form.createForm(this)
     }
   },
-  mounted () {},
+  mounted () {
+    this._loadData()
+  },
   methods: {
     async _loadData () {
       const res = await getTransactionAuditListAPI()
+      console.log('getTransactionAuditListAPI')
       console.log(res)
+      this.data = res.content.list
     },
     handleRemove (file) {
       const index = this.fileList.indexOf(file)

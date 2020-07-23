@@ -12,7 +12,7 @@
           </div>
           <div class="account-center-detail">
             <p>
-              <i class="title"></i>前端专家
+              <i class="title"></i>Front-end Expert
             </p>
           </div>
           <a-divider />
@@ -21,7 +21,7 @@
           <a-divider :dashed="true" />
 
           <div class="account-center-team">
-            <div class="teamTitle">团队</div>
+            <div class="teamTitle">Team</div>
             <a-spin :spinning="teamSpinning">
               <div class="members">
                 <a-row>
@@ -75,11 +75,11 @@ export default {
   methods: {
     getTeams () {
         this.teams = [
-          { avatar: this.avatar, name: '刘宸绪' },
-          { avatar: this.avatar, name: '常铂雨' },
-          { avatar: this.avatar, name: '马焜' },
-          { avatar: this.avatar, name: '陈禹帆' },
-          { avatar: this.avatar, name: '李思宽' }
+          { avatar: 'https://lskreno-typora.oss-cn-beijing.aliyuncs.com/img/lcx.jpg', name: '刘宸绪' },
+          { avatar: 'https://lskreno-typora.oss-cn-beijing.aliyuncs.com/img/cby.jpg', name: '常铂雨' },
+          { avatar: 'https://lskreno-typora.oss-cn-beijing.aliyuncs.com/img/mk.jpg', name: '马焜' },
+          { avatar: 'https://lskreno-typora.oss-cn-beijing.aliyuncs.com/img/cyf.jpg', name: '陈禹帆' },
+          { avatar: 'https://lskreno-typora.oss-cn-beijing.aliyuncs.com/img/nono.jpg', name: '李思宽' }
         ]
         this.teamSpinning = false
     },
