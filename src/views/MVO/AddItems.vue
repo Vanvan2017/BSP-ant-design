@@ -9,7 +9,7 @@
           <a-form layout="inline">
             <a-row :gutter="48">
               <a-col :md="8" :sm="24">
-                <a-form-item label="商品标题">
+                <a-form-item label="Product Title">
                   <a-input v-model="queryParam.title" placeholder="标题" />
                 </a-form-item>
               </a-col>
@@ -306,22 +306,23 @@ export default {
       formLayout: 'horizontal',
       form: this.$form.createForm(this, { name: 'coordinated' }),
       form1: {
+        userId: storage.get('userId'),
         proId: null,
-        title: 'oranges',
-        skuCd: 's44444',
-        upc: 'vccc123',
-        ean: 'g123456',
-        model: 'www0x',
-        warrantyDay: '20200716',
-        descrition: 'sweetsweetsweet',
-        retailPrice: '10',
-        length: '7.3',
-        weight: '9.3',
-        height: '5',
-        width: '43.2',
-        userId: '3',
-        createdBy: 'zzz',
-        stsCd: 'A'
+        title: '',
+        skuCd: '',
+        upc: '',
+        ean: '',
+        model: '',
+        warrantyDay: '',
+        descrition: '',
+        retailPrice: '',
+        length: '',
+        weight: '',
+        height: '',
+        width: '',
+        userId: '',
+        createdBy: '',
+        stsCd: ''
       },
       // create model
       visible: false,
@@ -425,6 +426,9 @@ export default {
       this.form1.retailPrice = record.retail_price
       this.form1.warrantyDay = record.warrant_day
       this.form1.proId = record.pro_id
+      this.form1.title=record.title
+      this.form1.upc=record.upc
+      this.form1.ean=record.ean
     },
     handleSubmit(e) {
       var _this = this
@@ -434,6 +438,7 @@ export default {
           console.log('Received values of form: ', values)
           this.visible = false
           values.userId = storage.get('userId')
+          values.createdBy=storage.get('userName')
           if (values.proId === null) {
             console.log(values)
             request
@@ -476,7 +481,6 @@ export default {
     },
     handleCancel() {
       this.visible = false
-
       const form = this.$refs.createModal.form
       form.resetFields() // 清理表单数据（可不做）
     },
@@ -486,7 +490,7 @@ export default {
       request
         .post('/system/mvo/product/delete', {
           proId: record.pro_id,
-          lastUpdateBy: 'Rain'
+          lastUpdateBy: storage.get('userName')
         })
         .then(function(response) {
           console.log(response)
