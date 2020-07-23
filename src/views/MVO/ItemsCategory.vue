@@ -188,7 +188,7 @@ export default {
           uid: '-1',
           name: 'image.png',
           status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+          uri: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
         },
         {
           uid: '-2',
@@ -251,7 +251,7 @@ export default {
           title: this.tempTitle,
           categoryName: this.tempCategory,
           createdBy: 'naultilss',
-          uri: tmpuri,
+          uri: tmpuri, // 放这
           stsCd: tempSts,
           userId: storage.get('userId')
         })
@@ -284,7 +284,7 @@ export default {
         .post('/system/mvo/productCategory/update', {
           prcId: this.tempRecord.prc_id,
           categoryName: this.tempCategory,
-          uri: tmpuri,
+          uri: tmpuri, // 放这
           stsCd: tempSts,
           lastUpdateBy: 'ptryyy'
         })
