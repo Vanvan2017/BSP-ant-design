@@ -25,7 +25,7 @@ const locale = {
   'Number': 'Number',
   'Type': 'Type',
   'Description': 'Description',
-  'Code': 'Code', 
+  'Code': 'Code',
   'Value': 'Value',
 
   'layouts.usermenu.dialog.title': 'Message',
