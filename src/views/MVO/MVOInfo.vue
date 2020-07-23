@@ -3,52 +3,52 @@
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
       <a-form @submit="handleSubmit" :form="form">
         <a-form-item
-          label="公司中文名称（中文）"
+          label="Company name (CN)"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
             v-decorator="[
               'nameCn',
-              {rules: [{ required: true, message: '请输入名称（中文）' }],
+              {rules: [{ required: true, message: 'please input company name (CN)' }],
                initialValue: form1.nameCn}
             ]"
             name="nameCn"
-            placeholder="请输入公司中文名称（中文）"
+            placeholder="please input company name (CN)"
           />
         </a-form-item>
         <a-form-item
-          label="公司英文名称（English）"
+          label="Company name (EN)"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
             v-decorator="[
               'nameEn',
-              {rules: [{ required: true, message: '请输入英文名称（English）' }],
+              {rules: [{ required: true, message: 'please input company name (EN)' }],
                initialValue: form1.nameEn}
             ]"
             name="nameEn"
-            placeholder="请输入公司名称（English）"
+            placeholder="please input company name (EN)"
           />
         </a-form-item>
         <a-form-item
-          label="公司简介"
+          label="description"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-textarea
             rows="4"
-            placeholder="请输入你的公司简介"
+            placeholder="please input description"
             v-decorator="[
               'description',
-              {rules: [{ required: true, message: '请输入公司简介' }],
+              {rules: [{ required: true, message: 'please input description' }],
                initialValue: form1.description}
             ]"
           />
         </a-form-item>
         <a-form-item
-          label="品牌商认证类型"
+          label="MVO certification Type"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
@@ -77,23 +77,23 @@
           </a-form-model-item>-->
         </a-form-item>
         <a-form-item
-          label="证书地址"
+          label="certificate url"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
-            placeholder="请输入证书地址"
+            placeholder="certificate url"
             v-decorator="[
               'gmcReportUrl',
-              {rules: [{ required: true, message: '请输入证书地址' }],
+              {rules: [{ required: true, message: 'certificate url' }],
                initialValue: form1.gmcReportUrl}
             ]"
           />
         </a-form-item>
 
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-          <a-button htmlType="submit" type="primary" @click="handleSubmit">保存</a-button>
-          <a-button style="margin-left: 8px" @click="handleCancel">取消</a-button>
+          <a-button htmlType="submit" type="primary" @click="handleSubmit">save</a-button>
+          <a-button style="margin-left: 8px" @click="handleCancel">cancel</a-button>
         </a-form-item>
       </a-form>
     </a-card>

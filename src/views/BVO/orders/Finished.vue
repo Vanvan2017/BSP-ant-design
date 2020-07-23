@@ -226,16 +226,16 @@ export default {
     this.getShipped()
   },
   methods: {
-    track (record) {
-      this.getAddress(record)
+    async track (record) {
+      await this.getAddress(record)
       // console.log(record)
       console.log(record.remark)
       console.log(this.companyName)
 
       // 测试用的
-      this.$refs['express-detail'].getExpress()
+      // this.$refs['express-detail'].getExpress()
       // 传入参数用这个
-      // this.$refs['express-detail'].getExpress(record.remark, this.companyName)
+      this.$refs['express-detail'].getExpress(record.remark, this.companyName)
       this.visiExp = true
     },
     showModal (record) {
@@ -315,11 +315,10 @@ export default {
           console.log(response)
         })
     },
-    getAddress (values) {
+    async getAddress (values) {
 			console.log(values)
       var app = this
-      console.log('我是马焜啊啊啊啊啊啊我好帅啊！！')
-      request
+      await request
         .post('/system/AddressController/getAddress', {
           saoId: values.saoId
         })

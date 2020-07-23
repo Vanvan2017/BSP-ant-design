@@ -14,22 +14,22 @@
                initialValue: form1.userId}
             ]"
             name="userId"
-            placeholder="请输入id"
+            placeholder="please input id"
           />
         </a-form-item>
         <a-form-item
-          label="姓名"
+          label="name"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
             v-decorator="[
               'name',
-              {rules: [{ required: true, message: '请输入姓名' }],
+              {rules: [{ required: true, message: 'please input name' }],
                initialValue: form1.name}
             ]"
             name="name"
-            placeholder="请输入姓名"
+            placeholder="please input name"
           />
         </a-form-item>
         <a-form-item
@@ -40,45 +40,45 @@
           <a-input
             v-decorator="[
               'email',
-              {rules: [{ required: true, message: '请输入邮箱' }],
+              {rules: [{ required: true, message: 'please input email' }],
                initialValue: form1.email}
             ]"
             name="email"
-            placeholder="请输入邮箱"
+            placeholder="please input email"
           />
         </a-form-item>
         <a-form-item
-          label="电话"
+          label="phone"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
-            placeholder="请输入电话"
+            placeholder="please input phone number"
             v-decorator="[
               'phone',
-              {rules: [{ required: true, message: '请输入电话' }],
+              {rules: [{ required: true, message: 'please input phone number' }],
                initialValue: form1.phone}
             ]"
           />
         </a-form-item>
         <a-form-item
-          label="固话"
+          label="number"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
             v-decorator="[
               'number',
-              {rules: [{ required: false, message: '请输入请输入固化号码' }],
+              {rules: [{ required: false, message: 'please input fix phone number' }],
                initialValue: form1.number}
             ]"
             v-model="number"
-            placeholder="请输入固话号码"
+            placeholder="please input fix phone number"
           />
         </a-form-item>
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-          <a-button htmlType="submit" type="primary" @click="handleSubmit">保存</a-button>
-          <a-button style="margin-left: 8px" @click="handleCancel">取消</a-button>
+          <a-button htmlType="submit" type="primary" @click="handleSubmit">save</a-button>
+          <a-button style="margin-left: 8px" @click="handleCancel">cancel</a-button>
         </a-form-item>
       </a-form>
     </a-card>

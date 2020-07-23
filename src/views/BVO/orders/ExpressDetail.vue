@@ -33,12 +33,14 @@ export default {
       this.data = []
       this.$emit('cancel')
     },
-    getExpress () {
+    getExpress (nu, com) {
       var app = this
+		console.log(nu)
+		console.log(com)
       request
         .post('/system/ExpressController/getState', {
-          com: 'suning',
-          nu: 'SN6600018167160'
+          com: com,
+          nu: nu
         })
         .then(function (response) {
           console.log('=======ExpressDetail=====')

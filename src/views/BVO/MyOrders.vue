@@ -97,11 +97,11 @@ export default {
   data () {
     return {
       tabList: [
-        { key: '1', tab: '待支付' },
-        { key: '2', tab: '待发货' },
-        { key: '3', tab: '已发货' },
-        { key: '4', tab: '已完成' },
-        { key: '5', tab: '已取消' }
+        { key: '1', tab: 'unpaid' },
+        { key: '2', tab: 'unshipped' },
+        { key: '3', tab: 'shipped' },
+        { key: '4', tab: 'finished' },
+        { key: '5', tab: 'cancelled' }
       ],
       tabActiveKey: '1',
       search: true
