@@ -10,7 +10,7 @@
             <a-row :gutter="48">
               <a-col :md="8" :sm="24">
                 <a-form-item label="Product Title">
-                  <a-input v-model="queryParam.title" placeholder="标题" />
+                  <a-input v-model="queryParam.title" placeholder="Product Title" />
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
@@ -20,7 +20,7 @@
               </a-col>
               <template v-if="advanced">
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="商品价格">
+                  <a-form-item label="Retail Price">
                     <a-input-number v-model="queryParam.retail_price" style="width: 100%" />
                   </a-form-item>
                 </a-col>
@@ -35,10 +35,10 @@
                   class="table-page-search-submitButtons"
                   :style="advanced && { float: 'right', overflow: 'hidden' } || {} "
                 >
-                  <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                  <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+                  <a-button type="primary" @click="$refs.table.refresh(true)">Search</a-button>
+                  <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">Reset</a-button>
                   <a @click="toggleAdvanced" style="margin-left: 8px">
-                    {{ advanced ? '收起' : '展开' }}
+                    {{ advanced ? 'Fold' : 'Unfold' }}
                     <a-icon :type="advanced ? 'up' : 'down'" />
                   </a>
                 </span>
@@ -48,16 +48,16 @@
         </div>
 
         <div class="table-operator">
-          <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+          <a-button type="primary" icon="plus" @click="handleAdd">Add</a-button>
           <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
             <a-menu slot="overlay">
               <a-menu-item key="1">
-                <a-icon type="delete" />删除
+                <a-icon type="delete" />Delete
               </a-menu-item>
               <!-- lock | unlock -->
             </a-menu>
             <a-button style="margin-left: 8px">
-              批量操作
+              Batch Operation
               <a-icon type="down" />
             </a-button>
           </a-dropdown>
@@ -83,9 +83,9 @@
 
           <span slot="action" slot-scope="text, record">
             <template>
-              <a @click="handleEdit(record)">编辑</a>
+              <a @click="handleEdit(record)">Edit</a>
               <a-divider type="vertical" />
-              <a @click="handleSub(record)">删除</a>
+              <a @click="handleSub(record)">Delete</a>
             </template>
           </span>
         </s-table>
@@ -236,7 +236,7 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '商品标题',
+    title: 'Product Title',
     dataIndex: 'title'
   },
   {
@@ -247,11 +247,11 @@ const columns = [
     customRender: text => text
   },
   {
-    title: '商品价格',
+    title: 'Retail Price',
     dataIndex: 'retail_price',
     sorter: true,
     needTotal: true,
-    customRender: text => text + ' 元'
+    customRender: text => '$ ' + text
   },
   // {
   //   title: '商品库存',
@@ -266,7 +266,7 @@ const columns = [
   //   sorter: true
   // },
   {
-    title: '操作',
+    title: 'Operation',
     dataIndex: 'action',
     width: '150px',
     scopedSlots: { customRender: 'action' }
@@ -276,19 +276,19 @@ const columns = [
 const statusMap = {
   0: {
     status: 'default',
-    text: '关闭'
+    text: 'close'
   },
   1: {
     status: 'processing',
-    text: '运行中'
+    text: 'processing'
   },
   2: {
     status: 'success',
-    text: '已上线'
+    text: 'online'
   },
   3: {
     status: 'error',
-    text: '异常'
+    text: 'error'
   }
 }
 
@@ -306,8 +306,8 @@ export default {
       formLayout: 'horizontal',
       form: this.$form.createForm(this, { name: 'coordinated' }),
       form1: {
-        userId: storage.get('userId'),
-        proId: null,
+        userId: '',
+        proId: '',
         title: '',
         skuCd: '',
         upc: '',
