@@ -39,7 +39,7 @@
             </a-col>
             <a-col :span="8">
               <a-button type="link" @click="withdraw()">Withdraw</a-button>
-              <a-button type="link" @click="DepositVisible = true">deposit</a-button>
+              <a-button type="link" @click="DepositVisible = true">Deposit</a-button>
             </a-col>
           </a-row>
 

@@ -307,7 +307,7 @@ export default {
       form: this.$form.createForm(this, { name: 'coordinated' }),
       form1: {
         userId: '',
-        proId: '',
+        proId: null,
         title: '',
         skuCd: '',
         upc: '',
