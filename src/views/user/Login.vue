@@ -248,7 +248,7 @@ export default {
       transition: color 0.3s;
 
       &:hover {
-        color: #13C2C2;
+        color: #1890ff;
       }
     }
 
