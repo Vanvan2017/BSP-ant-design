@@ -5,14 +5,14 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="角色ID">
-                <a-input placeholder="请输入" />
+              <a-form-item label="roleID">
+                <a-input placeholder="PLease Enter..." />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <span class="table-page-search-submitButtons">
-                <a-button type="primary">查询</a-button>
-                <a-button style="margin-left: 8px">重置</a-button>
+                <a-button type="primary">Query</a-button>
+                <a-button style="margin-left: 8px">Reset</a-button>
               </span>
             </a-col>
           </a-row>
@@ -84,19 +84,19 @@ import {
 
 const columns = [
   {
-    title: '唯一识别码',
+    title: 'id',
     dataIndex: 'id'
   },
   {
-    title: '角色名称',
+    title: 'roleName',
     dataIndex: 'roleName'
   },
   {
-    title: '角色描述',
+    title: 'description',
     dataIndex: 'description'
   },
   {
-    title: '操作',
+    title: 'action',
     width: '150px',
     dataIndex: 'action',
     scopedSlots: { customRender: 'action' }
@@ -108,6 +108,7 @@ export default {
   components: {},
   data () {
     return {
+      roleId: null,
       allPermissions: [],
       checkedPermissions: [],
       visible: false,
@@ -135,15 +136,16 @@ export default {
     },
     handleModify (record) {
       this.visible = true
+      this.roleId = record.id
       this.modalForm = record
-      this.allPermissions = record.permissions.map(item => {
+      this.allPermissions = record.permissions.map((item) => {
         return { label: item.menuName, value: item.menuId }
       })
       this.checkedPermissions = record.permissions
-        .filter(item => {
+        .filter((item) => {
           return item.deleted === 0
         })
-        .map(item => {
+        .map((item) => {
           return item.menuId
         })
     },
@@ -157,7 +159,7 @@ export default {
       await updateRoleApi(form)
 
       // 更新角色权限
-      await updatePermissionApi({ permissions: JSON.stringify(this.checkedPermissions) })
+      await updatePermissionApi({ roleId: this.roleId, permissions: JSON.stringify(this.checkedPermissions) })
       this.visible = false
     }
   }
