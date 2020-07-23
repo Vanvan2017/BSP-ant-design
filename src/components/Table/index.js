@@ -243,7 +243,7 @@ export default {
       // 绘制统计列数据
       const needTotalItems = this.needTotalList.map((item) => {
         return (<span style="margin-right: 12px">
-          {item.title}总计 <a style="font-weight: 600">{!item.customRender ? item.total : item.customRender(item.total)}</a>
+          {item.title} Sum: <a style="font-weight: 600">{!item.customRender ? item.total : item.customRender(item.total)}</a>
         </span>)
       })
 
@@ -258,7 +258,7 @@ export default {
       return (
         <a-alert showIcon={true} style="margin-bottom: 16px">
           <template slot="message">
-            <span style="margin-right: 12px">已选择: <a style="font-weight: 600">{this.selectedRows.length}</a></span>
+            <span style="margin-right: 12px">Choosed: <a style="font-weight: 600">{this.selectedRows.length}</a></span>
             {needTotalItems}
             {clearItem}
           </template>
