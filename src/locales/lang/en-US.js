@@ -15,6 +15,19 @@ const locale = {
   'menu.dashboard.monitor': 'Monitor',
   'menu.dashboard.workplace': 'Workplace',
 
+  // operations
+  'Add': 'Add',
+  'Edit': 'Edit',
+  'Delete': 'Delete',
+  'Action': 'Action',
+  'Selected': 'Selected',
+  // GVO-Dict
+  'Number': 'Number',
+  'Type': 'Type',
+  'Description': 'Description',
+  'Code': 'Code', 
+  'Value': 'Value',
+
   'layouts.usermenu.dialog.title': 'Message',
   'layouts.usermenu.dialog.content': 'Do you really log-out.',
 
