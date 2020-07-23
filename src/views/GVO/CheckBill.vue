@@ -14,8 +14,8 @@
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-radio-group v-decorator="['decision', { initialValue: 1 }]">
-            <a-radio :value="1">通过</a-radio>
-            <a-radio :value="2">不通过</a-radio>
+            <a-radio :value="1">Approve</a-radio>
+            <a-radio :value="2">Reject</a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item
@@ -57,8 +57,8 @@
         </a-row>
 
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center; margin-top: 24px">
-          <a-button htmlType="submit" type="primary">提交</a-button>
-          <a-button style="margin-left: 20px" @click="handleCancel">取消</a-button>
+          <a-button htmlType="submit" type="primary">Submit</a-button>
+          <a-button style="margin-left: 20px" @click="handleCancel">Cancel</a-button>
         </a-form-item>
       </a-form>
     </a-modal>
