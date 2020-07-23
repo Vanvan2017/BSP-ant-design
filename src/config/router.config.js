@@ -178,28 +178,28 @@ export const asyncRouterMap = [{
           component: () => import('@/views/BVO/MyWallet'),
           meta: {
             title: 'BVO-MyWallet',
-            keepAlive: false,
-            hideChildrenInMenu: true
-          },
-          children: [{
-              path: '/bvo/my-wallet/register',
-              name: 'BVO-MyWallet-Register',
-              component: () => import('@/views/BVO/WalletRegister'),
-              meta: {
-                title: 'Wallet Regitster',
-                keepAlive: true
-              }
-            },
-            {
-              path: '/bvo/my-wallet/record',
-              name: 'BVO-Wallet-Record',
-              component: () => import('@/views/BVO/WalletRecord'),
-              meta: {
-                title: 'Wallet Record',
-                keepAlive: true
-              }
-            }
-          ]
+            keepAlive: false
+            // hideChildrenInMenu: true
+          }
+          // children: [{
+          //     path: '/bvo/my-wallet/register',
+          //     name: 'BVO-MyWallet-Register',
+          //     component: () => import('@/views/BVO/WalletRegister'),
+          //     meta: {
+          //       title: 'Wallet Regitster',
+          //       keepAlive: true
+          //     }
+          //   },
+          //   {
+          //     path: '/bvo/my-wallet/record',
+          //     name: 'BVO-Wallet-Record',
+          //     component: () => import('@/views/BVO/WalletRecord'),
+          //     meta: {
+          //       title: 'Wallet Record',
+          //       keepAlive: true
+          //     }
+          //   }
+          // ]
         }
       ]
     },
@@ -304,29 +304,27 @@ export const asyncRouterMap = [{
           component: () => import('@/views/MVO/MyWallet'),
           meta: {
             title: 'MVO-MyWallet',
-            keepAlive: false,
-            hideChildrenInMenu: true
-          },
-          children: [{
-              path: '/mvo/my-wallet/register',
-              name: 'MVO-Wallet-Register',
-              component: () => import('@/views/MVO/WalletRegister'),
-              meta: {
-                title: 'Wallet Register',
-                keepAlive: false,
-                hidden: true
-              }
-            },
-            {
-              path: '/mvo/my-wallet/record',
-              name: 'MVO-Wallet-Record',
-              component: () => import('@/views/MVO/WalletRecord'),
-              meta: {
-                title: 'Wallet Record',
-                keepAlive: false
-              }
-            }
-          ]
+            keepAlive: false
+          }
+          // children: [{
+          //     path: '/mvo/my-wallet/register',
+          //     name: 'MVO-Wallet-Register',
+          //     component: () => import('@/views/MVO/WalletRegister'),
+          //     meta: {
+          //       title: 'Wallet Register',
+          //       keepAlive: false
+          //     }
+          //   },
+          //   {
+          //     path: '/mvo/my-wallet/record',
+          //     name: 'MVO-Wallet-Record',
+          //     component: () => import('@/views/MVO/WalletRecord'),
+          //     meta: {
+          //       title: 'Wallet Record',
+          //       keepAlive: false
+          //     }
+          //   }
+          // ]
         }
       ]
     },

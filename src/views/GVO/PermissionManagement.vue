@@ -132,7 +132,6 @@ export default {
     async _getRoleList () {
       const res = await getRoleListAPI()
       this.loadData = res.content.list
-      console.log(res.content.list)
     },
     handleModify (record) {
       this.visible = true

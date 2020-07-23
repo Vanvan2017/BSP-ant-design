@@ -1,14 +1,14 @@
 import request from '@/utils/request'
 
 const api = {
-  Role: '/system/role'
+  GetTransactionAudit: '/system/transactionAudit/list'
 }
 
 export default api
 
-export function getRoleList (parameter) {
+export function getTransactionAuditList (parameter) {
   return request({
-    url: api.Role,
+    url: api.GetTransactionAudit,
     method: 'post',
     params: parameter
   })

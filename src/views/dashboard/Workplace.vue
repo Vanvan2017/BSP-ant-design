@@ -15,7 +15,7 @@
           </div>
         </div>
       </template>
-      <template v-slot:extraContent>
+      <!-- <template v-slot:extraContent>
         <div class="extra-content">
           <div class="stat-item">
             <a-statistic title="商品数" :value="56" />
@@ -27,7 +27,7 @@
             <a-statistic title="访问量" :value="2223" />
           </div>
         </div>
-      </template>
+      </template> -->
       <div style="margin-bottom: 24px">
         <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
           <a-table :columns="columns" :data-source="data" :pagination="false">
@@ -141,17 +141,11 @@
 <script>
 import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
+import storage from 'store'
 import { getRoleList, getServiceList } from '@/api/manage'
 // const DataSet = require('@antv/data-set')
 import { STable, Ellipsis } from '@/components'
-
-const request = axios.create({
-  // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 
 const columns = [
   {
@@ -223,8 +217,8 @@ export default {
     }),
     currentUser () {
       return {
-        name: 'Kunkun Ma',
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
+        name: storage.get('username'),
+        avatar: this.$store.getters.avatar
       }
     },
     userInfo () {
@@ -266,34 +260,39 @@ export default {
     },
     getMVOInfo () {
       var app = this
+		console.log('weqw')
       request
-        .post('CompanyInformationController/getCompanyInfo', {
+        .post('/system/CompanyInformationController/getCompanyInfo', {
           manBuyerId: 0,
-          userId: 4,
-          username: 'string'
+          userId: storage.get('userId'),
+          username: storage.get('username')
         })
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
-          var data = response.data.content
-          if (data) {
-            var type = ''
-            if (data.gmcReportType === '1') {
-              type = 'TUV'
-            } else {
-              type = 'UL'
-            }
-            app.data.push({
-              manId: data.manId,
-              name_cn: data.nameCn,
-              name_en: data.nameEn,
-              type: type,
-              certificate: data.gmcReportUrl,
-              description: data.description
-            })
-            app.MVOInfo = data
-            app.getBrandList()
-          }
+          var data = response.content
+          if (response.success) {
+			if (data) {
+				var type = ''
+				if (data.gmcReportType === '1') {
+					type = 'TUV'
+				} else {
+					type = 'UL'
+				}
+				app.data.push({
+					manId: data.manId,
+					name_cn: data.nameCn,
+					name_en: data.nameEn,
+					type: type,
+					certificate: data.gmcReportUrl,
+					description: data.description
+				})
+				app.MVOInfo = data
+				app.getBrandList()
+			}
+          }	else {
+				app.toMVOInfo()
+			}
         })
     },
     addBrand (values) {
@@ -308,13 +307,13 @@ export default {
       console.log(values)
       console.log(brandDto.brdId)
       request
-        .post('BrdBrandController/saveBrand', {
-          UserId: 4,
+        .post('/system/BrdBrandController/saveBrand', {
+          UserId: storage.get('userId'),
           BrdBrandDto: brandDto
         })
         .then(function (response) {
           console.log(response)
-          if (response.data.success) {
+          if (response.success) {
             app.$message.info('add success', 5)
             window.location.reload()
           } else {
@@ -340,8 +339,8 @@ export default {
       // 	nameEn: 'TaoBao',
       // 	remark: 'ohhhh'
       // }
-      // request.post('BrdBrandController/saveBrand', {
-      // 	UserId: 4,
+      // request.post('/system/BrdBrandController/saveBrand', {
+      // 	UserId: storage.get('userId'),
       // 	BrdBrandDto: brandDto
       // }).then(function (response) {
       // 	console.log(response)
@@ -359,13 +358,13 @@ export default {
         remark: item.remark
       }
       request
-        .post('BrdBrandController/removeBrand', {
-          UserId: 4,
+        .post('/system/BrdBrandController/removeBrand', {
+          UserId: storage.get('userId'),
           BrdBrandDto: brandDto
         })
         .then(function (response) {
           console.log(response)
-          if (response.data.success) {
+          if (response.success) {
             app.$message.info('delete success', 5)
             window.location.reload()
           } else {
@@ -380,9 +379,9 @@ export default {
       console.log('1232')
       console.log(this.MVOInfo)
       // console.log(this.data instanceof Array)
-      request.post('BrdBrandController/getBrandsList', this.MVOInfo).then(function (response) {
+      request.post('/system/BrdBrandController/getBrandsList', this.MVOInfo).then(function (response) {
         console.log(response)
-        response.data.content.forEach(item => {
+        response.content.forEach(item => {
           console.log(item)
           app.dataSource.push(item)
         })

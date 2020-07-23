@@ -46,6 +46,9 @@
         </span>
         <template v-else>{{ text }}</template>
       </template>
+		<span slot="name" slot-scope="text, record">
+			<a @click="() => track(record)">{{ text }}</a>
+		</span>
       <span slot="action" slot-scope="record">
         <a @click="() => showModal(record)">Detail</a>
       </span>
@@ -258,7 +261,31 @@ export default {
           console.log('sdsd')
           console.log(response)
         })
-    }
+    },
+	track (record) {
+		this.getAddress(record)
+		// console.log(record)
+		console.log(record.remark)
+		console.log(this.companyName)
+		// 测试用的
+		this.$refs['express-detail'].getExpress()
+		// 传入参数用这个
+		// this.$refs['express-detail'].getExpress(record.remark, this.companyName)
+		this.visiExp = true
+	},
+	getAddress (record) {
+		var app = this
+		console.log(record)
+		request
+			.post('/system/AddressController/getAddress', {
+			saoId: record.saoId
+			})
+			.then(function (response) {
+			console.log('=======Address========')
+			console.log(response)
+			app.companyName = response.content.carrierName
+			})
+	}
   }
 }
 </script>

@@ -28,6 +28,9 @@ export function updatePermission (parameter) {
   return request({
     url: api.UpdatePermission,
     method: 'post',
-    params: parameter
+    params: parameter,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   })
 }

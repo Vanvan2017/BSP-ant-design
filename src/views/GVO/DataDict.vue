@@ -6,7 +6,7 @@
     <page-header-wrapper>
       <a-card :bordered="false">
         <div class="table-operator">
-          <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+          <a-button type="primary" icon="plus" @click="handleAdd">add</a-button>
           <!--        <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1">
@@ -49,9 +49,9 @@
                 </a-popconfirm>
               </span>
               <span v-else>
-                <a class="edit" @click="() => edit(record)">修改</a>
+                <a class="edit" @click="() => edit(record)">edit</a>
                 <a-divider type="vertical" />
-                <a class="delete" @click="() => del(record)">删除</a>
+                <a class="delete" @click="() => del(record)">delete</a>
               </span>
             </div>
           </template>
@@ -77,13 +77,13 @@
 					initialValue: form1.description}]"
           />
         </a-form-item>
-        <a-form-item label="codeType">
+        <a-form-item label="typeCd">
           <a-input
             v-decorator="['typeCd', { rules: [{ required: true, message: 'please input typeCd' }],
 					initialValue: form1.typeCd}]"
           />
         </a-form-item>
-        <a-form-item label="codeType">
+        <a-form-item label="codeVal">
           <a-input
             v-decorator="['codeVal', { rules: [{ required: true, message: 'please input codeVal' }],
 					initialValue: form1.codeVal}]"
@@ -111,36 +111,36 @@ export default {
       form: this.$form.createForm(this, { name: 'coordinated' }),
       columns: [
         {
-          title: '编号',
+          title: 'Id',
           dataIndex: 'cdmId',
           width: '120px'
         },
         {
-          title: '字典类型',
+          title: 'dict type',
           dataIndex: 'codeType',
           width: '120px',
           scopedSlots: { customRender: 'codeType' }
         },
         {
-          title: '用途描述',
+          title: 'description',
           dataIndex: 'description',
           scopedSlots: { customRender: 'description' }
         },
         {
-          title: '编码',
+          title: 'type Cd',
           dataIndex: 'typeCd',
           width: '150px',
           scopedSlots: { customRender: 'typeCd' }
           // customRender: (text) => text + ' 次'
         },
         {
-          title: '编码值',
+          title: 'code Value',
           dataIndex: 'codeVal',
           width: '100px',
           scopedSlots: { customRender: 'codeVal' }
         },
         {
-          table: '操作',
+          table: 'action',
           dataIndex: 'action',
           width: '120px',
           scopedSlots: { customRender: 'action' }
@@ -171,18 +171,18 @@ export default {
 
       visible: false,
       form1: {
-        codeType: 'string',
-        codeVal: 'string',
-        description: 'testCase',
-        remark: 'string',
-        typeCd: 'string'
+        codeType: '',
+        codeVal: '',
+        description: '',
+        remark: '',
+        typeCd: ''
       },
       form2: {
-        codeType: 'string',
-        codeVal: 'string',
-        description: 'testCase',
-        remark: 'string',
-        typeCd: 'string'
+        codeType: '',
+        codeVal: '',
+        description: '',
+        remark: '',
+        typeCd: ''
       },
       selectedRowKeys: [],
       selectedRows: []
@@ -207,7 +207,12 @@ export default {
               }
             })
             .then(function(response) {
-              _this.visible = false
+				if (response.success) {
+					_this.$message.success('save success')
+				} else {
+					_this.$message.warning('save fail')
+				}
+				_this.visible = false
             })
         }
       })
@@ -224,11 +229,11 @@ export default {
     del(row) {
       var app = this
       this.$confirm({
-        title: '警告',
-        content: `真的要删除 ${row.cdmId} 吗?`,
+        title: 'warning',
+        content: `realy delete ${row.cdmId} ?`,
         okText: 'yes',
         okType: 'danger',
-        cancelText: '取消',
+        cancelText: 'no',
         onOk() {
           console.log('OK')
           // 在这里调用删除接口
@@ -267,7 +272,11 @@ export default {
             }
           })
           .then(function(response) {
-            _this.$refs.table.refresh(true)
+						if (response.success) {
+							_this.$message.success('save success')
+							_this.$refs.table.refresh(true)
+						}
+            
           })
       }
     },

@@ -1,6 +1,3 @@
-<script>
-/*eslint-disable*/
-</script>
 <template>
   <page-header-wrapper content="BVO information, welcome to use BSP!">
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
@@ -63,7 +60,7 @@ import AInput from 'ant-design-vue/es/input/Input'
 import List from '@/views/list/table/List'
 import Edit from '@/views/list/table/Edit'
 
-import {axios as request} from '@/utils/request'
+import { axios as request } from '@/utils/request'
 import storage from 'store'
 
 export default {
@@ -74,15 +71,15 @@ export default {
     List,
     Edit
   },
-  data() {
+  data () {
     return {
-      form: this.$form.createForm(this),
+      form: this.$form.createForm(this)
     }
   },
 
   methods: {
     // handler
-    handleSubmit() {
+    handleSubmit () {
       var _this = this
       request
         .post('/system/wallet/register', {
@@ -90,7 +87,7 @@ export default {
           email: this.form.email,
           password: this.form.password
         })
-        .then(function(response) {
+        .then(function (response) {
           console.log(response)
           if (response.success === true) {
             // 跳转页面
@@ -98,11 +95,11 @@ export default {
             _this.$message.error(`Register Failed`)
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error)
         })
     },
-    handleCancel() {
+    handleCancel () {
       this.form.resetFields()
     }
   }

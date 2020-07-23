@@ -232,7 +232,7 @@ export default {
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
-          response.data.content.forEach(item => {
+          response.content.forEach(item => {
             app.data.push(item)
           })
           // var data = response.data.content

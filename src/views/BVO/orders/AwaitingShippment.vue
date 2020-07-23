@@ -63,7 +63,7 @@
 <script>
 import { axios as request } from '@/utils/request'
 import OrderDetail from './OrderDetail'
-
+import storage from 'store'
 const fakeData = [
   {
     orderNo: 'AS12345',
@@ -236,8 +236,8 @@ export default {
         .post('/system/SaOSalesOrderController/getBVOOrderList', {
           SysUserDto: {
             manBuyerId: 0,
-            userId: 4,
-            username: 'string'
+            userId: storage.get('userId'),
+            username: storage.get('username')
           },
           ORDER_STS: 'AwaitingShipment'
         })
@@ -287,10 +287,10 @@ export default {
           console.log('shipped!!!')
         })
     },
-    getItemDetail () {
+    getItemDetail (values) {
       request
         .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
-          saoId: 1
+          saoId: values
         })
         .then(function (response) {
           console.log('sdsd')
