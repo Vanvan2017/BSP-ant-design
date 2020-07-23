@@ -149,28 +149,28 @@ import { STable, Ellipsis } from '@/components'
 
 const columns = [
   {
-    title: '公司名称（中文）',
+    title: 'Company name (CN)',
     dataIndex: 'name_cn',
     key: 'name_cn'
   },
   {
-    title: '公司名称（英文）',
+    title: 'Company name (EN)',
     dataIndex: 'name_en',
     key: 'name_en'
   },
   {
-    title: '品牌商认证类型',
+    title: 'MVO certification Type',
     dataIndex: 'type',
     key: 'type'
   },
   {
-    title: '证书地址',
+    title: 'certificate url',
     dataIndex: 'certificate',
     key: 'certificate'
   },
 
   {
-    title: '操作',
+    title: 'action',
     dataIndex: '',
     width: '150px',
     key: 'x',
@@ -272,26 +272,28 @@ export default {
           console.log(response)
           var data = response.content
           if (response.success) {
-			if (data) {
-				var type = ''
-				if (data.gmcReportType === '1') {
-					type = 'TUV'
-				} else {
-					type = 'UL'
+				if (data) {
+					var type = ''
+					if (data.gmcReportType === '1') {
+						type = 'TUV'
+					} else {
+						type = 'UL'
+					}
+					app.data.push({
+						manId: data.manId,
+						name_cn: data.nameCn,
+						name_en: data.nameEn,
+						type: type,
+						certificate: data.gmcReportUrl,
+						description: data.description
+					})
+					app.MVOInfo = data
+					app.getBrandList()
 				}
-				app.data.push({
-					manId: data.manId,
-					name_cn: data.nameCn,
-					name_en: data.nameEn,
-					type: type,
-					certificate: data.gmcReportUrl,
-					description: data.description
-				})
-				app.MVOInfo = data
-				app.getBrandList()
-			}
           }	else {
-				app.toMVOInfo()
+				if (response.code !== '1') {
+					app.toMVOInfo()
+				}
 			}
         })
     },

@@ -42,10 +42,10 @@
           <template slot="action" slot-scope="text, record">
             <div class="editable-row-operations">
               <span v-if="record.editable">
-                <a @click="() => save(record)">保存</a>
+                <a @click="() => save(record)">save</a>
                 <a-divider type="vertical" />
-                <a-popconfirm title="真的放弃编辑吗?" @confirm="() => cancel(record)">
-                  <a>取消</a>
+                <a-popconfirm title="really give up?" @confirm="() => cancel(record)">
+                  <a>cancel</a>
                 </a-popconfirm>
               </span>
               <span v-else>

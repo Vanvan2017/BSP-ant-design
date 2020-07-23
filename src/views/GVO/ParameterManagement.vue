@@ -44,10 +44,10 @@
         <template slot="action" slot-scope="text, record">
           <div class="editable-row-operations">
             <span v-if="record.editable">
-              <a @click="() => save(record)">add</a>
+              <a @click="() => save(record)">confirm</a>
               <a-divider type="vertical" />
-              <a-popconfirm title="真的放弃编辑吗?" @confirm="() => cancel(record)">
-                <a>取消</a>
+              <a-popconfirm title="really give up?" @confirm="() => cancel(record)">
+                <a>canceel</a>
               </a-popconfirm>
             </span>
             <span v-else>
@@ -141,6 +141,7 @@ export default {
 					'userId':	storage.get('userId'),
 					'rights':	1
 				}).then(function (response) {
+					console.log(response)
 					response.content.forEach(item => {
 						item.editable = false
 					})
@@ -233,23 +234,24 @@ export default {
     },
     save (row) {
       row.editable = false
-	  console.log(row)
-		if(row.paramCd === ''){
-			this.$message.warning('the paramCd can not be null')
-			this.$refs.table.refresh(true)
-		} else if (row.paramValue === ''){
-			this.$message.warning('the paramValue can not be null')
-			this.$refs.table.refresh(true)
-		} else {
-			request.post('/system/parameterController/saveParameter',
-			{
-		  	'ParParameterDto': row,
-		  	'SysUserDto': {
-		  		'userId':	storage.get('userId')
-		  	}
-		  }).then(function (response) {
+			console.log(row)
+			if(row.paramCd === ''){
+				this.$message.warning('the paramCd can not be null')
 				this.$refs.table.refresh(true)
-		  })
+			} else if (row.paramValue === ''){
+				this.$message.warning('the paramValue can not be null')
+				this.$refs.table.refresh(true)
+			} else {
+				request.post('/system/parameterController/saveParameter',
+				{
+					'ParParameterDto': row,
+					'SysUserDto': {
+						'userId':	storage.get('userId')
+					}
+				}).then(function (response) {
+					console.log(response)
+					this.$refs.table.refresh(true)
+				})
 	  }
     },
     cancel (row) {

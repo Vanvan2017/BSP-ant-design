@@ -46,19 +46,25 @@
         </span>
         <template v-else>{{ text }}</template>
       </template>
-		<span slot="name" slot-scope="text, record">
-			<a @click="() => track(record)">{{ text }}</a>
-		</span>
+      <span slot="name" slot-scope="text, record">
+        <a @click="() => track(record)">{{ text }}</a>
+      </span>
       <span slot="action" slot-scope="record">
         <a @click="() => showModal(record)">Detail</a>
       </span>
     </a-table>
     <order-detail ref="order-detail" :visible="visi" @okay="handleOk" @cancel="handleCancel" />
+    <express-detail
+      ref="express-detail"
+      :visible="visiExp"
+      @okay="handleOkExp"
+      @cancel="handleCancelExp"/>
   </div>
 </template>
 
 <script>
 import OrderDetail from './OrderDetail'
+import ExpressDetail from './ExpressDetail'
 import { axios as request } from '@/utils/request'
 import storage from 'store'
 
@@ -71,11 +77,13 @@ import storage from 'store'
 // ]
 export default {
   components: {
-    OrderDetail
+    OrderDetail,
+	ExpressDetail
   },
   data () {
     return {
       visi: false,
+	visiExp: false,
       data: [],
       searchText: '',
       searchInput: null,
@@ -176,7 +184,7 @@ export default {
           scopedSlots: {
             filterDropdown: 'filterDropdown',
             filterIcon: 'filterIcon',
-            customRender: 'customRender'
+            customRender: 'name'
           },
           onFilter: (value, record) =>
             record.remark
@@ -211,6 +219,12 @@ export default {
     handleCancel () {
       this.visi = false
     },
+	handleOkExp () {
+		this.visiExp = false
+	},
+	handleCancelExp () {
+		this.visiExp = false
+	},
     handleSearch (selectedKeys, confirm, dataIndex) {
       confirm()
       this.searchText = selectedKeys[0]
@@ -262,21 +276,21 @@ export default {
           console.log(response)
         })
     },
-	track (record) {
-		this.getAddress(record)
+	async track (record) {
+		await this.getAddress(record)
 		// console.log(record)
 		console.log(record.remark)
 		console.log(this.companyName)
 		// 测试用的
-		this.$refs['express-detail'].getExpress()
+		// this.$refs['express-detail'].getExpress()
 		// 传入参数用这个
-		// this.$refs['express-detail'].getExpress(record.remark, this.companyName)
+		this.$refs['express-detail'].getExpress(record.remark, this.companyName)
 		this.visiExp = true
 	},
-	getAddress (record) {
+	async getAddress (record) {
 		var app = this
 		console.log(record)
-		request
+		await request
 			.post('/system/AddressController/getAddress', {
 			saoId: record.saoId
 			})

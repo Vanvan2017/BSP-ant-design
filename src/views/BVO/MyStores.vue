@@ -100,9 +100,7 @@
     <a-card style="margin-top: 26px" ref="list1">
       <a-list item-layout="horizontal" :data-source="AmazonData">
         <a-list-item slot="renderItem" slot-scope="item">
-          <a-list-item-meta
-            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-          >
+          <a-list-item-meta>
             <a slot="title" href="https://www.antdv.com/">{{ item.storeName }}</a>
             <a-avatar
               slot="avatar"
@@ -116,9 +114,7 @@
     <a-card style="margin-top: 26px" ref="list2">
       <a-list item-layout="horizontal" :data-source="EbayData">
         <a-list-item slot="renderItem" slot-scope="item">
-          <a-list-item-meta
-            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-          >
+          <a-list-item-meta>
             <a slot="title" href="https://www.antdv.com/">{{ item.storeName }}</a>
             <a-avatar
               slot="avatar"
