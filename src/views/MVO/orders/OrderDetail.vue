@@ -16,6 +16,11 @@ const columns = [
     key: 'title',
     scopedSlots: { customRender: 'name' }
   },
+	{
+		title: 'skuCd',
+		dataIndex: 'skuCd',
+		key: 'skuCd'
+	},
   {
     title: 'Price',
     dataIndex: 'price',

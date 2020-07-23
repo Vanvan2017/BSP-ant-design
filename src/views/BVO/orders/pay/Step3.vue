@@ -3,8 +3,11 @@
     <a-form>
 
       <a-result :is-success="success" style="max-width: 560px; margin: 40px auto 0;">
-        <!--        <div class="information">
-          <a-row>
+               <div class="information">
+					<a-row>
+						<a-col :sm="16" :xs="24">success</a-col>
+					</a-row>
+<!--          <a-row>
             <a-col :sm="8" :xs="24">付款账户：</a-col>
             <a-col :sm="16" :xs="24">ant-design@alipay.com</a-col>
           </a-row>
@@ -19,8 +22,8 @@
           <a-row>
             <a-col :sm="8" :xs="24">转账金额：</a-col>
             <a-col :sm="16" :xs="24"><span class="money">500</span> 元</a-col>
-          </a-row>
-        </div> -->
+          </a-row> -->
+        </div>
         <template #extra>
           <!-- <a-button type="primary" @click="finish">再付一单</a-button> -->
           <a-button style="margin-left: 8px" @click="toOrderList">查看账单</a-button>

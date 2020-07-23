@@ -207,10 +207,10 @@ export default {
           })
         })
     },
-    getItemDetail () {
+    getItemDetail (values) {
       request
         .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
-          saoId: 1
+          saoId: values
         })
         .then(function (response) {
         })

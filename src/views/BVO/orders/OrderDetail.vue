@@ -8,7 +8,7 @@
 
 <script>
 import { axios as request } from '@/utils/request'
-
+// import storage from 'store'
 const columns = [
   {
     title: 'Title',
@@ -16,15 +16,30 @@ const columns = [
     key: 'title',
     scopedSlots: { customRender: 'name' }
   },
+	{
+		title: 'skuCd',
+		dataIndex: 'skuCd',
+		key: 'skuCd'
+	},
+	// {
+	// 	title: 'ean',
+	// 	dataIndex: 'ean',
+	// 	key: 'ean'
+	// },
+	// {
+	// 	title: 'upc',
+	// 	dataIndex: 'upc',
+	// 	key: 'upc'
+	// },
   {
-    title: 'Price',
-    dataIndex: 'price',
-    key: 'price'
+		title: 'Price',
+		dataIndex: 'price',
+		key: 'price'
   },
   {
-    title: 'Quantity',
-    dataIndex: 'qty',
-    key: 'qty'
+		title: 'Quantity',
+		dataIndex: 'qty',
+		key: 'qty'
   }
 ]
 // const data = [
@@ -90,6 +105,9 @@ export default {
             app.data.push({
               proId: pro.proId,
               title: pro.title,
+				ean: pro.ean,
+				skuCd: pro.skuCd,
+				upc: pro.upc,
               price: sal.price,
               qty: sal.qty
             })

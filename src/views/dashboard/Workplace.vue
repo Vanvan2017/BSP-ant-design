@@ -27,7 +27,7 @@
             <a-statistic title="访问量" :value="2223" />
           </div>
         </div>
-      </template>-->
+      </template> -->
       <div style="margin-bottom: 24px">
         <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
           <a-table :columns="columns" :data-source="data" :pagination="false">
@@ -260,7 +260,7 @@ export default {
     },
     getMVOInfo () {
       var app = this
-      console.log('weqw')
+		console.log('weqw')
       request
         .post('/system/CompanyInformationController/getCompanyInfo', {
           manBuyerId: 0,
@@ -271,26 +271,28 @@ export default {
           console.log('sdsd')
           console.log(response)
           var data = response.content
-          if (data) {
-            var type = ''
-            if (data.gmcReportType === '1') {
-              type = 'TUV'
-            } else {
-              type = 'UL'
-            }
-            app.data.push({
-              manId: data.manId,
-              name_cn: data.nameCn,
-              name_en: data.nameEn,
-              type: type,
-              certificate: data.gmcReportUrl,
-              description: data.description
-            })
-            app.MVOInfo = data
-            app.getBrandList()
-          } else {
-            app.toMVOInfo()
-          }
+          if (response.success) {
+			if (data) {
+				var type = ''
+				if (data.gmcReportType === '1') {
+					type = 'TUV'
+				} else {
+					type = 'UL'
+				}
+				app.data.push({
+					manId: data.manId,
+					name_cn: data.nameCn,
+					name_en: data.nameEn,
+					type: type,
+					certificate: data.gmcReportUrl,
+					description: data.description
+				})
+				app.MVOInfo = data
+				app.getBrandList()
+			}
+          }	else {
+				app.toMVOInfo()
+			}
         })
     },
     addBrand (values) {

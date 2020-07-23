@@ -66,7 +66,7 @@
 import { axios as request } from '@/utils/request'
 import OrderDetail from './OrderDetail'
 import ExpressDetail from './ExpressDetail'
-
+import storage from 'store'
 // const data = [
 //   {
 //     orderNo: 'AS12345',
@@ -227,7 +227,7 @@ export default {
   },
   methods: {
     track (record) {
-      this.getAddress()
+      this.getAddress(record)
       // console.log(record)
       console.log(record.remark)
       console.log(this.companyName)
@@ -270,8 +270,8 @@ export default {
         .post('/system/SaOSalesOrderController/getBVOOrderList', {
           SysUserDto: {
             manBuyerId: 0,
-            userId: 4,
-            username: 'string'
+            userId: storage.get('userId'),
+            username: storage.get('username')
           },
           ORDER_STS: 'Complete'
         })
@@ -305,22 +305,23 @@ export default {
           // }
         })
     },
-    getItemDetail () {
+    getItemDetail (values) {
       request
         .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
-          saoId: 1
+          saoId: values
         })
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
         })
     },
-    getAddress () {
+    getAddress (values) {
+			console.log(values)
       var app = this
       console.log('我是马焜啊啊啊啊啊啊我好帅啊！！')
       request
         .post('/system/AddressController/getAddress', {
-          saoId: 1
+          saoId: values.saoId
         })
         .then(function (response) {
           console.log('=======Address========')
