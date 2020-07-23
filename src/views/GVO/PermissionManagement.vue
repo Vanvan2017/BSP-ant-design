@@ -159,8 +159,15 @@ export default {
       await updateRoleApi(form)
 
       // 更新角色权限
-      await updatePermissionApi({ roleId: this.roleId, permissions: JSON.stringify(this.checkedPermissions) })
-      this.visible = false
+      const res = await updatePermissionApi({
+        roleId: this.roleId,
+        permissions: JSON.stringify(this.checkedPermissions)
+      })
+      if (res.content === 'success') {
+        this.visible = false
+        this.$message.success('Success')
+        this._getRoleList()
+      }
     }
   }
 }
