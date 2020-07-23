@@ -2,7 +2,11 @@
   <page-header-wrapper>
     <a-card rowKey="tkey">
       <a-table :row-selection="rowSelection" :columns="columns" :data-source="data">
-        <a slot="name" slot-scope="text">{{ text }}</a>
+        <a-tag
+          slot="operateType"
+          :color="text===1? 'green':text===2?'blue':'pink'"
+          slot-scope="text"
+        >{{ text===1? "Application":text===2?"Withdraw":"Refund" }}</a-tag>
         <a slot="action" slot-scope="record" @click="() => confirm(record)">Confirm</a>
       </a-table>
     </a-card>
@@ -66,7 +70,11 @@
 </template>
 <script>
 import request from '../../utils/request'
-import { getTransactionAuditList as getTransactionAuditListAPI } from '@/api/transactionAudit'
+import {
+  getTransactionAuditList as getTransactionAuditListAPI,
+  passTransactionAudit as passTransactionAuditAPI,
+  failTransactionAudit as failTransactionAuditAPI
+} from '@/api/transactionAudit'
 
 const columns = [
   {
@@ -75,12 +83,21 @@ const columns = [
     scopedSlots: { customRender: 'transactionAuditId' }
   },
   {
+    title: 'transactionId',
+    dataIndex: 'transactionId'
+  },
+  {
     title: 'buyerId',
     dataIndex: 'buyerId'
   },
   {
     title: 'createBy',
     dataIndex: 'createBy'
+  },
+  {
+    title: 'operateType',
+    dataIndex: 'operateType',
+    scopedSlots: { customRender: 'operateType' }
   },
   {
     title: 'depositingMoneyBefore',
@@ -92,40 +109,17 @@ const columns = [
   },
   { title: 'Action', dataIndex: '', key: 'x', scopedSlots: { customRender: 'action' } }
 ]
-const data = [
-  {
-    tkey: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park'
-  },
-  {
-    tkey: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park'
-  },
-  {
-    tkey: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park'
-  },
-  {
-    tkey: '4',
-    name: 'Disabled User',
-    age: 99,
-    address: 'Sidney No. 1 Lake Park'
-  }
-]
 
 export default {
   data () {
     return {
+      transactionId: null,
+      transactionAuditId: null,
+      buyerId: null,
       fileList: [],
       uploading: false,
       visible: false,
-      data,
+      data: [],
       columns,
       form: this.$form.createForm(this)
     }
@@ -136,8 +130,6 @@ export default {
   methods: {
     async _loadData () {
       const res = await getTransactionAuditListAPI()
-      console.log('getTransactionAuditListAPI')
-      console.log(res)
       this.data = res.content.list
     },
     handleRemove (file) {
@@ -153,7 +145,7 @@ export default {
     handleUpload () {
       const { fileList } = this
       const formData = new FormData()
-      fileList.forEach(file => {
+      fileList.forEach((file) => {
         formData.append('files[]', file)
       })
       this.uploading = true
@@ -175,18 +167,39 @@ export default {
         }
       })
     },
-    handleSubmit (e) {
+    async handleSubmit (e) {
       e.preventDefault()
-      this.form.validateFields((err, values) => {
+      this.form.validateFields(async (err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values)
-          // 下面写发起请求QAQ
+          const parameter = values
+          parameter.buyerId = this.buyerId
+          parameter.transactionAuditId = this.transactionAuditId
+          parameter.transactionId = this.transactionId
+          if (parameter.decision === 1) {
+            // 通过
+            const res = await passTransactionAuditAPI(parameter)
+            if (res.content === 'success') {
+              this.$message.success('Pass success')
+            } else {
+              this.$message.error('Pass failed')
+            }
+          } else {
+            // 拒绝
+            const res = await failTransactionAuditAPI(parameter)
+            if (res.content === 'success') {
+              this.$message.error('Reject failed')
+            }
+          }
           this.visible = false
+          this._loadData()
         }
       })
     },
     confirm (record) {
-      console.log(record)
+      const { buyerId, transactionAuditId, transactionId } = record
+      this.buyerId = buyerId
+      this.transactionAuditId = transactionAuditId
+      this.transactionId = transactionId
       this.visible = true
     },
     handleCancel () {
@@ -199,7 +212,7 @@ export default {
         onChange: (selectedRowKeys, selectedRows) => {
           console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
         },
-        getCheckboxProps: record => ({
+        getCheckboxProps: (record) => ({
           props: {
             name: record.name
           }
