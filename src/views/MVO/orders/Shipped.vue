@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-table :data-source="fakeData" :columns="columns" rowKey="saoId">
+    <a-table :data-source="data" :columns="columns" rowKey="saoId">
       <div
         slot="filterDropdown"
         slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
@@ -298,11 +298,12 @@ export default {
           app.$message.error(response.message)
         } else {
           app.$message.success('Successfully cancelled!')
+		window.location.reload()
         }
       })
     },
     track (record) {
-      this.getAddress()
+      this.getAddress(record)
       // console.log(record)
       console.log(record.remark)
       console.log(this.companyName)
@@ -371,21 +372,21 @@ export default {
           // }
         })
     },
-    getItemDetail () {
+    getItemDetail (values) {
       request
         .post('/system/SalSalesOrderLineItemController/getSalSalesOrderLineItemControllerList', {
-          saoId: 1
+          saoId: values
         })
         .then(function (response) {
           console.log('sdsd')
           console.log(response)
         })
     },
-    getAddress () {
+    getAddress (values) {
       var app = this
       request
         .post('/system/AddressController/getAddress', {
-          saoId: 1
+          saoId: values.saoId
         })
         .then(function (response) {
           console.log('=======Address========')

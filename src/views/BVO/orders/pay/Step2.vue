@@ -27,7 +27,7 @@
 
 <script>
 import { axios as request } from '@/utils/request'
-
+import storage from 'store'
 export default {
   name: 'Step2',
   data () {
@@ -45,12 +45,13 @@ export default {
 		const { form: { validateFields } } = this
 		// that.loading = true
 		var record = JSON.parse(sessionStorage.getItem('record'))
+		console.log(record)
 		validateFields((err, values) => {
 			if (!err) {
 				request.post('/system/wallerController/pay',
 				{
 					'SysUserDto': {
-						'userId':	3
+						'userId':	storage.get('userId')
 					},
 					'password': values.paymentPassword,
 					'SaoSalesOrderDto': {
@@ -59,6 +60,12 @@ export default {
 				}).then(function (response) {
 					console.log('sdsd')
 					console.log(response)
+					if (response.success) {
+						that.$message.info('paySuccess')
+						that.$emit('nextStep')
+					} else {
+						that.$message.warning(response.message)
+					}
 				})
 			} else {
 				that.loading = false

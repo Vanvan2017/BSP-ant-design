@@ -126,7 +126,7 @@ export default {
 		var app = this
 		// console.log('我是马焜啊啊啊啊啊啊我好帅啊！！')
 		app.record = JSON.parse(sessionStorage.getItem('record'))
-		sessionStorage.removeItem('record')
+		// sessionStorage.removeItem('record')
 		request
 			.post('system/AddressController/getAddress', {
 			saoId: app.record.saoId

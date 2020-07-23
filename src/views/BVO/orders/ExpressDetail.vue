@@ -43,7 +43,7 @@ export default {
         .then(function (response) {
           console.log('=======ExpressDetail=====')
           console.log(response)
-          response.data.showapi_res_body.data.forEach(item => {
+          response.showapi_res_body.data.forEach(item => {
             app.data.push(item)
             // console.log(item)
           })

@@ -271,23 +271,25 @@ export default {
           console.log('sdsd')
           console.log(response)
           var data = response.content
-          if (data) {
-            var type = ''
-            if (data.gmcReportType === '1') {
-              type = 'TUV'
-            } else {
-              type = 'UL'
-            }
-            app.data.push({
-              manId: data.manId,
-				name_cn: data.nameCn,
-				name_en: data.nameEn,
-				type: type,
-				certificate: data.gmcReportUrl,
-				description: data.description
-			})
-			app.MVOInfo = data
-			app.getBrandList()
+          if (response.success) {
+			if (data) {
+				var type = ''
+				if (data.gmcReportType === '1') {
+					type = 'TUV'
+				} else {
+					type = 'UL'
+				}
+				app.data.push({
+					manId: data.manId,
+					name_cn: data.nameCn,
+					name_en: data.nameEn,
+					type: type,
+					certificate: data.gmcReportUrl,
+					description: data.description
+				})
+				app.MVOInfo = data
+				app.getBrandList()
+			}
           }	else {
 				app.toMVOInfo()
 			}
