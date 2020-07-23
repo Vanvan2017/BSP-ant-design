@@ -1,7 +1,7 @@
 <template>
   <a-dropdown v-if="currentUser && currentUser.name" placement="bottomRight">
     <span class="ant-pro-account-avatar">
-      <a-avatar size="small" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" class="antd-pro-global-header-index-avatar" />
+      <a-avatar size="small" :src="currentUser.avatar" class="antd-pro-global-header-index-avatar" />
       <span>{{ currentUser.name }}</span>
     </span>
     <template v-slot:overlay>
@@ -10,10 +10,10 @@
           <a-icon type="user" />
           个人中心
         </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
+        <!-- <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
           <a-icon type="setting" />
           个人设置
-        </a-menu-item>
+        </a-menu-item> -->
         <a-menu-divider v-if="menu" />
         <a-menu-item key="logout" @click="handleLogout">
           <a-icon type="logout" />

@@ -77,6 +77,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import '~ant-design-vue/lib/style/themes/default.less';
 
 .card-container {
   background: #f5f5f5;

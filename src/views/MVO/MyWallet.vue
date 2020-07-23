@@ -1,318 +1,448 @@
+<script>
+/* eslint-disable */
+</script>
 <template>
-  <page-header-wrapper>
-    <a-card :bordered="false">
-      <div class="table-page-search-wrapper">
-        <a-form layout="inline">
-          <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="规则编号">
-                <a-input v-model="queryParam.id" placeholder=""/>
-              </a-form-item>
+  <div>
+    <page-header-wrapper>
+      <a-card>
+        <div>
+          <a-row>
+            <a-col :span="4">
+              <h3>Account Name</h3>
             </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
-                </a-select>
-              </a-form-item>
+            <a-col :span="4">
+              <h3>Available Money</h3>
             </a-col>
-            <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="调用次数">
-                  <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="更新日期">
-                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </template>
-            <a-col :md="!advanced && 8 || 24" :sm="24">
-              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                <a @click="toggleAdvanced" style="margin-left: 8px">
-                  {{ advanced ? '收起' : '展开' }}
-                  <a-icon :type="advanced ? 'up' : 'down'"/>
-                </a>
-              </span>
+            <a-col :span="4">
+              <h3>Depositing Money</h3>
+            </a-col>
+            <a-col :span="4">
+              <h3>WithdrawingMoney</h3>
+            </a-col>
+            <a-col :span="8">
+              <h3>Operation</h3>
             </a-col>
           </a-row>
+
+          <a-row>
+            <a-col :span="4">
+              <p>{{data.createBy}}</p>
+            </a-col>
+            <a-col :span="4">
+              <p>{{data.availableMoney}}</p>
+            </a-col>
+            <a-col :span="4">
+              <p>{{data.depositingMoney}}</p>
+            </a-col>
+            <a-col :span="4">
+              <p>{{data.withdrawingMoney}}</p>
+            </a-col>
+            <a-col :span="8">
+              <a-button type="link" @click="withdraw()">Withdraw</a-button>
+              <a-button type="link" @click="DepositVisible = true">deposit</a-button>
+            </a-col>
+          </a-row>
+
+          <br />
+          <br />
+          <a-row>
+            <a-col :span="8"></a-col>
+            <a-col :span="2">
+              <a-button type="primary" @click="changePassword()">Change Password</a-button>
+            </a-col>
+            <a-col :span="4"></a-col>
+            <a-col :span="2">
+              <a-button type="primary" @click="record()">Record</a-button>
+            </a-col>
+            <a-col :span="8"></a-col>
+          </a-row>
+        </div>
+      </a-card>
+      <a-modal v-model="PwdVisible" title="Change Password" @ok="handleOk1">
+        <a-form :form="form1">
+          <a-form-item label="Old password">
+            <a-input-password
+              size="large"
+              placeholder="Old password"
+              name="oldPwd"
+              v-decorator="[
+                'oldPwd',
+                {rules: [{ required: true, message: 'Enter your old password' }], validateTrigger: 'blur'}
+              ]"
+            >
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
+            </a-input-password>
+          </a-form-item>
+          <a-form-item label="New password">
+            <a-input-password
+              size="large"
+              name="newPwd"
+              placeholder="New password"
+              v-decorator="[
+                'newPwd',
+                {rules: [{ required: true, message: 'Set a new password' }], validateTrigger: 'blur'}
+              ]"
+            >
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
+            </a-input-password>
+          </a-form-item>
         </a-form>
-      </div>
-
-      <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-        <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
-          <a-menu slot="overlay">
-            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-            <!-- lock | unlock -->
-            <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
-          </a-menu>
-          <a-button style="margin-left: 8px">
-            批量操作 <a-icon type="down" />
-          </a-button>
-        </a-dropdown>
-      </div>
-
-      <s-table
-        ref="table"
-        size="default"
-        rowKey="key"
-        :columns="columns"
-        :data="loadData"
-        :alert="true"
-        :rowSelection="rowSelection"
-        showPagination="auto"
-      >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
-        <span slot="status" slot-scope="text">
-          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-        </span>
-        <span slot="description" slot-scope="text">
-          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
-        </span>
-
-        <span slot="action" slot-scope="text, record">
-          <template>
-            <a @click="handleEdit(record)">配置</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">订阅报警</a>
-          </template>
-        </span>
-      </s-table>
-
-      <create-form
-        ref="createModal"
-        :visible="visible"
-        :loading="confirmLoading"
-        :model="mdl"
-        @cancel="handleCancel"
-        @ok="handleOk"
-      />
-      <step-by-step-modal ref="modal" @ok="handleOk"/>
-    </a-card>
-  </page-header-wrapper>
+      </a-modal>
+      <a-modal v-model="WithdrawVisible" title="Withdraw" @ok="handleOk2">
+        <a-form :form="form2">
+          <a-form-item
+            label="Amount ($)"
+            :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+            :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          >
+            <a-input
+              v-decorator="[
+              'amount',
+              {rules: [{ required: true, message: 'Please input amount' }]}
+            ]"
+              name="amount"
+              placeholder="Please input amount"
+            />
+          </a-form-item>
+          <a-form-item
+            label="Password"
+            :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+            :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          >
+            <a-input-password
+              name="password"
+              placeholder="Password here"
+              v-decorator="[
+                'password',
+                {rules: [{ required: true, message: 'Please enter password' }], validateTrigger: 'blur'}
+              ]"
+            >
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
+            </a-input-password>
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </page-header-wrapper>
+    <a-modal v-model="visible" :footer="null">
+      <a-form :form="form3">
+        <a-form-item
+          label="E-mail"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+        >
+          <a-input
+            v-decorator="[
+				'email',
+				{rules: [{ required: true, message: 'Please enter e-mail' }],
+				initialValue: form1.email}
+			]"
+            name="email"
+            placeholder="Please enter e-mail"
+          />
+        </a-form-item>
+        <a-form-item>
+          <a-input-password
+            size="large"
+            placeholder="Set password"
+            v-decorator="[
+			  'password',
+			  {rules: [{ required: true, message: 'Please set a password' }], validateTrigger: 'blur'}
+			]"
+          >
+            <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
+          </a-input-password>
+        </a-form-item>
+        <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
+          <a-button htmlType="submit" type="primary" @click="handleSubmit">Register</a-button>
+          <a-button style="margin-left: 8px" @click="handleCancel">Reset</a-button>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+    <a-modal v-model="visible1" :footer="null" @cancel="reload()">
+      <a-table :columns="columns" :data-source="data">
+        <a slot="transactionNumber" slot-scope="text">{{ text}}</a>
+        <p slot="transactionMoney" slot-scope="text">$ {{ text }}</p>
+        <p slot="createTime" slot-scope="text">{{ text }}</p>
+      </a-table>
+    </a-modal>
+    <a-modal v-model="DepositVisible" title="Deposit" @ok="deposit()">
+      <a-form :form="form5">
+        <a-form-item
+          label="Amount ($)"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+        >
+          <a-input
+            v-decorator="[
+	          'amount',
+	          {rules: [{ required: true, message: 'Please input amount' }]}
+	        ]"
+            name="amount"
+            placeholder="Please input amount"
+          />
+        </a-form-item>
+        <a-form-item
+          label="Password"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+        >
+          <a-input-password
+            name="password"
+            placeholder="Password here"
+            v-decorator="[
+	            'password',
+	            {rules: [{ required: true, message: 'Please enter password' }], validateTrigger: 'blur'}
+	          ]"
+          >
+            <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
+          </a-input-password>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+  </div>
 </template>
 
-<script>
-import moment from 'moment'
-import { STable, Ellipsis } from '@/components'
-import { getRoleList, getServiceList } from '@/api/manage'
 
-import StepByStepModal from './modules/StepByStepModal'
-import CreateForm from './modules/CreateForm'
+<script>
+import ATextarea from 'ant-design-vue/es/input/TextArea'
+import AInput from 'ant-design-vue/es/input/Input'
+// 动态切换组件
+import List from '@/views/list/table/List'
+import Edit from '@/views/list/table/Edit'
+import { axios as request } from '@/utils/request'
+import storage from 'store'
 
 const columns = [
   {
-    title: '#',
-    scopedSlots: { customRender: 'serial' }
+    title: 'Serial Number',
+    dataIndex: 'transactionNumber',
+    key: 'transactionNumber',
+    scopedSlots: { customRender: 'transactionNumber' },
   },
   {
-    title: '规则编号',
-    dataIndex: 'no'
+    title: 'Amount',
+    dataIndex: 'transactionMoney',
+    key: 'transactionMoney',
+    scopedSlots: { customRender: 'transactionMoney' },
   },
   {
-    title: '描述',
-    dataIndex: 'description',
-    scopedSlots: { customRender: 'description' }
+    title: 'Time',
+    dataIndex: 'createTime',
+    key: 'createTime',
   },
   {
-    title: '服务调用次数',
-    dataIndex: 'callNo',
-    sorter: true,
-    needTotal: true,
-    customRender: (text) => text + ' 次'
-  },
-  {
-    title: '状态',
+    title: 'Status',
+    key: 'status',
     dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
   },
-  {
-    title: '更新时间',
-    dataIndex: 'updatedAt',
-    sorter: true
-  },
-  {
-    title: '操作',
-    dataIndex: 'action',
-    width: '150px',
-    scopedSlots: { customRender: 'action' }
-  }
 ]
-
-const statusMap = {
-  0: {
-    status: 'default',
-    text: '关闭'
-  },
-  1: {
-    status: 'processing',
-    text: '运行中'
-  },
-  2: {
-    status: 'success',
-    text: '已上线'
-  },
-  3: {
-    status: 'error',
-    text: '异常'
-  }
-}
-
 export default {
-  name: 'TableList',
+  name: 'MyWallet',
   components: {
-    STable,
-    Ellipsis,
-    CreateForm,
-    StepByStepModal
+    AInput,
+    ATextarea,
+    List,
+    Edit,
   },
-  data () {
-    this.columns = columns
+  data() {
     return {
-      // create model
       visible: false,
-      confirmLoading: false,
-      mdl: null,
-      // 高级搜索 展开/关闭
-      advanced: false,
-      // 查询参数
-      queryParam: {},
-      // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        const requestParameters = Object.assign({}, parameter, this.queryParam)
-        console.log('loadData request parameters:', requestParameters)
-        return getServiceList(requestParameters)
-          .then(res => {
-            return res.result
-          })
-      },
-      selectedRowKeys: [],
-      selectedRows: []
+      visible1: false,
+      DepositVisible: false,
+      data: '',
+      PwdVisible: false,
+      WithdrawVisible: false,
+      form1: this.$form.createForm(this),
+      form2: this.$form.createForm(this),
+      form3: this.$form.createForm(this),
+      form4: this.$form.createForm(this),
+      form5: this.$form.createForm(this),
+      columns,
     }
   },
-  filters: {
-    statusFilter (type) {
-      return statusMap[type].text
-    },
-    statusTypeFilter (type) {
-      return statusMap[type].status
-    }
-  },
-  created () {
-    getRoleList({ t: new Date() })
-  },
-  computed: {
-    rowSelection () {
-      return {
-        selectedRowKeys: this.selectedRowKeys,
-        onChange: this.onSelectChange
-      }
-    }
+  mounted() {
+    this.getAccountData()
   },
   methods: {
-    handleAdd () {
-      this.mdl = null
-      this.visible = true
+    withdraw() {
+      this.WithdrawVisible = true
     },
-    handleEdit (record) {
-      this.visible = true
-      this.mdl = { ...record }
+    changePassword() {
+      this.PwdVisible = true
     },
-    handleOk () {
-      const form = this.$refs.createModal.form
-      this.confirmLoading = true
-      form.validateFields((errors, values) => {
-        if (!errors) {
-          console.log('values', values)
-          if (values.id > 0) {
-            // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('修改成功')
+    handleOk1() {
+      var _this = this
+      this.form1.validateFields((err, values) => {
+        if (!err) {
+          request
+            .post('/system/wallet/changepwd', {
+              accountName: storage.get('username'),
+              old_password: values.oldPwd,
+              new_password: values.newPwd,
             })
-          } else {
-            // 新增
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then(res => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('新增成功')
+            .then(function (response) {
+              console.log(response)
+              if (response.success === true) {
+                _this.$message.info(`Change Succeed`)
+                _this.form1.resetFields()
+                _this.PwdVisible = false
+              } else {
+                _this.$message.error(`Change Failed`)
+              }
             })
-          }
-        } else {
-          this.confirmLoading = false
+            .catch(function (error) {
+              console.log(error)
+            })
         }
       })
     },
-    handleCancel () {
-      this.visible = false
-
-      const form = this.$refs.createModal.form
-      form.resetFields() // 清理表单数据（可不做）
+    handleOk2() {
+      var _this = this
+      this.form2.validateFields((err, values) => {
+        if (!err) {
+          request
+            .post('/system/wallet/withdraw', {
+              accountName: storage.get('username'),
+              password: values.password,
+              withdrawingMoney: values.amount,
+              currency: 'USD',
+            })
+            .then(function (response) {
+              console.log(response)
+              if (response.success === true) {
+                _this.$message.info(`Withdraw Submitted`)
+                _this.form2.resetFields()
+                _this.WithdrawVisible = false
+              } else {
+                _this.$message.error(response.message)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+      })
     },
-    handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
-      } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
-      }
+    getAccountData() {
+      var _this = this
+      request
+        .post('/system/wallet/querylist', {
+          accountName: storage.get('username'),
+        })
+        .then(function (response) {
+          console.log(response)
+          if (response.success === true) {
+            _this.data = response.content
+          } else {
+            // 该用户没有注册过钱包，显示注册页面
+            _this.$message.error('Please register at first!')
+            _this.visible = true
+            // this.$router.push({ path: '/mvo/my-wallet/register' })
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
+    record() {
+      // this.$router.push('/mvo/my-wallet/record')
+      this.visible1 = true
+      var _this = this
+      request
+        .post('/system/wallet/queryrecord', {
+          accountName: storage.get('username'),
+          page: 0,
+          size: 10,
+        })
+        .then(function (response) {
+          console.log(response)
+          if (response.success === true) {
+            _this.data = response.content.list
+            for (let item of _this.data) {
+              let tmp = new Date(item.createTime)
+              item.createTime = tmp.toLocaleString('chinese', { hour12: false })
+              if (item.status == 2) {
+                item.status = 'Applying'
+              } else if (item.status == 4) {
+                item.status = 'Completed'
+              } else if (item.status == 1) {
+                item.status = 'Failed'
+              }
+            }
+          } else {
+            _this.$message.error(`No Record Found`)
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
+    reload(){
+      this.visible1=false
+      this.getAccountData()
     },
-    resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date())
-      }
-    }
-  }
+    handleSubmit() {
+      var _this = this
+      this.form3.validateFields((err, values) => {
+        console.log(values)
+        if (!err) {
+          request
+            .post('/system/wallet/register', {
+              accountName: storage.get('username'),
+              email: values.email,
+              password: values.password,
+            })
+            .then(function (response) {
+              console.log(response)
+              if (response.success === true) {
+                // 跳转页面
+                _this.getAccountData()
+                _this.visible = false
+              } else {
+                _this.$message.error(`Register Failed`)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+      })
+    },
+    handleCancel() {
+      this.form3.resetFields()
+    },
+    deposit() {
+      var _this = this
+      this.form5.validateFields((err, values) => {
+        console.log(values)
+        if (!err) {
+          request
+            .post('/system/wallet/deposit', {
+              accountName: storage.get('username'),
+              password: values.password,
+              depositingMoney: values.amount,
+              currency: 'USD',
+            })
+            .then(function (response) {
+              console.log(response)
+              if (response.success === true) {
+                _this.$message.info(`Deposit Submitted`)
+                _this.form5.resetFields()
+                _this.DepositVisible = false
+              } else {
+                _this.$message.error(response.message)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+      })
+    },
+  },
 }
 </script>
+
+<style lang="less" scoped>
+@import '~ant-design-vue/lib/style/themes/default.less';
+</style>

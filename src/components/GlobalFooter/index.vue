@@ -1,12 +1,9 @@
 <template>
   <global-footer class="footer custom-render">
     <template v-slot:links>
-      <a href="https://www.github.com/vueComponent/pro-layout" target="_blank">Pro Layout</a>
-      <a href="https://www.github.com/vueComponent/ant-design-vue-pro" target="_blank">Github</a>
-      <a href="https://www.github.com/vanvan2017/" target="_blank">@MaKunKun</a>
-    </template>
-    <template v-slot:copyright>
-      <a href="https://github.com/vueComponent" target="_blank">vueComponent</a>
+      <a href="https://www.github.com/" target="_blank">Copyright</a>
+      <a href="https://www.github.com/" target="_blank">&copy; 2020</a>
+      <a href="https://www.github.com/" target="_blank">Cross-Border E-Commerce BSP</a>
     </template>
   </global-footer>
 </template>

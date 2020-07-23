@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 // base library
 import {
+  Timeline,
   ConfigProvider,
   Layout,
   Input,
@@ -56,6 +57,7 @@ import PageLoading from '@/components/PageLoading'
 import PermissionHelper from '@/utils/helper/permission'
 import './directives/action'
 
+Vue.use(Timeline)
 Vue.use(ConfigProvider)
 Vue.use(Layout)
 Vue.use(Input)

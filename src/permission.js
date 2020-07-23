@@ -4,11 +4,20 @@ import storage from 'store'
 import NProgress from 'nprogress' // progress bar
 import '@/components/NProgress/nprogress.less' // progress bar custom style
 import notification from 'ant-design-vue/es/notification'
-import { setDocumentTitle, domTitle } from '@/utils/domUtil'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { i18nRender } from '@/locales'
+import {
+  setDocumentTitle,
+  domTitle
+} from '@/utils/domUtil'
+import {
+  ACCESS_TOKEN
+} from '@/store/mutation-types'
+import {
+  i18nRender
+} from '@/locales'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+NProgress.configure({
+  showSpinner: false
+}) // NProgress Configuration
 
 const whiteList = ['login', 'register', 'registerResult'] // no redirect whitelist
 const loginRoutePath = '/user/login'
@@ -20,7 +29,9 @@ router.beforeEach((to, from, next) => {
   /* has token */
   if (storage.get(ACCESS_TOKEN)) {
     if (to.path === loginRoutePath) {
-      next({ path: defaultRoutePath })
+      next({
+        path: defaultRoutePath
+      })
       NProgress.done()
     } else {
       // check login user.roles is null
@@ -29,9 +40,12 @@ router.beforeEach((to, from, next) => {
         store
           .dispatch('GetInfo')
           .then(res => {
-            const roles = res.result && res.result.role
+            const { role } = res.content
+            // const roles = res.result && res.result.role
             // generate dynamic router
-            store.dispatch('GenerateRoutes', { roles }).then(() => {
+            store.dispatch('GenerateRoutes', {
+              role
+            }).then(() => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表
               router.addRoutes(store.getters.addRouters)
@@ -39,10 +53,15 @@ router.beforeEach((to, from, next) => {
               const redirect = decodeURIComponent(from.query.redirect || to.path)
               if (to.path === redirect) {
                 // set the replace: true so the navigation will not leave a history record
-                next({ ...to, replace: true })
+                next({
+                  ...to,
+                  replace: true
+                })
               } else {
                 // 跳转到目的路由
-                next({ path: redirect })
+                next({
+                  path: redirect
+                })
               }
             })
           })
@@ -53,7 +72,12 @@ router.beforeEach((to, from, next) => {
             })
             // 失败时，获取用户信息失败时，调用登出，来清空历史保留信息
             store.dispatch('Logout').then(() => {
-              next({ path: loginRoutePath, query: { redirect: to.fullPath } })
+              next({
+                path: loginRoutePath,
+                query: {
+                  redirect: to.fullPath
+                }
+              })
             })
           })
       } else {
@@ -65,7 +89,12 @@ router.beforeEach((to, from, next) => {
       // 在免登录白名单，直接进入
       next()
     } else {
-      next({ path: loginRoutePath, query: { redirect: to.fullPath } })
+      next({
+        path: loginRoutePath,
+        query: {
+          redirect: to.fullPath
+        }
+      })
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     }
   }

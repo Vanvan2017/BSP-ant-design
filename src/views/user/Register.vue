@@ -1,13 +1,21 @@
 <template>
   <div class="main user-layout-register">
-    <h3><span>注册</span></h3>
+    <h3>
+      <span>SignUp</span>
+    </h3>
     <a-form ref="formRegister" :form="form" id="formRegister">
+      <a-form-item>
+        <a-radio-group default-value="2" v-model="roleId" @change="onChangeRoleId">
+          <a-radio-button value="2">BVO</a-radio-button>
+          <a-radio-button value="3">MVO</a-radio-button>
+        </a-radio-group>
+      </a-form-item>
       <a-form-item>
         <a-input
           size="large"
           type="text"
-          placeholder="邮箱"
-          v-decorator="['email', {rules: [{ required: true, type: 'email', message: '请输入邮箱地址' }], validateTrigger: ['change', 'blur']}]"
+          placeholder="email"
+          v-decorator="['email', {rules: [{ required: true, type: 'email', message: 'Please enter your email address' }], validateTrigger: ['change', 'blur']}]"
         ></a-input>
       </a-form-item>
 
@@ -15,13 +23,21 @@
         placement="rightTop"
         :trigger="['focus']"
         :getPopupContainer="(trigger) => trigger.parentElement"
-        v-model="state.passwordLevelChecked">
+        v-model="state.passwordLevelChecked"
+      >
         <template slot="content">
-          <div :style="{ width: '240px' }" >
-            <div :class="['user-register', passwordLevelClass]">强度：<span>{{ passwordLevelName }}</span></div>
-            <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor " />
+          <div :style="{ width: '240px' }">
+            <div :class="['user-register', passwordLevelClass]">
+              Password Strength：
+              <span>{{ passwordLevelName }}</span>
+            </div>
+            <a-progress
+              :percent="state.percent"
+              :showInfo="false"
+              :strokeColor=" passwordLevelColor "
+            />
             <div style="margin-top: 10px;">
-              <span>请至少输入 6 个字符。请不要使用容易被猜到的密码。</span>
+              <span>Please enter at least 6 characters. Do not use passwords that are easy to guess.</span>
             </div>
           </div>
         </template>
@@ -29,8 +45,8 @@
           <a-input-password
             size="large"
             @click="handlePasswordInputClick"
-            placeholder="至少6位密码，区分大小写"
-            v-decorator="['password', {rules: [{ required: true, message: '至少6位密码，区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
+            placeholder="Passwords with at least 6 characters, case sensitive"
+            v-decorator="['password', {rules: [{ required: true, message: 'Passwords with at least 6 characters, case sensitive'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
           ></a-input-password>
         </a-form-item>
       </a-popover>
@@ -38,42 +54,26 @@
       <a-form-item>
         <a-input-password
           size="large"
-          placeholder="确认密码"
-          v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
+          placeholder="Confirm password"
+          v-decorator="['password2', {rules: [{ required: true, message: 'Passwords with at least 6 characters, case sensitive' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
         ></a-input-password>
       </a-form-item>
-
-      <a-form-item>
-        <a-input size="large" placeholder="11 位手机号" v-decorator="['mobile', {rules: [{ required: true, message: '请输入正确的手机号', pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
-          <a-select slot="addonBefore" size="large" defaultValue="+86">
-            <a-select-option value="+86">+86</a-select-option>
-            <a-select-option value="+87">+87</a-select-option>
-          </a-select>
-        </a-input>
-      </a-form-item>
-      <!--<a-input-group size="large" compact>
-            <a-select style="width: 20%" size="large" defaultValue="+86">
-              <a-select-option value="+86">+86</a-select-option>
-              <a-select-option value="+87">+87</a-select-option>
-            </a-select>
-            <a-input style="width: 80%" size="large" placeholder="11 位手机号"></a-input>
-          </a-input-group>-->
 
       <a-row :gutter="16">
         <a-col class="gutter-row" :span="16">
           <a-form-item>
-            <a-input size="large" type="text" placeholder="验证码" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
-              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            <a-input
+              size="large"
+              type="text"
+              placeholder="Kaptcha"
+              v-decorator="['captcha', {rules: [{ required: true, message: 'Please enter a Kaptcha' }], validateTrigger: 'blur'}]"
+            >
+              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
         </a-col>
         <a-col class="gutter-row" :span="8">
-          <a-button
-            class="getCaptcha"
-            size="large"
-            :disabled="state.smsSendBtn"
-            @click.stop.prevent="getCaptcha"
-            v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"></a-button>
+          <img :src="kaptcha_src" @click="getkaptcha()" />
         </a-col>
       </a-row>
 
@@ -85,17 +85,17 @@
           class="register-button"
           :loading="registerBtn"
           @click.stop.prevent="handleSubmit"
-          :disabled="registerBtn">注册
-        </a-button>
-        <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
+          :disabled="registerBtn"
+        >SignUp</a-button>
+        <router-link class="login" :to="{ name: 'login' }">Log in with an existing account</router-link>
       </a-form-item>
-
     </a-form>
   </div>
 </template>
 
 <script>
-import { getSmsCaptcha } from '@/api/login'
+import { getSmsCaptcha, signup as signupAPI } from '@/api/login'
+import { uuid } from '@/utils/util'
 
 const levelNames = {
   0: '低',
@@ -117,11 +117,13 @@ const levelColor = {
 }
 export default {
   name: 'Register',
-  components: {
-  },
+  components: {},
   mixins: [],
   data () {
     return {
+      imageCodeToken: '',
+      kaptcha_src: '',
+      roleId: '2',
       form: this.$form.createForm(this),
 
       state: {
@@ -146,7 +148,20 @@ export default {
       return levelColor[this.state.passwordLevel]
     }
   },
+  mounted () {
+    this.getkaptcha()
+  },
   methods: {
+    getkaptcha () {
+      const imageCodeToken = uuid().split('-')[0]
+      this.imageCodeToken = imageCodeToken
+      this.kaptcha_src = process.env.VUE_APP_API_BASE_URL + 'system/kaptcha/image-code/' + imageCodeToken
+    },
+
+    onChangeRoleId (event) {
+      this.roleId = event.target.value
+    },
+
     handlePasswordLevel (rule, value, callback) {
       let level = 0
 
@@ -173,26 +188,26 @@ export default {
         if (level === 0) {
           this.state.percent = 10
         }
-        callback(new Error('密码强度不够'))
+        callback(new Error('Weak password'))
       }
     },
 
     handlePasswordCheck (rule, value, callback) {
       const password = this.form.getFieldValue('password')
-      console.log('value', value)
+      // console.log('value', value)
       if (value === undefined) {
-        callback(new Error('请输入密码'))
+        callback(new Error('Please enter your password.'))
       }
       if (value && password && value.trim() !== password.trim()) {
-        callback(new Error('两次密码不一致'))
+        callback(new Error('The two passwords do not match'))
       }
       callback()
     },
 
     handlePhoneCheck (rule, value, callback) {
-      console.log('handlePhoneCheck, rule:', rule)
-      console.log('handlePhoneCheck, value', value)
-      console.log('handlePhoneCheck, callback', callback)
+      // console.log('handlePhoneCheck, rule:', rule)
+      // console.log('handlePhoneCheck, value', value)
+      // console.log('handlePhoneCheck, callback', callback)
 
       callback()
     },
@@ -206,56 +221,74 @@ export default {
     },
 
     handleSubmit () {
-      const { form: { validateFields }, state, $router } = this
+      const {
+        form: { validateFields },
+        state,
+        $router
+      } = this
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           state.passwordLevelChecked = false
-          $router.push({ name: 'registerResult', params: { ...values } })
+          values.roleId = this.roleId
+          values.imageCode = values.captcha
+          values.imageCodeToken = this.imageCodeToken
+          values.username = values.email
+          delete values.email
+          delete values.captcha
+          delete values.password2
+          signupAPI(values).then(res => {
+            $router.push({ name: 'registerResult', params: { ...values } })
+          })
         }
       })
     },
 
     getCaptcha (e) {
       e.preventDefault()
-      const { form: { validateFields }, state, $message, $notification } = this
+      const {
+        form: { validateFields },
+        state,
+        $message,
+        $notification
+      } = this
 
-      validateFields(['mobile'], { force: true },
-        (err, values) => {
-          if (!err) {
-            state.smsSendBtn = true
+      validateFields(['mobile'], { force: true }, (err, values) => {
+        if (!err) {
+          state.smsSendBtn = true
 
-            const interval = window.setInterval(() => {
-              if (state.time-- <= 0) {
-                state.time = 60
-                state.smsSendBtn = false
-                window.clearInterval(interval)
-              }
-            }, 1000)
+          const interval = window.setInterval(() => {
+            if (state.time-- <= 0) {
+              state.time = 60
+              state.smsSendBtn = false
+              window.clearInterval(interval)
+            }
+          }, 1000)
 
-            const hide = $message.loading('验证码发送中..', 0)
+          const hide = $message.loading('验证码发送中..', 0)
 
-            getSmsCaptcha({ mobile: values.mobile }).then(res => {
+          getSmsCaptcha({ mobile: values.mobile })
+            .then(res => {
               setTimeout(hide, 2500)
               $notification['success']({
                 message: '提示',
                 description: '验证码获取成功，您的验证码为：' + res.result.captcha,
                 duration: 8
               })
-            }).catch(err => {
+            })
+            .catch(err => {
               setTimeout(hide, 1)
               clearInterval(interval)
               state.time = 60
               state.smsSendBtn = false
               this.requestFailed(err)
             })
-          }
         }
-      )
+      })
     },
     requestFailed (err) {
       this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        message: 'Error',
+        description: ((err.response || {}).data || {}).message || 'There was an error in the request. Please try again later',
         duration: 4
       })
       this.registerBtn = false
@@ -263,55 +296,52 @@ export default {
   },
   watch: {
     'state.passwordLevel' (val) {
-      console.log(val)
+      // console.log(val)
     }
   }
 }
 </script>
 <style lang="less">
-  .user-register {
-
-    &.error {
-      color: #ff0000;
-    }
-
-    &.warning {
-      color: #ff7e05;
-    }
-
-    &.success {
-      color: #52c41a;
-    }
-
+.user-register {
+  &.error {
+    color: #ff0000;
   }
 
-  .user-layout-register {
-    .ant-input-group-addon:first-child {
-      background-color: #fff;
-    }
+  &.warning {
+    color: #ff7e05;
   }
+
+  &.success {
+    color: #52c41a;
+  }
+}
+
+.user-layout-register {
+  .ant-input-group-addon:first-child {
+    background-color: #fff;
+  }
+}
 </style>
 <style lang="less" scoped>
-  .user-layout-register {
-
-    & > h3 {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .getCaptcha {
-      display: block;
-      width: 100%;
-      height: 40px;
-    }
-
-    .register-button {
-      width: 50%;
-    }
-
-    .login {
-      float: right;
-      line-height: 40px;
-    }
+.user-layout-register {
+  & > h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
   }
+
+  .getCaptcha {
+    display: block;
+    width: 100%;
+    height: 40px;
+  }
+
+  .register-button {
+    width: 50%;
+  }
+
+  .login {
+    float: right;
+    line-height: 40px;
+  }
+}
 </style>

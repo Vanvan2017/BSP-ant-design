@@ -2,34 +2,34 @@
   <page-header-wrapper content="BVO information, welcome to use BSP!">
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
       <a-form @submit="handleSubmit" :form="form">
-		<a-form-item
-			label="userId"
-			:labelCol="{lg: {span: 7}, sm: {span: 7}}"
-			:wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
-			<a-input
-				readOnly="true"
-				v-decorator="[
-				'userId',
-				{rules: [{ required: true, message: '请输入id' }],
-					initialValue: form1.userId}
-			]"
-			name="userId"
-			placeholder="请输入id"
-			/>
-		</a-form-item>
         <a-form-item
-          label="姓名"
+          label="userId"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
+          <a-input
+            readOnly="true"
+            v-decorator="[
+              'userId',
+              {rules: [{ required: true, message: '请输入id' }],
+               initialValue: form1.userId}
+            ]"
+            name="userId"
+            placeholder="please input id"
+          />
+        </a-form-item>
+        <a-form-item
+          label="name"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
             v-decorator="[
               'name',
-              {rules: [{ required: true, message: '请输入姓名' }],
-					initialValue: form1.name}
+              {rules: [{ required: true, message: 'please input name' }],
+               initialValue: form1.name}
             ]"
             name="name"
-            placeholder="请输入姓名"
+            placeholder="please input name"
           />
         </a-form-item>
         <a-form-item
@@ -40,45 +40,45 @@
           <a-input
             v-decorator="[
               'email',
-              {rules: [{ required: true, message: '请输入邮箱' }],
-					initialValue: form1.email}
+              {rules: [{ required: true, message: 'please input email' }],
+               initialValue: form1.email}
             ]"
             name="email"
-            placeholder="请输入邮箱"
+            placeholder="please input email"
           />
         </a-form-item>
         <a-form-item
-          label="电话"
+          label="phone"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
-            placeholder="请输入电话"
+            placeholder="please input phone number"
             v-decorator="[
               'phone',
-              {rules: [{ required: true, message: '请输入电话' }],
-					initialValue: form1.phone}
+              {rules: [{ required: true, message: 'please input phone number' }],
+               initialValue: form1.phone}
             ]"
           />
         </a-form-item>
         <a-form-item
-          label="固话"
+          label="number"
           :labelCol="{lg: {span: 7}, sm: {span: 7}}"
           :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
         >
           <a-input
             v-decorator="[
               'number',
-              {rules: [{ required: false, message: '请输入请输入固化号码' }],
-					initialValue: form1.number}
+              {rules: [{ required: false, message: 'please input fix phone number' }],
+               initialValue: form1.number}
             ]"
             v-model="number"
-            placeholder="请输入固话号码"
+            placeholder="please input fix phone number"
           />
         </a-form-item>
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-          <a-button htmlType="submit" type="primary" @click="handleSubmit">保存</a-button>
-          <a-button style="margin-left: 8px" @click="handleCancel">取消</a-button>
+          <a-button htmlType="submit" type="primary" @click="handleSubmit">save</a-button>
+          <a-button style="margin-left: 8px" @click="handleCancel">cancel</a-button>
         </a-form-item>
       </a-form>
     </a-card>
@@ -96,13 +96,9 @@ import AInput from 'ant-design-vue/es/input/Input'
 import List from '@/views/list/table/List'
 import Edit from '@/views/list/table/Edit'
 // import router from '../../router'
-import axios from 'axios'
+import { axios as request } from '@/utils/request'
+import storage from 'store'
 
-const request = axios.create({ // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 export default {
   name: 'BaseForm',
   components: {
@@ -142,8 +138,6 @@ export default {
 			flag = true
           console.log('Received values of form: ', values)
 			app.form1 = values
-          // this.$router.push('/dashboard/mvo-workplace')
-			// app.saveBVOInfo(values)
         }
       })
 		if (flag) {
@@ -154,15 +148,15 @@ export default {
 	getBVOInfo () {
 		var app = this
 		console.log('hhh')
-		request.post('DsrDropshipperController/getBVOInfo',
+		request.post('/system/DsrDropshipperController/getBVOInfo',
 		{
 			'manBuyerId':	0,
-			'userId':	3,
-			'username':	'string'
+			'userId':	storage.get('userId'),
+			'username':	storage.get('username')
 		}).then(function (response) {
 			console.log('sdsd')
 			console.log(response)
-			var data = response.data.content
+			var data = response.content
 			app.form1.userId = data.userId
 			app.form1.name = data.name
 			app.form1.email = data.email
@@ -186,20 +180,23 @@ export default {
 		var app = this
 		// console.log(values)
 		console.log(this.form1)
-		request.post('DsrDropshipperController/saveBVOInfo',
+		request.post('/system/DsrDropshipperController/saveBVOInfo',
 		{
 			'SysUserDto': app.form1
 		}).then(function (response) {
 			console.log('sdsd')
 			console.log(response)
-			console.log(response.data)
-			// if (response.data.success) {
+			console.log(response)
+			// if (response.success) {
 			// 	app.$router.push('/dashboard/mvo-workplace')
 			// }
+			// app.$message.info(`Update Succeed`)
 		})
+		this.$message.success('update success')
 	},
     handleCancel () {
-      this.$router.push('/dashboard/mvo-workplace')
+      // this.$router.push('/dashboard/mvo-workplace')
+			location.reload()
     },
     handleEdit (record) {
       this.record = record || ''

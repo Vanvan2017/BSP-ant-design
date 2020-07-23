@@ -1,9 +1,11 @@
+<script>/*eslint-disable*/</script>
 <template>
+	<div>
   <page-header-wrapper>
     <a-card :bordered="false">
       <div class="table-operator">
-        <a-button type="primary" icon="plus">新建</a-button>
-        <a-dropdown v-if="selectedRowKeys.length > 0">
+        <a-button type="primary" icon="plus" @click="handleAdd">add</a-button>
+<!--        <a-dropdown v-if="selectedRowKeys.length > 0">
           <a-menu slot="overlay">
             <a-menu-item key="1">
               <a-icon type="delete" />删除
@@ -13,7 +15,7 @@
             批量操作
             <a-icon type="down" />
           </a-button>
-        </a-dropdown>
+        </a-dropdown> -->
       </div>
 
       <s-table
@@ -42,33 +44,52 @@
         <template slot="action" slot-scope="text, record">
           <div class="editable-row-operations">
             <span v-if="record.editable">
-              <a @click="() => save(record)">保存</a>
+              <a @click="() => save(record)">confirm</a>
               <a-divider type="vertical" />
-              <a-popconfirm title="真的放弃编辑吗?" @confirm="() => cancel(record)">
-                <a>取消</a>
+              <a-popconfirm title="really give up?" @confirm="() => cancel(record)">
+                <a>canceel</a>
               </a-popconfirm>
             </span>
             <span v-else>
-              <a class="edit" @click="() => edit(record)">修改</a>
+              <a class="edit" @click="() => edit(record)">save</a>
               <a-divider type="vertical" />
-              <a class="delete" @click="() => del(record)">删除</a>
+              <a class="delete" @click="() => del(record)">delete</a>
             </span>
           </div>
         </template>
       </s-table>
     </a-card>
-  </page-header-wrapper>
+	</page-header-wrapper>
+	<a-modal v-model="visible" title="Item Information" @ok="handleSubmit" width="700px">
+		<a-form :form="form" :label-col="{ span: 8 }" :wrapper-col="{ span: 12 }" @submit="handleSubmit">
+			<a-form-item label="paramCd">
+				<a-input
+					v-decorator="['paramCd', { rules: [{ required: true, message: 'please input paramCd' }],
+					initialValue: form1.paramCd}]"
+				/>
+            </a-form-item>
+			<a-form-item label="paramValue">
+				<a-input
+					v-decorator="['paramValue', { rules: [{ required: true, message: 'please input paramValue' }],
+					initialValue: form1.paramValue}]"
+				/>
+			</a-form-item>
+			<a-form-item label="description">
+				<a-input
+					v-decorator="['description', { rules: [{ required: true, message: 'please input description' }],
+					initialValue: form1.description}]"
+				/>
+			</a-form-item>
+		</a-form>
+	</a-modal>
+	</div>
 </template>
 
 <script>
 import { STable } from '@/components'
-import axios from 'axios'
+import {axios as request} from '@/utils/request'
+import storage from 'store'
 
-const request = axios.create({ // eslint-disable-line no-unused-vars
-  // API 请求的默认前缀
-  baseURL: 'http://localhost:9000/system/',
-  timeout: 6000 // 请求超时时间
-})
 export default {
   name: 'TableList',
   components: {
@@ -77,33 +98,35 @@ export default {
   data () {
     return {
       // 表头
+	  
+	  form: this.$form.createForm(this, { name: 'coordinated' }),
       columns: [
         {
-          title: '编号',
-          dataIndex: 'no',
+          title: 'Id',
+          dataIndex: 'parId',
           width: '70px'
         },
         {
-          title: '参数主键',
-          dataIndex: 'id',
+          title: 'param Cd',
+          dataIndex: 'paramCd',
           width: '90px',
-          scopedSlots: { customRender: 'description' }
+          scopedSlots: { customRender: 'paramCd' }
         },
         {
-          title: '参数值',
-          dataIndex: 'callNo',
+          title: 'param Value',
+          dataIndex: 'paramValue',
           width: '90px',
-          scopedSlots: { customRender: 'description' }
+          scopedSlots: { customRender: 'paramValue' }
         },
         {
-          title: '参数说明',
+          title: 'description',
           dataIndex: 'description',
           width: '200px',
-          scopedSlots: { customRender: 'callNo' }
+          scopedSlots: { customRender: 'description' }
           // customRender: (text) => text + ' 次'
         },
         {
-          table: '操作',
+          table: 'action',
           dataIndex: 'action',
           width: '120px',
           scopedSlots: { customRender: 'action' }
@@ -111,16 +134,32 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return this.$http
-          .get('/service', {
-            params: Object.assign(parameter, this.queryParam)
-          })
-          .then(res => {
-            console.log(res.result)
-            return res.result
-          })
+		const requestParameters = Object.assign({}, parameter, this.queryParam)
+		console.log('loadData request parameters:', requestParameters)
+        return 	request.post('/system/parameterController/getParameterList',
+				{
+					'userId':	storage.get('userId'),
+					'rights':	1
+				}).then(function (response) {
+					console.log(response)
+					response.content.forEach(item => {
+						item.editable = false
+					})
+					var result = {
+						'data': response.content,
+						'pageNo': parameter.pageNo,
+						'pageSize': 10
+					}
+					console.log(response)
+					return result
+				})
       },
-
+		visible: false,
+		form1: {
+			'description': '',
+			'paramCd': '',
+			'paramValue': ''
+		},
       selectedRowKeys: [],
       selectedRows: []
     }
@@ -130,24 +169,63 @@ export default {
       console.log(value, key, column)
       record[column.dataIndex] = value
     },
+	handleSubmit(e) {
+			var _this = this
+			e.preventDefault()
+			this.form.validateFields((err, values) => {
+				if (!err) {
+				console.log('Received values of form: ', values);
+				request.post('/system/parameterController/saveParameter',
+				{
+					'ParParameterDto': {
+						'description': values.description,
+						'paramCd': values.paramCd,
+						'paramValue': values.paramValue,
+						'remark': values.remark
+					},
+					'SysUserDto': {
+						'userId':	storage.get('userId')
+					}
+				}).then(function (response) {
+					_this.visible = false
+					// _this.$refs.table.refresh(true)
+					if(response.success){
+						_this.$message.success('save success')
+						_this.$refs.table.refresh(true)
+					}
+				})
+				}
+			})
+	},
+	handleAdd () {
+		// this.mdl = null
+		this.visible = true
+	},
     edit (row) {
       row.editable = true
       // row = Object.assign({}, row)
     },
     // eslint-disable-next-line
     del(row) {
+		var _this = this
       this.$confirm({
-        title: '警告',
-        content: `真的要删除 ${row.no} 吗?`,
-        okText: '删除',
+        title: 'warning',
+        content: `relay delety ${row.parId} ?`,
+        okText: 'yes',
         okType: 'danger',
-        cancelText: '取消',
+        cancelText: 'no',
         onOk () {
           console.log('OK')
           // 在这里调用删除接口
-          return new Promise((resolve, reject) => {
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
-          }).catch(() => console.log('Oops errors!'))
+			request.post('/system/parameterController/removeParameter',
+			{
+				'parId': row.parId
+			}).then(function (response) {
+				_this.$refs.table.refresh(true)
+			})
+          // return new Promise((resolve, reject) => {
+          //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
+          // }).catch(() => console.log('Oops errors!'))
         },
         onCancel () {
           console.log('Cancel')
@@ -156,9 +234,29 @@ export default {
     },
     save (row) {
       row.editable = false
+			console.log(row)
+			if(row.paramCd === ''){
+				this.$message.warning('the paramCd can not be null')
+				this.$refs.table.refresh(true)
+			} else if (row.paramValue === ''){
+				this.$message.warning('the paramValue can not be null')
+				this.$refs.table.refresh(true)
+			} else {
+				request.post('/system/parameterController/saveParameter',
+				{
+					'ParParameterDto': row,
+					'SysUserDto': {
+						'userId':	storage.get('userId')
+					}
+				}).then(function (response) {
+					console.log(response)
+					this.$refs.table.refresh(true)
+				})
+	  }
     },
     cancel (row) {
       row.editable = false
+	  this.$refs.table.refresh(true)
     },
 
     onSelectChange (selectedRowKeys, selectedRows) {
@@ -168,42 +266,6 @@ export default {
     toggleAdvanced () {
       this.advanced = !this.advanced
     },
-		getParameterList () {
-			request.post('parameterController/getParameterList',
-			{
-				'userId':	3,
-				'rights':	1
-			}).then(function (response) {
-				console.log('sdsd')
-				console.log(response)
-			})
-		},
-		saveParameter () {
-			request.post('parameterController/saveParameter',
-			{
-				'ParParameterDto': {
-					'description': 'string',
-					'paramCd': 'string',
-					'paramValue': 'string',
-					'remark': 'stringtest'
-				},
-				'SysUserDto': {
-					'userId':	3
-				}
-			}).then(function (response) {
-				console.log('sdsd')
-				console.log(response)
-			})
-		},
-		removeParameter () {
-			request.post('parameterController/removeParameter',
-			{
-				'parId': '3'
-			}).then(function (response) {
-				console.log('sdsd')
-				console.log(response)
-			})
-		}
   },
   watch: {
     /*
