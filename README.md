@@ -19,7 +19,9 @@ An out-of-box UI solution for  the entire platform, including MVO and BVO inform
 Overview
 ----
 
-![dashboard](https://static-2.loacg.com/open/static/github/SP1.png)
+![dashboard](https://lskreno-typora.oss-cn-beijing.aliyuncs.com/img/login.png)
+
+![](https://lskreno-typora.oss-cn-beijing.aliyuncs.com/img/%E5%89%8D%E7%AB%AF%E6%9E%B6%E6%9E%84.jpg)
 
 ### Env and dependencies
 
