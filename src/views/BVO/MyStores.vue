@@ -166,7 +166,6 @@ export default {
           this.visible = false
         }
       })
-	  location.reload()
     },
     getOnlineStores() {
       var app = this
@@ -218,6 +217,9 @@ export default {
 			console.log(response)
 			console.log(app.$refs)
 			console.log(app.AmazonData.length)
+			if(response.success){
+				location.reload()
+			}
 			// app.$forceUpdate(true)
 			// for (var i=0; i<app.AmazonData.;i++){
 			// 	app.AmazonData.pop()
